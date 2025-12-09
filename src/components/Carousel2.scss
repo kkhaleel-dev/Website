@@ -1,0 +1,45 @@
+.carousel2-section {
+  width: 100%;
+  background: #ffffff;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+  overflow-x: auto; /* allows scroll if screen smaller */
+}
+
+.cards-wrapper {
+  display: flex;
+  gap: 25px;
+  flex-wrap: nowrap; /* ❗ keep all in one row */
+  justify-content: center;
+  width: max-content; /* ensure row expands */
+}
+
+.info-card {
+  background: #fff;
+  padding: 25px 30px;
+  width: 230px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: 0.3s;
+  flex-shrink: 0; /* prevents shrinking on small screens */
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.card-value {
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0;
+}
