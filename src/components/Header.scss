@@ -29,6 +29,7 @@
   justify-content: flex-end;
   gap: 20px;
   flex: 1;
+  margin-right: 10px;
 }
 
 .nav ul {
@@ -48,48 +49,89 @@
     transition: 0.25s;
 
     &:hover {
-      color: #0055ff;
-
-      .dropdown-menu {
-        display: block;
-      }
+      color: #fd1e1e;
     }
 
+    /* highlight when dropdown is open */
+    &.active {
+      color: #0055ff;
+    }
+
+    a {
+      text-decoration: none; // remove underline
+      color: inherit;
+      font-size: inherit;
+      font-weight: inherit;
+      display: block;
+      width: 100%;
+    }
+
+    a:hover {
+      color: #fd1e1e;
+    }
+  }
+
+  .dropdown-item {
     .dropdown-icon {
       font-size: 12px;
       margin-top: 2px;
+      transition: 0.3s;
     }
 
-    /* Dropdown menu */
+    .dropdown-icon.open {
+      transform: rotate(180deg);
+    }
+
     .dropdown-menu {
       display: none;
       position: absolute;
-      top: 100%;
+      top: calc(100% + 20px);
       left: 0;
       background: #ffffff;
       border: 1px solid #ccc;
-      //   border-radius: 4px;
       padding: 5px 0;
-      min-width: 150px;
+      min-width: 180px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
       z-index: 1000;
+      transform-origin: top left;
 
       li {
-        font-size: 16px;
-        font-weight: 500;
-        padding: 8px 12px;
-        white-space: nowrap;
+        font-size: 18px;
+        font-weight: 600;
+        padding: 10px 14px;
         color: #222;
+        white-space: nowrap;
+        transition: background 0.15s ease;
 
         &:hover {
-          background: #f0f0f0;
+          background: #f2f2f2;
         }
+
+        a {
+          text-decoration: none;
+          color: inherit;
+          display: block;
+          width: 100%;
+        }
+
+        a:hover {
+          color: inherit;
+        }
+      }
+    }
+
+    .dropdown-menu.show {
+      display: block;
+
+      &.align-right {
+        left: auto;
+        right: 0;
+        transform-origin: top right;
       }
     }
   }
 }
 
-/* THEME TOGGLE */
 .theme-toggle {
   flex: 0 0 auto;
   font-size: 18px;
@@ -102,25 +144,20 @@
   }
 }
 
-/* DARK MODE */
 body.dark-theme {
   background: #111;
   color: #eee;
 }
 
-body.dark-theme .theme-toggle {
-  color: #fff;
+body.dark-theme .nav ul li.active {
+  color: #66a3ff;
 }
 
 body.dark-theme .nav ul li .dropdown-menu {
   background: #333;
   border-color: #555;
 
-  li {
-    color: #eee;
-
-    &:hover {
-      background: #444;
-    }
+  li:hover {
+    background: #444;
   }
 }

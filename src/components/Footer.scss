@@ -38,15 +38,6 @@
   }
 }
 
-.powered {
-  font-size: 14px;
-  color: #bbb;
-
-  strong {
-    color: #fff;
-  }
-}
-
 .iz-icon {
   width: 20px;
   height: 20px;
@@ -87,4 +78,37 @@
 .social-icons a:nth-child(5):hover {
   /* YouTube */
   color: #ff0000;
+}
+
+.powered-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  &:hover {
+    color: rgb(245, 213, 33);
+
+    strong {
+      color: rgb(250, 219, 47);
+    }
+  }
+}
+
+.powered-link strong {
+  color: #fff; // default
+}
+
+.powered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #bbb;
+
+  strong {
+    color: #fff;
+  }
 }

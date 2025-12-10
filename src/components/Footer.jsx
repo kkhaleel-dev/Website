@@ -63,9 +63,16 @@ const Footer = () => {
       </div>
 
       <p className="powered">
-        Powered by <img src={IZLogo} alt="IZ Logo" className="iz-icon" />
-        {""}
-        <strong>Intelizest Consulting Pvt Ltd</strong>
+        Powered by &nbsp;
+        <a
+          href="https://intelizest.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="powered-link"
+        >
+          <img src={IZLogo} alt="IZ Logo" className="iz-icon" />
+          <strong>Intelizest Consulting Pvt Ltd</strong>
+        </a>
       </p>
     </footer>
   );
