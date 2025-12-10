@@ -1,4 +1,3 @@
-import React from "react";
 import "./Carousel2.scss";
 
 const data = [
@@ -22,16 +21,6 @@ const data = [
     value: "25",
     color: "#f97316", // orange
   },
-  //   {
-  //     title: "Departments Active",
-  //     value: "25",
-  //     color: "#f97316", // orange
-  //   },
-  //   {
-  //     title: "Departments Active",
-  //     value: "25",
-  //     color: "#f97316", // orange
-  //   },
   {
     title: "Placements Success",
     value: "95%",

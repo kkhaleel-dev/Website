@@ -1,18 +1,29 @@
 .carousel2-section {
   width: 100%;
   background: #ffffff;
-  padding: 40px 0;
+  padding: 40px 0; // reset side padding for desktop
   display: flex;
   justify-content: center;
-  overflow-x: auto; /* allows scroll if screen smaller */
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-left: 10px; // ensures first card visible on mobile
+
+  /* Hide scrollbar */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none; /* IE 10+ */
+  scrollbar-width: none; /* Firefox */
 }
 
 .cards-wrapper {
   display: flex;
   gap: 25px;
-  flex-wrap: nowrap; /* ❗ keep all in one row */
+  flex-wrap: nowrap;
   justify-content: center;
-  width: max-content; /* ensure row expands */
+  width: max-content;
+  scroll-snap-type: x mandatory;
 }
 
 .info-card {
@@ -23,7 +34,8 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: 0.3s;
-  flex-shrink: 0; /* prevents shrinking on small screens */
+  flex-shrink: 0;
+  scroll-snap-align: start;
 
   &:hover {
     transform: translateY(-5px);
@@ -42,4 +54,53 @@
   font-size: 30px;
   font-weight: 700;
   margin: 0;
+}
+
+@media (max-width: 768px) {
+  .carousel2-section {
+    justify-content: flex-start; // left-align for mobile
+    padding: 20px 0; // reduced top/bottom padding
+  }
+
+  .cards-wrapper {
+    padding-left: 10px; // ensure first card is fully visible
+    gap: 15px;
+  }
+
+  .info-card {
+    width: 180px; // smaller cards for mobile
+    padding: 20px;
+  }
+
+  .card-title {
+    font-size: 14px;
+  }
+
+  .card-value {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel2-section {
+    padding: 15px 0; // further reduce top/bottom padding
+  }
+
+  .cards-wrapper {
+    padding-left: 8px;
+    gap: 12px;
+  }
+
+  .info-card {
+    width: 150px;
+    padding: 15px;
+  }
+
+  .card-title {
+    font-size: 13px;
+  }
+
+  .card-value {
+    font-size: 20px;
+  }
 }

@@ -2,7 +2,7 @@ import { useLocation } from "react-router-dom";
 import { FaTools, FaCogs, FaWrench } from "react-icons/fa";
 import "./Placeholderpage.scss";
 
-const PlaceholderPage = () => {
+const Placeholderpage = () => {
   const location = useLocation();
   const endpoint = location.pathname.replace("/", "") || "home";
 
@@ -26,4 +26,4 @@ const PlaceholderPage = () => {
   );
 };
 
-export default PlaceholderPage;
+export default Placeholderpage;
