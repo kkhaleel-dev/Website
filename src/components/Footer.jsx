@@ -51,7 +51,7 @@ const Footer = () => {
         </a>
       </div>
 
-      <div className="footer-links">
+      {/* <div className="footer-links">
         <a>Home</a>
         <a>About</a>
         <a>Academics</a>
@@ -60,7 +60,7 @@ const Footer = () => {
         <a>Students</a>
         <a>Exam</a>
         <a>Admission</a>
-      </div>
+      </div> */}
 
       <p className="powered">
         Powered by &nbsp;
