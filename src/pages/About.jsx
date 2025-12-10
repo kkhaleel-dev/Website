@@ -10,6 +10,7 @@ const About = () => {
       {/* <Carousel />
       <Carousel2 />
       <Carousel3 /> */}
+
       <PlaceholderPage />
     </>
   );
