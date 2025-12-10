@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { FaTools, FaCogs, FaWrench } from "react-icons/fa";
-import "./PlaceholderPage.scss";
+import "./Placeholderpage.scss";
 
 const PlaceholderPage = () => {
   const location = useLocation();
