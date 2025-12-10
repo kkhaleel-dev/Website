@@ -2,7 +2,7 @@ import React from "react";
 import Carousel from "../components/Carousel";
 import Carousel2 from "../components/Carousel2";
 import Carousel3 from "../components/Carousel3";
-import PlaceholderPage from "../components/Placeholderpage";
+import Placeholderpage from "../components/Placeholderpage";
 
 const About = () => {
   return (
@@ -10,7 +10,7 @@ const About = () => {
       {/* <Carousel />
       <Carousel2 />
       <Carousel3 /> */}
-      <PlaceholderPage />
+      <Placeholderpage />
     </>
   );
 };

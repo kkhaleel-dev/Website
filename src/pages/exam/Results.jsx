@@ -1,10 +1,9 @@
-import React from "react";
-import PlaceholderPage from "../../components/Placeholderpage";
+import Placeholderpage from "../../components/Placeholderpage";
 
 const Results = () => {
   return (
     <>
-      <PlaceholderPage />
+      <Placeholderpage />
     </>
   );
 };

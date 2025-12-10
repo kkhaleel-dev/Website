@@ -1,10 +1,10 @@
 import React from "react";
-import PlaceholderPage from "../../components/Placeholderpage";
+import Placeholderpage from "../../components/Placeholderpage";
 
 const Professors = () => {
   return (
     <>
-      <PlaceholderPage />
+      <Placeholderpage />
     </>
   );
 };
