@@ -1,4 +1,3 @@
-import React from "react";
 import { useLocation } from "react-router-dom";
 import { FaTools, FaCogs, FaWrench } from "react-icons/fa";
 import "./PlaceholderPage.scss";
