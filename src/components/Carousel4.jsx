@@ -5,17 +5,14 @@ import { IoClose } from "react-icons/io5";
 
 import img1 from "../assets/1.png";
 
-const CARD_WIDTH = 280; // reduced card width
-const CARD_GAP = 30; // space between cards
-const VISIBLE_CARDS = 4; // show 4 cards always
-const SLIDE_SIZE = CARD_WIDTH + CARD_GAP;
-
 const Carousel4 = () => {
   const containerRef = useRef(null);
 
   const [active, setActive] = useState(0);
   const [showNav, setShowNav] = useState(false);
   const [popupData, setPopupData] = useState(null);
+  const [visibleCards, setVisibleCards] = useState(4);
+  const [slideSize, setSlideSize] = useState(310);
 
   const profiles = [
     {
@@ -68,13 +65,33 @@ const Carousel4 = () => {
     },
   ];
 
-  // Enable carousel ONLY if more than 4 cards
   useEffect(() => {
-    setShowNav(profiles.length > VISIBLE_CARDS);
-  }, [profiles]);
+    const updateResponsive = () => {
+      const w = window.innerWidth;
+
+      if (w <= 600) {
+        setVisibleCards(1);
+        setSlideSize(330);
+      } else if (w <= 1024) {
+        setVisibleCards(2);
+        setSlideSize(330);
+      } else {
+        setVisibleCards(4);
+        setSlideSize(330);
+      }
+    };
+
+    updateResponsive();
+    window.addEventListener("resize", updateResponsive);
+    return () => window.removeEventListener("resize", updateResponsive);
+  }, []);
+
+  useEffect(() => {
+    setShowNav(profiles.length > visibleCards);
+  }, [visibleCards]);
 
   const nextSlide = () => {
-    if (active < profiles.length - VISIBLE_CARDS) {
+    if (active < profiles.length - visibleCards) {
       setActive(active + 1);
     }
   };
@@ -90,7 +107,7 @@ const Carousel4 = () => {
       <div className="carousel4-container" ref={containerRef}>
         <div
           className="carousel4-inner"
-          style={{ transform: `translateX(-${active * SLIDE_SIZE}px)` }}
+          style={{ transform: `translateX(-${active * slideSize}px)` }}
         >
           {profiles.map((p, i) => (
             <div className="carousel4-card" key={i}>
@@ -113,19 +130,17 @@ const Carousel4 = () => {
       </div>
 
       {showNav && (
-        <>
-          <div className="carousel4-dots">
-            {Array.from({ length: profiles.length - VISIBLE_CARDS + 1 }).map(
-              (_, i) => (
-                <div
-                  key={i}
-                  className={`dot ${i === active ? "active" : ""}`}
-                  onClick={() => setActive(i)}
-                ></div>
-              )
-            )}
-          </div>
-        </>
+        <div className="carousel4-dots">
+          {Array.from({ length: profiles.length - visibleCards + 1 }).map(
+            (_, i) => (
+              <div
+                key={i}
+                className={`dot ${i === active ? "active" : ""}`}
+                onClick={() => setActive(i)}
+              ></div>
+            )
+          )}
+        </div>
       )}
 
       {popupData && (

@@ -1,0 +1,127 @@
+.latest-events-page {
+  min-height: 100vh;
+  padding: 2rem 5%;
+  background: #f5f7fa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h2 {
+    font-size: 2rem;
+    color: #0a2148;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  .event-card {
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .event-image img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .event-content {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+
+      h3 {
+        font-size: 1.3rem;
+        color: #0a2148;
+      }
+
+      .event-date,
+      .event-location {
+        font-size: 0.9rem;
+        color: #555;
+        display: block;
+      }
+
+      p {
+        font-size: 1rem;
+        color: #333;
+        margin: 0.5rem 0;
+      }
+
+      .event-link {
+        margin-top: auto;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #105bbf;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .latest-events-page {
+    padding: 2rem 3%;
+
+    .event-card {
+      .event-content {
+        padding: 1.2rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .latest-events-page {
+    padding: 1.5rem 2%;
+
+    h2 {
+      font-size: 1.6rem;
+    }
+
+    .event-card {
+      .event-content {
+        padding: 1rem;
+
+        h3 {
+          font-size: 1.2rem;
+        }
+
+        p {
+          font-size: 0.95rem;
+        }
+
+        .event-date,
+        .event-location {
+          font-size: 0.85rem;
+        }
+      }
+
+      .event-image img {
+        height: 150px;
+      }
+    }
+  }
+}

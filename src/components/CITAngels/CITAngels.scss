@@ -1,0 +1,132 @@
+.cit-angels-page {
+  min-height: 100vh;
+  padding: 2rem 5%;
+  background: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h2 {
+    font-size: 2rem;
+    color: #0a2148;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .angels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  .angels-card {
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .angels-image img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .angels-content {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      h3 {
+        font-size: 1.3rem;
+        color: #0a2148;
+      }
+
+      .angels-founder,
+      .angels-sector,
+      .angels-mentorship {
+        font-size: 0.9rem;
+        color: #555;
+        display: block;
+      }
+
+      p {
+        font-size: 1rem;
+        color: #333;
+      }
+
+      .angels-link {
+        margin-top: auto;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #105bbf;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .cit-angels-page {
+    padding: 2rem 3%;
+
+    .angels-card {
+      .angels-content {
+        padding: 1.2rem;
+      }
+
+      .angels-image img {
+        height: 150px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .cit-angels-page {
+    padding: 1.5rem 2%;
+
+    h2 {
+      font-size: 1.6rem;
+    }
+
+    .angels-card {
+      .angels-content {
+        padding: 1rem;
+
+        h3 {
+          font-size: 1.2rem;
+        }
+
+        p {
+          font-size: 0.95rem;
+        }
+
+        .angels-founder,
+        .angels-sector,
+        .angels-mentorship {
+          font-size: 0.85rem;
+        }
+      }
+
+      .angels-image img {
+        height: 130px;
+      }
+    }
+  }
+}

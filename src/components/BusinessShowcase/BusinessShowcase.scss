@@ -1,0 +1,130 @@
+.business-showcase-page {
+  min-height: 100vh;
+  padding: 2rem 5%;
+  background: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h2 {
+    font-size: 2rem;
+    color: #0a2148;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .startups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  .startup-card {
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .startup-image img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .startup-content {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      h3 {
+        font-size: 1.3rem;
+        color: #0a2148;
+      }
+
+      .startup-founder,
+      .startup-sector {
+        font-size: 0.9rem;
+        color: #555;
+        display: block;
+      }
+
+      p {
+        font-size: 1rem;
+        color: #333;
+      }
+
+      .startup-link {
+        margin-top: auto;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #105bbf;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .business-showcase-page {
+    padding: 2rem 3%;
+
+    .startup-card {
+      .startup-content {
+        padding: 1.2rem;
+      }
+
+      .startup-image img {
+        height: 150px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .business-showcase-page {
+    padding: 1.5rem 2%;
+
+    h2 {
+      font-size: 1.6rem;
+    }
+
+    .startup-card {
+      .startup-content {
+        padding: 1rem;
+
+        h3 {
+          font-size: 1.2rem;
+        }
+
+        p {
+          font-size: 0.95rem;
+        }
+
+        .startup-founder,
+        .startup-sector {
+          font-size: 0.85rem;
+        }
+      }
+
+      .startup-image img {
+        height: 130px;
+      }
+    }
+  }
+}

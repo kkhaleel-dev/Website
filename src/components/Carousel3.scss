@@ -5,73 +5,64 @@
   display: flex;
   justify-content: center;
   gap: 35px;
+  flex-wrap: wrap; // responsive
 }
 
 .carousel-card {
-  background: #ffffff;
+  background: #fff;
   width: 300px;
   min-height: 330px;
   padding: 25px 20px;
   border-radius: 12px;
   box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.08);
-
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-
-  font-family: "Inter", sans-serif;
 }
 
 .icon-svg {
-  font-size: 70px; /* React icons size */
-  color: #000;
+  font-size: 70px;
   margin-bottom: 20px;
 }
 
-/* Header */
-.card-header {
-  font-size: 18px;
-  font-weight: 600;
-  color: #000;
-  margin-bottom: 10px;
-}
-
-/* Fixed-height subheader */
 .card-subheader-wrapper {
-  height: 60px; /* Fixed same height */
+  height: 60px;
   overflow-y: auto;
   margin-bottom: 20px;
   padding-right: 4px;
 }
 
-/* Subheader text */
-.card-subheader {
-  font-size: 14px;
-  color: #000;
-  opacity: 0.8;
-  line-height: 1.45;
-}
-
-/* Button */
 .card-btn {
   padding: 10px 24px;
   background: #0d2f62;
   color: #fff;
-  border: none;
   border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
   text-decoration: none;
 }
 
-/* scroll bar */
-.card-subheader-wrapper::-webkit-scrollbar {
-  width: 6px;
+/* responsive */
+@media (max-width: 1024px) {
+  .carousel-card {
+    width: 260px;
+  }
 }
 
-.card-subheader-wrapper::-webkit-scrollbar-thumb {
-  background: #c2c2c2;
-  border-radius: 10px;
+@media (max-width: 768px) {
+  .carousel3-container {
+    padding: 20px;
+    gap: 20px;
+  }
+  .carousel-card {
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-card {
+    width: 100%;
+  }
+  .icon-svg {
+    font-size: 55px;
+  }
 }

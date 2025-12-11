@@ -45,13 +45,10 @@ const Carousel3 = () => {
       {cardData.map((item, index) => (
         <div key={index} className="carousel-card">
           <div className="card-icon">{item.icon}</div>
-
           <h3 className="card-header">{item.header}</h3>
-
           <div className="card-subheader-wrapper">
             <p className="card-subheader">{item.subheader}</p>
           </div>
-
           <Link to={item.route} className="card-btn">
             {item.buttonText}
           </Link>

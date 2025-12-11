@@ -113,7 +113,7 @@ const Header = () => {
                 }`}
               >
                 <li>
-                  <Link to="/events">Latest Events</Link>
+                  <Link to="/events/latestEvents">Latest Events</Link>
                 </li>
                 <li>
                   <Link to="/events/reunion">Reunion</Link>
