@@ -1,21 +1,77 @@
 .carousel3-container {
   width: 100%;
-  background: #ffffff;
-  padding: 40px 0;
+  padding: 50px 40px;
+  background: #ecececc2;
   display: flex;
   justify-content: center;
+  gap: 35px;
 }
 
-.map-wrapper {
-  width: 90%;
-  height: 60vh; /* larger map for clearer view */
-  border-radius: 5px;
-  overflow: hidden;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+.carousel-card {
+  background: #ffffff;
+  width: 300px;
+  min-height: 330px;
+  padding: 25px 20px;
+  border-radius: 12px;
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  font-family: "Inter", sans-serif;
 }
 
-.map-wrapper iframe {
-  width: 100%;
-  height: 100%;
-  border: 0;
+.icon-svg {
+  font-size: 70px; /* React icons size */
+  color: #000;
+  margin-bottom: 20px;
+}
+
+/* Header */
+.card-header {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+/* Fixed-height subheader */
+.card-subheader-wrapper {
+  height: 60px; /* Fixed same height */
+  overflow-y: auto;
+  margin-bottom: 20px;
+  padding-right: 4px;
+}
+
+/* Subheader text */
+.card-subheader {
+  font-size: 14px;
+  color: #000;
+  opacity: 0.8;
+  line-height: 1.45;
+}
+
+/* Button */
+.card-btn {
+  padding: 10px 24px;
+  background: #0d2f62;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* scroll bar */
+.card-subheader-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.card-subheader-wrapper::-webkit-scrollbar-thumb {
+  background: #c2c2c2;
+  border-radius: 10px;
 }

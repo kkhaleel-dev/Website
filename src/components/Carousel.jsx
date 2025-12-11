@@ -1,22 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Carousel.scss";
 
-import { FaPlay, FaPause } from "react-icons/fa"; // ⭐ ADDED
+import { FaPlay, FaPause } from "react-icons/fa";
 
-import Image1 from "../assets/1.jpg";
-import Image2 from "../assets/2.jpg";
-import Image3 from "../assets/3.jpg";
-import Image4 from "../assets/4.jpg";
-import Image5 from "../assets/5.jpg";
-import Image6 from "../assets/6.jpg";
-import Image7 from "../assets/7.jpg";
-import Image8 from "../assets/8.jpg";
+import Image1 from "../assets/1.png";
+import Image2 from "../assets/2.png";
+import Image3 from "../assets/3.png";
+import Image4 from "../assets/4.png";
 
-const images = [Image1, Image2, Image3, Image4, Image5, Image6, Image7, Image8];
+const images = [Image1, Image2, Image3, Image4];
 
 const Carousel = () => {
   const [active, setActive] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const intervalRef = useRef(null);
 
   useEffect(() => {

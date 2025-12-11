@@ -1,0 +1,170 @@
+.accounts-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------------- HERO SECTION ---------------- */
+.accounts-hero {
+  width: 100%;
+  background: #690000;
+  padding: 40px 0;
+  text-align: center;
+
+  h1 {
+    color: white;
+    font-size: 36px;
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+}
+
+/* ---------------- CONTENT AREA ---------------- */
+.accounts-content {
+  width: 100%;
+  max-width: 1100px;
+  margin: 40px auto;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding: 0 20px;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* ---------------- LEFT CARD ---------------- */
+.card-left {
+  width: 40%;
+  background: white;
+  border-radius: 12px;
+  padding: 40px 30px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+
+  img {
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #222;
+  }
+
+  p {
+    font-size: 15px;
+    color: #555;
+  }
+
+  @media (max-width: 900px) {
+    width: 90%;
+  }
+}
+
+/* ---------------- RIGHT CARD ---------------- */
+.card-right {
+  width: 50%;
+  background: white;
+  border-radius: 12px;
+  padding: 40px 30px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+
+  h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #222;
+  }
+
+  @media (max-width: 900px) {
+    width: 90%;
+  }
+}
+
+/* ---------------- SOCIAL BUTTONS ---------------- */
+.social {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  letter-spacing: 0.5px;
+  transition: 0.2s ease-in-out;
+  color: white;
+
+  &:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+  }
+
+  &.fb {
+    background: #1877f2;
+  }
+  &.google {
+    background: #d93025;
+  }
+  &.linkedin {
+    background: #0077b5;
+  }
+}
+
+/* ---------------- OR DIVIDER ---------------- */
+.or {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #555;
+  letter-spacing: 1px;
+}
+
+/* ---------------- EMAIL ROW ---------------- */
+.email-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: #eee;
+  border-radius: 8px;
+  padding: 6px;
+
+  input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 15px;
+    padding-left: 10px;
+    color: #333;
+
+    &::placeholder {
+      color: #777;
+    }
+  }
+
+  .go {
+    background: #690000; /* IITD deep red */
+    padding: 12px 18px;
+    border-radius: 8px;
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+
+    &:hover {
+      background: #450000;
+    }
+  }
+}

@@ -1,106 +1,49 @@
 .carousel2-section {
   width: 100%;
-  background: #ffffff;
-  padding: 40px 0; // reset side padding for desktop
+  background-color: #7a0a0a;
+  padding: 30px 0;
   display: flex;
   justify-content: center;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  scroll-padding-left: 10px; // ensures first card visible on mobile
-
-  /* Hide scrollbar */
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  -ms-overflow-style: none; /* IE 10+ */
-  scrollbar-width: none; /* Firefox */
+  color: #ffffff;
+  font-family: "Inter", "Segoe UI", sans-serif;
 }
 
-.cards-wrapper {
-  display: flex;
-  gap: 25px;
-  flex-wrap: nowrap;
-  justify-content: center;
-  width: max-content;
-  scroll-snap-type: x mandatory;
-}
-
-.info-card {
-  background: #fff;
-  padding: 25px 30px;
-  width: 230px;
-  border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+/* Center content in the middle 60% */
+.carousel2-content {
+  width: 65%;
   text-align: center;
-  transition: 0.3s;
-  flex-shrink: 0;
-  scroll-snap-align: start;
+  margin: auto;
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  /* Mobile: expand width */
+  @media (max-width: 900px) {
+    width: 80%;
+  }
+
+  @media (max-width: 600px) {
+    width: 90%;
   }
 }
 
-.card-title {
-  font-size: 15px;
+.carousel2-title {
+  font-size: 25px;
   font-weight: 600;
-  margin-bottom: 8px;
-  color: #333;
-}
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
 
-.card-value {
-  font-size: 30px;
-  font-weight: 700;
-  margin: 0;
-}
-
-@media (max-width: 768px) {
-  .carousel2-section {
-    justify-content: flex-start; // left-align for mobile
-    padding: 20px 0; // reduced top/bottom padding
-  }
-
-  .cards-wrapper {
-    padding-left: 10px; // ensure first card is fully visible
-    gap: 15px;
-  }
-
-  .info-card {
-    width: 180px; // smaller cards for mobile
-    padding: 20px;
-  }
-
-  .card-title {
-    font-size: 14px;
-  }
-
-  .card-value {
-    font-size: 24px;
-  }
-}
-
-@media (max-width: 480px) {
-  .carousel2-section {
-    padding: 15px 0; // further reduce top/bottom padding
-  }
-
-  .cards-wrapper {
-    padding-left: 8px;
-    gap: 12px;
-  }
-
-  .info-card {
-    width: 150px;
-    padding: 15px;
-  }
-
-  .card-title {
-    font-size: 13px;
-  }
-
-  .card-value {
+  @media (max-width: 600px) {
     font-size: 20px;
+  }
+}
+
+.carousel2-subtitle {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.7;
+  letter-spacing: 0.3px;
+  margin-top: 0;
+  opacity: 0.95;
+
+  @media (max-width: 600px) {
+    font-size: 16px;
   }
 }

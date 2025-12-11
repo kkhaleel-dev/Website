@@ -2,47 +2,22 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Header.scss";
 import Logo from "../assets/CollegeFullNameLogo.png";
-import LogoDark from "../assets/CollegeFullNameLogo-dark.png";
 import { FaChevronDown } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { MdClose } from "react-icons/md";
 
 const Header = () => {
-  const [darkMode, setDarkMode] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const menuRefs = useRef({});
   const dropdownContainerRef = useRef(null);
 
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
-    document.body.classList.toggle("dark-theme");
-  };
-
-  const handleDropdown = (menu) => {
-    const newMenu = openDropdown === menu ? null : menu;
-    setOpenDropdown(newMenu);
-
-    setTimeout(() => {
-      if (!newMenu) return;
-
-      const menuEl = menuRefs.current[newMenu];
-      if (!menuEl) return;
-
-      const rect = menuEl.getBoundingClientRect();
-      const viewportWidth = window.innerWidth;
-
-      if (rect.right > viewportWidth) {
-        menuEl.classList.add("align-right");
-      } else {
-        menuEl.classList.remove("align-right");
-      }
-    }, 10);
+  const handleDropdown = (key) => {
+    setOpenDropdown((prev) => (prev === key ? null : key));
   };
 
   useEffect(() => {
-    const handleOutsideClick = (e) => {
+    const onDocClick = (e) => {
       if (
         dropdownContainerRef.current &&
         !dropdownContainerRef.current.contains(e.target)
@@ -50,290 +25,320 @@ const Header = () => {
         setOpenDropdown(null);
       }
     };
-
-    document.addEventListener("click", handleOutsideClick);
-    return () => document.removeEventListener("click", handleOutsideClick);
+    document.addEventListener("click", onDocClick);
+    return () => document.removeEventListener("click", onDocClick);
   }, []);
 
   return (
-    <header className={`header ${darkMode ? "dark" : ""}`}>
-      <div className="left-section">
-        <img
-          src={darkMode ? LogoDark : Logo}
-          alt="Logo"
-          className="logo"
-          onClick={() => navigate("/")}
-          style={{ cursor: "pointer" }}
-        />
+    <header className="site-header">
+      {/* ROW 1 - TOPBAR */}
+      <div className="topbar">
+        <div className="topbar-left">
+          <img
+            src={Logo}
+            alt="logo"
+            className="logo"
+            onClick={() => navigate("/")}
+            role="button"
+          />
+        </div>
+
+        <div className="topbar-right">
+          <button
+            className="signup-btn"
+            onClick={() => navigate("/accounts")}
+            aria-label="Sign Up or Login"
+          >
+            Sign Up / Login
+          </button>
+        </div>
       </div>
 
-      <div className="right-container" ref={dropdownContainerRef}>
+      {/* ROW 2 - NAVBAR */}
+      <div className="navbar" ref={dropdownContainerRef}>
         <nav className="nav">
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
+          <ul className="nav-list">
+            <li className="nav-item active">
+              <Link to="/">Alumni Day</Link>
             </li>
 
-            {/* Academics */}
             <li
-              className={`dropdown-item ${
-                openDropdown === "academics" ? "active" : ""
+              className={`nav-item dropdown ${
+                openDropdown === "about" ? "open" : ""
               }`}
-              onClick={() => handleDropdown("academics")}
+              onClick={() => handleDropdown("about")}
             >
-              Academics
-              <FaChevronDown
-                className={`dropdown-icon ${
-                  openDropdown === "academics" ? "open" : ""
-                }`}
-              />
+              <span>
+                About <FaChevronDown className="chev" />
+              </span>
               <ul
-                ref={(el) => (menuRefs.current["academics"] = el)}
                 className={`dropdown-menu ${
-                  openDropdown === "academics" ? "show" : ""
+                  openDropdown === "about" ? "show" : ""
                 }`}
               >
                 <li>
-                  <Link to="/undergraduate">Undergraduate</Link>
+                  <Link to="/about">About CIT</Link>
                 </li>
                 <li>
-                  <Link to="/postgraduate">Postgraduate</Link>
+                  <Link to="/about/noticeboard">Noticeboard</Link>
+                </li>
+                <li>
+                  <Link to="/about/team">Team</Link>
+                </li>
+                <li>
+                  <Link to="/about/chapterPolicy">Chapter Policy</Link>
+                </li>
+                <li>
+                  <Link to="/about/codeOfEthics">Code of Ethics</Link>
                 </li>
               </ul>
             </li>
 
-            {/* Department */}
+            <li className="nav-item">
+              <Link to="/smart-card">Smart I-Card</Link>
+            </li>
+
             <li
-              className={`dropdown-item ${
-                openDropdown === "department" ? "active" : ""
+              className={`nav-item dropdown ${
+                openDropdown === "events" ? "open" : ""
               }`}
-              onClick={() => handleDropdown("department")}
+              onClick={() => handleDropdown("events")}
             >
-              Department
-              <FaChevronDown
-                className={`dropdown-icon ${
-                  openDropdown === "department" ? "open" : ""
-                }`}
-              />
+              <span>
+                Events <FaChevronDown className="chev" />
+              </span>
               <ul
-                ref={(el) => (menuRefs.current["department"] = el)}
                 className={`dropdown-menu ${
-                  openDropdown === "department" ? "show" : ""
+                  openDropdown === "events" ? "show" : ""
                 }`}
               >
                 <li>
-                  <Link to="/computer-science">Computer Science</Link>
+                  <Link to="/events">Latest Events</Link>
                 </li>
                 <li>
-                  <Link to="/mechanical">Mechanical</Link>
+                  <Link to="/events/reunion">Reunion</Link>
+                </li>
+                <li>
+                  <Link to="/events/chapters">Chapters</Link>
                 </li>
               </ul>
             </li>
 
-            {/* Faculty */}
+            <li className="nav-item">
+              <Link to="/sponsorship">Sponsorship</Link>
+            </li>
             <li
-              className={`dropdown-item ${
-                openDropdown === "faculty" ? "active" : ""
+              className={`nav-item dropdown ${
+                openDropdown === "startup" ? "open" : ""
               }`}
-              onClick={() => handleDropdown("faculty")}
+              onClick={() => handleDropdown("startup")}
             >
-              Faculty
-              <FaChevronDown
-                className={`dropdown-icon ${
-                  openDropdown === "faculty" ? "open" : ""
-                }`}
-              />
+              <span>
+                Startup <FaChevronDown className="chev" />
+              </span>
               <ul
-                ref={(el) => (menuRefs.current["faculty"] = el)}
                 className={`dropdown-menu ${
-                  openDropdown === "faculty" ? "show" : ""
+                  openDropdown === "startup" ? "show" : ""
                 }`}
               >
                 <li>
-                  <Link to="/professors">Professors</Link>
+                  <Link to="/startup/businessShowcase">Business Showcase</Link>
                 </li>
                 <li>
-                  <Link to="/assistant-professors">Assistant Professors</Link>
+                  <Link to="/startup/citAngels">CIT Angels</Link>
                 </li>
               </ul>
             </li>
 
-            {/* Students */}
             <li
-              className={`dropdown-item ${
-                openDropdown === "students" ? "active" : ""
+              className={`nav-item dropdown ${
+                openDropdown === "updates" ? "open" : ""
               }`}
-              onClick={() => handleDropdown("students")}
+              onClick={() => handleDropdown("updates")}
             >
-              Students
-              <FaChevronDown
-                className={`dropdown-icon ${
-                  openDropdown === "students" ? "open" : ""
-                }`}
-              />
+              <span>
+                Updates <FaChevronDown className="chev" />
+              </span>
               <ul
-                ref={(el) => (menuRefs.current["students"] = el)}
                 className={`dropdown-menu ${
-                  openDropdown === "students" ? "show" : ""
+                  openDropdown === "updates" ? "show" : ""
                 }`}
               >
                 <li>
-                  <Link to="/clubs">Clubs</Link>
+                  <Link to="/updates/newsletters">Newsletters</Link>
                 </li>
                 <li>
-                  <Link to="/events">Events</Link>
+                  <Link to="/updates/citAwards">CIT Awards</Link>
+                </li>
+                <li>
+                  <Link to="/updates/alumniNews">Alumni News</Link>
                 </li>
               </ul>
             </li>
 
-            {/* Exam */}
             <li
-              className={`dropdown-item ${
-                openDropdown === "exam" ? "active" : ""
+              className={`nav-item dropdown ${
+                openDropdown === "services" ? "open" : ""
               }`}
-              onClick={() => handleDropdown("exam")}
+              onClick={() => handleDropdown("services")}
             >
-              Exam
-              <FaChevronDown
-                className={`dropdown-icon ${
-                  openDropdown === "exam" ? "open" : ""
-                }`}
-              />
+              <span>
+                Services <FaChevronDown className="chev" />
+              </span>
               <ul
-                ref={(el) => (menuRefs.current["exam"] = el)}
                 className={`dropdown-menu ${
-                  openDropdown === "exam" ? "show" : ""
+                  openDropdown === "services" ? "show" : ""
                 }`}
               >
                 <li>
-                  <Link to="/schedules">Schedules</Link>
+                  <Link to="/services/lifeInsurance">
+                    Life Insurance Program
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/results">Results</Link>
-                </li>
-              </ul>
-            </li>
-
-            {/* Admission */}
-            <li
-              className={`dropdown-item ${
-                openDropdown === "admission" ? "active" : ""
-              }`}
-              onClick={() => handleDropdown("admission")}
-            >
-              Admission
-              <FaChevronDown
-                className={`dropdown-icon ${
-                  openDropdown === "admission" ? "open" : ""
-                }`}
-              />
-              <ul
-                ref={(el) => (menuRefs.current["admission"] = el)}
-                className={`dropdown-menu ${
-                  openDropdown === "admission" ? "show" : ""
-                }`}
-              >
-                <li>
-                  <Link to="/apply-online">Apply Online</Link>
+                  <Link to="/services/donation">Donation</Link>
                 </li>
                 <li>
-                  <Link to="/fees">Fees</Link>
+                  <Link to="/services/jobs">JOBS</Link>
+                </li>
+                <li>
+                  <Link to="/services/alumniDirectory">Alumni Directory</Link>
+                </li>
+                <li>
+                  <Link to="/services/alumniNearby">Alumni Nearby</Link>
+                </li>
+                <li>
+                  <Link to="/services/getTranscript">Get Transcripts</Link>
+                </li>
+                <li>
+                  <Link to="/services/alumniFaculties">Alumni Faculties</Link>
+                </li>
+                <li>
+                  <Link to="/services/mentorship">Mentorship</Link>
+                </li>
+                <li>
+                  <Link to="/services/contact">Visit Your Alma Master</Link>
                 </li>
               </ul>
             </li>
           </ul>
         </nav>
-      </div>
 
-      {/* MOBILE SIDEBAR ICON */}
-      <div className="mobile-menu-icon" onClick={() => setMobileMenuOpen(true)}>
-        ☰
+        {/* MOBILE MENU BUTTON (visible on small screens) */}
+        <div className="mobile-controls">
+          <button
+            className="mobile-signup"
+            onClick={() => navigate("/accounts")}
+          >
+            Sign Up / Login
+          </button>
+
+          <button
+            className="mobile-menu-btn"
+            onClick={() => setMobileMenuOpen(true)}
+            aria-label="Open menu"
+          >
+            MENU
+          </button>
+        </div>
       </div>
 
       {/* MOBILE SIDEBAR */}
       <div className={`mobile-sidebar ${mobileMenuOpen ? "open" : ""}`}>
-        <div className="close-btn" onClick={() => setMobileMenuOpen(false)}>
-          <MdClose />
+        <div className="mobile-sidebar-header">
+          <img
+            src={Logo}
+            alt="logo"
+            className="mobile-logo"
+            onClick={() => {
+              navigate("/");
+              setMobileMenuOpen(false);
+            }}
+          />
+          <button
+            className="close-btn"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="Close menu"
+          >
+            <MdClose />
+          </button>
         </div>
 
         <ul className="mobile-nav">
           <li>
             <Link to="/" onClick={() => setMobileMenuOpen(false)}>
-              Home
+              HOME
             </Link>
           </li>
           <li>
-            <Link to="/about" onClick={() => setMobileMenuOpen(false)}>
-              About
+            <Link to="/alumni-day" onClick={() => setMobileMenuOpen(false)}>
+              Alumni Day
             </Link>
           </li>
 
           <details>
-            <summary>Academics</summary>
-            <Link to="/undergraduate" onClick={() => setMobileMenuOpen(false)}>
-              Undergraduate
+            <summary>About</summary>
+            <Link to="/about" onClick={() => setMobileMenuOpen(false)}>
+              Institute
             </Link>
-            <Link to="/postgraduate" onClick={() => setMobileMenuOpen(false)}>
-              Postgraduate
-            </Link>
-          </details>
-
-          <details>
-            <summary>Department</summary>
-            <Link
-              to="/computer-science"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Computer Science
-            </Link>
-            <Link to="/mechanical" onClick={() => setMobileMenuOpen(false)}>
-              Mechanical
+            <Link to="/about/team" onClick={() => setMobileMenuOpen(false)}>
+              Team
             </Link>
           </details>
 
-          <details>
-            <summary>Faculty</summary>
-            <Link to="/professors" onClick={() => setMobileMenuOpen(false)}>
-              Professors
+          <li>
+            <Link to="/smart-card" onClick={() => setMobileMenuOpen(false)}>
+              Smart I-Card
             </Link>
-            <Link
-              to="/assistant-professors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Assistant Professors
-            </Link>
-          </details>
+          </li>
 
           <details>
-            <summary>Students</summary>
-            <Link to="/clubs" onClick={() => setMobileMenuOpen(false)}>
-              Clubs
-            </Link>
+            <summary>Events</summary>
             <Link to="/events" onClick={() => setMobileMenuOpen(false)}>
-              Events
+              All Events
+            </Link>
+            <Link
+              to="/events/upcoming"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Upcoming
+            </Link>
+          </details>
+
+          <li>
+            <Link to="/sponsorship" onClick={() => setMobileMenuOpen(false)}>
+              Sponsorship
+            </Link>
+          </li>
+          <li>
+            <Link to="/startup" onClick={() => setMobileMenuOpen(false)}>
+              Startup
+            </Link>
+          </li>
+
+          <details>
+            <summary>Updates</summary>
+            <Link to="/news" onClick={() => setMobileMenuOpen(false)}>
+              News
+            </Link>
+            <Link to="/announcements" onClick={() => setMobileMenuOpen(false)}>
+              Announcements
             </Link>
           </details>
 
           <details>
-            <summary>Exam</summary>
-            <Link to="/schedules" onClick={() => setMobileMenuOpen(false)}>
-              Schedules
+            <summary>Services</summary>
+            <Link
+              to="/services/smart-card"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Smart I-Card Service
             </Link>
-            <Link to="/results" onClick={() => setMobileMenuOpen(false)}>
-              Results
-            </Link>
-          </details>
-
-          <details>
-            <summary>Admission</summary>
-            <Link to="/apply-online" onClick={() => setMobileMenuOpen(false)}>
-              Apply Online
-            </Link>
-            <Link to="/fees" onClick={() => setMobileMenuOpen(false)}>
-              Fees
+            <Link
+              to="/services/contact"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Contact
             </Link>
           </details>
         </ul>

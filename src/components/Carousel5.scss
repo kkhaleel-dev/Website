@@ -1,0 +1,164 @@
+/* Carousel5.scss */
+.events-wrapper {
+  width: 100vw;
+  padding: 20px;
+  box-sizing: border-box;
+  background: #f9f9f9;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h2 {
+      font-size: 32px;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .view-all-btn {
+      padding: 10px 20px;
+      border: none;
+      background: #800000;
+      color: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 16px;
+      transition: background 0.3s;
+
+      &:hover {
+        background: #a00000;
+      }
+    }
+  }
+}
+
+.events-container {
+  overflow: hidden;
+  position: relative;
+
+  .events-inner-wrapper {
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .events-inner {
+    display: flex;
+    transition: transform 0.45s ease;
+    padding-bottom: 20px;
+  }
+
+  .event-card {
+    margin-right: 20px;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+
+    .event-img {
+      flex: 1;
+      min-height: 200px;
+      background: #ddd;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .event-content {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .event-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .event-type {
+        font-size: 12px;
+        background: #223a5e;
+        color: #fff;
+        padding: 2px 8px;
+        border-radius: 4px;
+        display: inline-block;
+      }
+
+      .event-date {
+        font-size: 14px;
+        color: #555;
+      }
+
+      .event-btn {
+        margin-top: auto;
+        padding: 10px;
+        background: #800000;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+        font-size: 14px;
+
+        &:hover {
+          background: #a00000;
+        }
+      }
+    }
+  }
+
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    font-size: 28px;
+    padding: 8px 14px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    z-index: 2;
+    transition: background 0.3s;
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+      background: #fff;
+    }
+  }
+
+  .prev {
+    left: 10px;
+  }
+
+  .next {
+    right: 10px;
+  }
+}
+
+/* Make carousel scrollable vertically if content exceeds viewport */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+.events-wrapper {
+  //   min-height: 100vh;
+}
+
+.event-img {
+  width: 100%;
+  height: 200px; // adjust as needed
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+}

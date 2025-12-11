@@ -1,0 +1,84 @@
+/* Carousel6.scss */
+.carousel6-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+
+  .carousel6-content {
+    display: flex;
+    max-width: 1200px;
+    width: 90%;
+    border-radius: 8px;
+    overflow: hidden;
+
+    .text-section {
+      background-color: #8a1010;
+      color: white;
+      padding: 40px;
+      flex: 0 0 40%; // takes 40% width
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      h2 {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      p {
+        font-size: 16px;
+        margin-bottom: 30px;
+      }
+
+      .cta-btn {
+        background-color: white;
+        color: #8a1010;
+        border: none;
+        padding: 12px 24px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 4px;
+        width: fit-content;
+        transition: background 0.3s, color 0.3s;
+
+        &:hover {
+          background-color: #f2f2f2;
+        }
+      }
+    }
+
+    .image-section {
+      flex: 0 0 60%; // takes 60% width
+      position: relative;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; // fully cover its container
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel6-content {
+    flex-direction: column;
+
+    .text-section,
+    .image-section {
+      flex: unset;
+      width: 100%;
+    }
+
+    .text-section {
+      padding: 20px;
+    }
+
+    .image-section img {
+      height: 300px; // adjust for mobile
+    }
+  }
+}
