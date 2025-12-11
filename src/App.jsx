@@ -15,7 +15,7 @@ import "./App.css";
 import SmartICardForm from "./components/SmartICardForm.jsx";
 import Noticeboard from "./components/NoticeBoard/NoticeBoard.jsx";
 import Team from "./components/Team/Team.jsx";
-import ChapterPolicy from "./components/ChapterPolicy/Chapterpolicy.jsx";
+import ChapterPolicy from "./components/ChapterPolicy/ChapterPolicy.jsx";
 import CodeOfEthics from "./components/CodeOfEthics/CodeOfEthics.jsx";
 import LatestEvents from "./components/LatestEvents/LatestEvents.jsx";
 import Reunion from "./components/Reunion/Reunion.jsx";
