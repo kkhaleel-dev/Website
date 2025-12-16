@@ -1,0 +1,142 @@
+.magazines-page {
+  min-height: 100vh;
+  background: #eef4fb;
+  padding: 2.8rem 4%;
+  font-family: "Inter", sans-serif;
+}
+
+/* Header */
+.magazines-header {
+  max-width: 850px;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+
+  h2 {
+    font-size: 2.5rem;
+    color: #0a2148;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 1.08rem;
+    color: #555;
+    line-height: 1.6;
+  }
+}
+
+/* Grid */
+.magazines-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1.2rem;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+/* Card */
+.magazine-card {
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
+  }
+}
+
+/* Cover */
+.magazine-cover {
+  img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+}
+
+/* Content */
+.magazine-content {
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  height: 100%;
+
+  h3 {
+    font-size: 1.28rem;
+    color: #0a2148;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .magazine-edition {
+    font-size: 0.85rem;
+    color: #777;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.55;
+  }
+
+  .magazine-link {
+    margin-top: auto;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #105bbf;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .magazines-header h2 {
+    font-size: 2.2rem;
+  }
+
+  .magazine-cover img {
+    height: 180px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .magazines-page {
+    padding: 2rem 3%;
+  }
+
+  .magazines-header h2 {
+    font-size: 1.9rem;
+  }
+
+  .magazines-grid {
+    gap: 1.2rem;
+  }
+
+  .magazine-cover img {
+    height: 155px;
+  }
+
+  .magazine-content {
+    padding: 1.15rem;
+
+    h3 {
+      font-size: 1.18rem;
+    }
+
+    p {
+      font-size: 0.92rem;
+    }
+  }
+}

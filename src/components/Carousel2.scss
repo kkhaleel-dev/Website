@@ -1,10 +1,12 @@
+@import "../variables.scss";
+
 .carousel2-section {
   width: 100%;
-  background-color: #7a0a0a;
+  background-color: $common-bg;
   padding: 30px 0;
   display: flex;
   justify-content: center;
-  color: #ffffff;
+  color: $white;
   font-family: "Inter", "Segoe UI", sans-serif;
 }
 

@@ -1,9 +1,14 @@
-/* Carousel5.scss */
+@import "../variables.scss";
+
 .events-wrapper {
-  width: 100vw;
-  padding: 20px;
+  width: 100%;
+  padding: 40px;
   box-sizing: border-box;
   background: #f9f9f9;
+
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
 
   .header {
     display: flex;
@@ -15,6 +20,10 @@
       font-size: 32px;
       margin: 0;
       font-weight: 700;
+
+      @media (max-width: 768px) {
+        font-size: 24px;
+      }
     }
 
     .view-all-btn {
@@ -26,7 +35,118 @@
       cursor: pointer;
       font-weight: 600;
       font-size: 16px;
-      transition: background 0.3s;
+
+      &:hover {
+        background: #a00000;
+      }
+
+      @media (max-width: 1023px) {
+        padding: 8px 16px;
+        font-size: 14px;
+      }
+
+      @media (max-width: 768px) {
+        padding: 7px 14px;
+        font-size: 13px;
+        border-radius: 5px;
+      }
+    }
+  }
+}
+
+.events-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.events-inner-wrapper {
+  overflow: hidden;
+
+  @media (max-width: 1023px) {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+.events-inner {
+  display: flex;
+  gap: 16px;
+  transition: transform 0.45s ease;
+
+  @media (max-width: 1023px) {
+    transition: none;
+    padding-bottom: 10px;
+  }
+}
+
+.event-card {
+  width: 310px;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+  margin-bottom: 15px;
+
+  @media (max-width: 1023px) {
+    width: 280px;
+  }
+
+  @media (max-width: 480px) {
+    width: 90%;
+  }
+
+  .event-img {
+    height: 200px;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .event-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+
+    .event-title {
+      font-size: 17px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .event-type {
+      font-size: 12px;
+      background: #223a5e;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 4px;
+      width: fit-content;
+    }
+
+    .event-date {
+      font-size: 13px;
+      color: #555;
+    }
+
+    .event-btn {
+      margin-top: auto;
+      padding: 9px;
+      background: #800000;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
 
       &:hover {
         background: #a00000;
@@ -35,130 +155,10 @@
   }
 }
 
-.events-container {
-  overflow: hidden;
-  position: relative;
-
-  .events-inner-wrapper {
-    overflow: hidden;
-    height: 100%;
-  }
-
-  .events-inner {
-    display: flex;
-    transition: transform 0.45s ease;
-    padding-bottom: 20px;
-  }
-
-  .event-card {
-    margin-right: 20px;
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-
-    .event-img {
-      flex: 1;
-      min-height: 200px;
-      background: #ddd;
-      border-bottom: 1px solid #ccc;
-    }
-
-    .event-content {
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-
-      .event-title {
-        font-size: 18px;
-        font-weight: 600;
-        margin: 0;
-      }
-
-      .event-type {
-        font-size: 12px;
-        background: #223a5e;
-        color: #fff;
-        padding: 2px 8px;
-        border-radius: 4px;
-        display: inline-block;
-      }
-
-      .event-date {
-        font-size: 14px;
-        color: #555;
-      }
-
-      .event-btn {
-        margin-top: auto;
-        padding: 10px;
-        background: #800000;
-        color: #fff;
-        border: none;
-        border-radius: 6px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.3s;
-        font-size: 14px;
-
-        &:hover {
-          background: #a00000;
-        }
-      }
-    }
-  }
-
-  .carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.95);
-    border: none;
-    font-size: 28px;
-    padding: 8px 14px;
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-    z-index: 2;
-    transition: background 0.3s;
-
-    &:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-    }
-
-    &:hover:not(:disabled) {
-      background: #fff;
-    }
-  }
-
-  .prev {
-    left: 10px;
-  }
-
-  .next {
-    right: 10px;
-  }
+.prev {
+  left: 10px;
 }
 
-/* Make carousel scrollable vertically if content exceeds viewport */
-html,
-body,
-#root {
-  height: 100%;
-}
-
-.events-wrapper {
-  //   min-height: 100vh;
-}
-
-.event-img {
-  width: 100%;
-  height: 200px; // adjust as needed
-  background-size: cover;
-  background-position: center;
-  border-radius: 8px;
+.next {
+  right: 10px;
 }

@@ -1,7 +1,4 @@
-/* variables */
-$maroon: #7a0a0a;
-$light: #f0f0f0;
-$white: #ffffff;
+@import "../variables.scss";
 
 /* overall header */
 .site-header {
@@ -16,8 +13,7 @@ $white: #ffffff;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #ffffff; /* light strip as in image */
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: $common-bg;
 
   .topbar-left {
     display: flex;
@@ -25,7 +21,7 @@ $white: #ffffff;
   }
 
   .logo {
-    height: 80px;
+    height: 60px;
     width: auto;
     object-fit: contain;
     cursor: pointer;
@@ -39,8 +35,8 @@ $white: #ffffff;
   }
 
   .signup-btn {
-    background: $maroon;
-    color: $white;
+    background: $white;
+    color: #0d1f1a;
     border: none;
     padding: 8px 14px;
     font-weight: 700;
@@ -53,13 +49,10 @@ $white: #ffffff;
 
 /* NAVBAR (ROW 2) - centered maroon bar */
 .navbar {
-  background: $maroon;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 20px 12px;
-  // border-bottom: 4px solid rgba(0, 0, 0, 0.15);
 
   .nav {
     width: 100%;
@@ -69,7 +62,6 @@ $white: #ffffff;
   .nav-list {
     display: flex;
     justify-content: center;
-    gap: 34px;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -81,6 +73,7 @@ $white: #ffffff;
       font-weight: 700;
       position: relative;
       cursor: pointer;
+      padding: 20px 20px;
       a,
       span {
         color: $white;
@@ -88,8 +81,7 @@ $white: #ffffff;
       }
 
       &:hover {
-        // background-color: #350505;
-        // text-decoration: underline;
+        background-color: $options-card-bg;
       }
     }
 
@@ -101,9 +93,10 @@ $white: #ffffff;
     .dropdown-menu {
       display: none;
       position: absolute;
-      top: calc(100% + 8px);
-      left: 0;
-      background: $white;
+      top: calc(100%);
+      left: 0px;
+      border-top: 1px solid $option-hover;
+      background: $options-card-bg !important;
       color: #222;
       min-width: 180px;
       border-radius: 2px;
@@ -121,20 +114,29 @@ $white: #ffffff;
       }
 
       li:hover {
-        background: rgba(60, 29, 146, 0.877);
+        background: $option-hover;
       }
     }
 
     .dropdown.open .dropdown-menu,
     .dropdown-menu.show {
       display: block;
-      background-color: $maroon;
+      background-color: #0d1f1a;
     }
   }
 
   /* mobile controls hidden on desktop */
   .mobile-controls {
     display: none;
+  }
+}
+
+.nav-list {
+  .nav-item.dropdown.open {
+    background-color: $options-card-bg;
+  }
+  .nav-item {
+    transition: background-color 0.25s ease;
   }
 }
 
@@ -145,7 +147,7 @@ $white: #ffffff;
   right: -320px;
   width: 320px;
   height: 100vh;
-  background: $maroon;
+  background: #0d1f1a;
   color: $white;
   z-index: 4000;
   transition: right 0.28s ease;
@@ -174,6 +176,13 @@ $white: #ffffff;
       padding: 6px;
       cursor: pointer;
       font-size: 20px;
+    }
+
+    .mobile-signup {
+      border: $common-bg;
+      background-color: rgb(255, 255, 55);
+      border-radius: 2px;
+      padding: 7px;
     }
   }
 
@@ -221,9 +230,8 @@ $white: #ffffff;
 }
 
 @media (max-width: 768px) {
-  /* Mobile: topbar becomes row1 logo only - keep signup hidden in topbar; row2 becomes controls row */
   .topbar {
-    padding: 10px 14px;
+    padding: 0px 0px;
     .topbar-right {
       display: none;
     }
@@ -250,15 +258,6 @@ $white: #ffffff;
       align-items: center;
       padding: 0 6px;
 
-      .mobile-signup {
-        background: $white;
-        color: $maroon;
-        border: none;
-        padding: 8px 12px;
-        font-weight: 700;
-        border-radius: 4px;
-      }
-
       .mobile-menu-btn {
         background: transparent;
         color: $white;
@@ -278,5 +277,39 @@ $white: #ffffff;
   }
   .mobile-sidebar {
     width: 280px;
+  }
+}
+
+.mobile-sidebar details summary.mobile-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* pushes chevron to the end */
+  padding: 10px 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mobile-sidebar details summary .chev {
+  font-size: 14px;
+  transition: transform 0.25s ease;
+}
+
+/* When dropdown is open, rotate chevron */
+.mobile-sidebar details[open] summary .chev {
+  transform: rotate(180deg);
+}
+/* Rotate chevron on desktop hover */
+.nav-item.dropdown .chev {
+  transition: transform 0.25s ease;
+}
+
+.nav-item.dropdown.open .chev {
+  transform: rotate(180deg);
+}
+
+/* Enable hover dropdown ONLY for desktop */
+@media (min-width: 769px) {
+  .nav-item.dropdown:hover .dropdown-menu {
+    display: block;
   }
 }

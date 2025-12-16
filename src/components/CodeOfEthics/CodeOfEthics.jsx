@@ -4,43 +4,59 @@ import "./CodeOfEthics.scss";
 const CodeOfEthics = () => {
   const ethicsSections = [
     {
-      title: "Integrity",
+      title: "Integrity & Honesty",
       content:
-        "Members shall act with honesty, fairness, and integrity in all dealings, both within the alumni network and externally.",
+        "CIT alumni shall act with the highest levels of integrity and honesty in all professional and personal interactions, upholding the reputation of the Institute and its community.",
     },
     {
-      title: "Respect",
+      title: "Respect & Inclusivity",
       content:
-        "Members must treat each other with respect, valuing diversity of opinions, culture, and background.",
+        "Members must respect the dignity, values, and diversity of all individuals; promoting an inclusive and collaborative environment for all CITians.",
     },
     {
-      title: "Confidentiality",
+      title: "Commitment to Excellence",
       content:
-        "All sensitive information shared within the alumni network must be kept confidential unless authorized for disclosure.",
+        "Alumni shall pursue excellence in professional endeavors, learning continuously, and contributing meaningfully to society and their fields of expertise.",
     },
     {
-      title: "Professionalism",
+      title: "Professional Conduct",
       content:
-        "Members shall uphold professional standards and represent the Institute positively in all interactions.",
+        "Members shall demonstrate professional behavior in all communications, engagements, and representations of CIT, ensuring fairness, courtesy, and ethical decision-making.",
     },
     {
-      title: "Accountability",
+      title: "Confidentiality & Privacy",
       content:
-        "Members are accountable for their actions and decisions, ensuring they do not harm the reputation of the Institute or its alumni.",
+        "All sensitive or proprietary information shared within alumni activities, networks, and collaborations must be respected and protected unless legally authorized for disclosure.",
     },
     {
-      title: "Compliance",
+      title: "Accountability & Responsibility",
       content:
-        "Members shall comply with all applicable laws, regulations, and the Institute’s policies while engaging in alumni activities.",
+        "Alumni are responsible for their actions and decisions, ensuring they positively reflect the values of CIT and contribute to the welfare of the alumni community.",
+    },
+    {
+      title: "Service & Giving Back",
+      content:
+        "Members should seek opportunities to contribute their skills, time, and resources to mentor current students, support community initiatives, and strengthen the alumni network.",
     },
   ];
 
   return (
     <div className="code-of-ethics-page">
-      <h2>Code of Ethics</h2>
-      <div className="ethics-sections">
+      <div className="ethics-hero">
+        <h2>Code of Ethics</h2>
+        <p>
+          As members of the Coimbatore Institute of Technology Alumni
+          Association, we commit to these guiding principles that shape our
+          conduct, character, and collective reputation.
+        </p>
+      </div>
+
+      <div className="ethics-container">
         {ethicsSections.map((section, index) => (
-          <div className="ethics-section" key={index}>
+          <div className="ethics-card" key={index}>
+            <span className="ethics-index">
+              {String(index + 1).padStart(2, "0")}
+            </span>
             <h3>{section.title}</h3>
             <p>{section.content}</p>
           </div>

@@ -1,0 +1,73 @@
+.alumni-nearby-page {
+  padding: 1.5rem 3%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f9f9f9;
+
+  .map-header {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    h2 {
+      font-size: 1.8rem;
+      color: #0a2148;
+    }
+
+    .filter-btn {
+      background-color: #105bbf;
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background-color: #0a3e8c;
+      }
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .alumni-nearby-page {
+    padding: 1.2rem;
+
+    .map-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.8rem;
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .filter-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .alumni-nearby-page {
+    padding: 1rem;
+
+    .map-header h2 {
+      font-size: 1.3rem;
+    }
+
+    .map-header .filter-btn {
+      font-size: 0.85rem;
+    }
+  }
+}

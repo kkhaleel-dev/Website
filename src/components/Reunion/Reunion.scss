@@ -1,143 +1,156 @@
 .reunion-page {
   min-height: 100vh;
-  padding: 2rem 5%;
-  background: #f5f7fa;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  background: #eef4fb;
+  padding: 2.8rem 4%;
+  font-family: "Inter", sans-serif;
+}
+
+/* Header */
+.reunion-header {
+  max-width: 850px;
+  margin: 0 auto 2.5rem;
+  text-align: center;
 
   h2 {
-    font-size: 2rem;
+    font-size: 2.5rem;
     color: #0a2148;
-    margin-bottom: 2rem;
-    text-align: center;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+
+  p {
+    font-size: 1.08rem;
+    color: #555;
+    line-height: 1.6;
+  }
+}
+
+/* Grid */
+.reunion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+/* Card */
+.reunion-card {
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
+  }
+}
+
+/* Image */
+.reunion-image {
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+  }
+
+  .date-badge {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: #0a2148;
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 18px;
+  }
+}
+
+/* Content */
+.reunion-content {
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  height: 100%;
+
+  h3 {
+    font-size: 1.3rem;
+    color: #0a2148;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .reunion-location {
+    font-size: 0.88rem;
+    color: #777;
+    font-weight: 500;
+  }
+
+  p {
+    font-size: 0.96rem;
+    color: #444;
+    line-height: 1.55;
+  }
+
+  .reunion-link {
+    margin-top: auto;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #105bbf;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .reunion-header h2 {
+    font-size: 2.2rem;
+  }
+
+  .reunion-image img {
+    height: 170px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .reunion-page {
+    padding: 2rem 3%;
+  }
+
+  .reunion-header h2 {
+    font-size: 1.9rem;
   }
 
   .reunion-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    width: 100%;
-    max-width: 1200px;
+    gap: 1.2rem;
   }
 
-  .reunion-card {
-    background: #ffffff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-    display: flex;
-    flex-direction: column;
-
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-    }
-
-    .reunion-image {
-      position: relative;
-      width: 100%;
-      height: 180px;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .date-badge {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: #105bbf;
-        color: #fff;
-        font-size: 0.85rem;
-        font-weight: 600;
-        padding: 0.35rem 0.7rem;
-        border-radius: 5px;
-      }
-    }
-
-    .reunion-content {
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-
-      h3 {
-        font-size: 1.3rem;
-        color: #0a2148;
-      }
-
-      .reunion-location {
-        font-size: 0.9rem;
-        color: #555;
-        display: block;
-      }
-
-      p {
-        font-size: 1rem;
-        color: #333;
-        margin: 0.5rem 0;
-      }
-
-      .reunion-link {
-        margin-top: auto;
-        font-size: 0.95rem;
-        font-weight: 500;
-        color: #105bbf;
-        text-decoration: none;
-
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-    }
+  .reunion-image img {
+    height: 150px;
   }
-}
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .reunion-page {
-    padding: 2rem 3%;
-    .reunion-card {
-      .reunion-content {
-        padding: 1.2rem;
-      }
-      .reunion-image {
-        height: 150px;
-      }
-    }
-  }
-}
+  .reunion-content {
+    padding: 1.15rem;
 
-@media (max-width: 480px) {
-  .reunion-page {
-    padding: 1.5rem 2%;
-    h2 {
-      font-size: 1.6rem;
+    h3 {
+      font-size: 1.2rem;
     }
-    .reunion-card {
-      .reunion-content {
-        padding: 1rem;
-        h3 {
-          font-size: 1.2rem;
-        }
-        p {
-          font-size: 0.95rem;
-        }
-        .reunion-location {
-          font-size: 0.85rem;
-        }
-      }
-      .reunion-image {
-        height: 130px;
-        .date-badge {
-          font-size: 0.75rem;
-          padding: 0.25rem 0.5rem;
-        }
-      }
+
+    p {
+      font-size: 0.92rem;
     }
   }
 }

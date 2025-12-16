@@ -4,64 +4,79 @@
   margin: 2rem auto;
   padding: 1rem;
   min-height: 100vh;
+  font-family: "Poppins", sans-serif;
 
   h2 {
     text-align: center;
     font-size: 2rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     color: #0a2148;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   .noticeboard-grid {
     display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
 
   .notice-card {
-    background: #ffffff;
-    border-radius: 8px;
-    padding: 1.2rem;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
+    background: linear-gradient(145deg, #ffffff, #e6f0ff);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid #105bbf;
+    transition: transform 0.3s, box-shadow 0.3s;
 
     &:hover {
-      transform: translateY(-3px);
-      box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.15);
+      transform: translateY(-5px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
     }
 
     .notice-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.8rem;
+      margin-bottom: 1rem;
 
       h3 {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         color: #0a2148;
-        margin: 0;
+        font-weight: 600;
       }
 
       .notice-date {
         font-size: 0.9rem;
-        color: #555;
+        color: #105bbf;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
       }
     }
 
     p {
       font-size: 1rem;
       color: #333;
-      margin-bottom: 0.8rem;
+      margin-bottom: 1rem;
+      line-height: 1.5;
     }
 
     .notice-link {
+      display: inline-block;
       font-size: 0.95rem;
-      color: #105bbf;
+      color: #ffffff;
+      background-color: #105bbf;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
       text-decoration: none;
       font-weight: 500;
+      transition: background-color 0.3s;
 
       &:hover {
-        text-decoration: underline;
+        background-color: #0a3a7d;
       }
     }
   }
@@ -73,7 +88,7 @@
     padding: 0.5rem;
 
     h2 {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
     }
 
     .notice-card {
@@ -94,6 +109,7 @@
 
       .notice-link {
         font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
       }
     }
   }

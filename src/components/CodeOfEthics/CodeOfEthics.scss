@@ -1,97 +1,111 @@
 .code-of-ethics-page {
-  min-height: 100vh; // Full viewport height
-  padding: 2rem 5%;
-  background: #f9f9f9;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  min-height: 100vh;
+  background: #eef4fb;
+  padding-bottom: 4rem;
+  font-family: "Inter", sans-serif;
+}
+
+.ethics-hero {
+  text-align: center;
+  padding: 3rem 5% 2rem;
+  background: linear-gradient(90deg, #0a2148, #003366);
+  color: #fff;
 
   h2 {
-    font-size: 2rem;
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+
+  p {
+    font-size: 1.15rem;
+    opacity: 0.85;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+}
+
+.ethics-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 5%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.ethics-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem 1.8rem;
+  position: relative;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 14px 36px rgba(0, 0, 0, 0.12);
+  }
+
+  .ethics-index {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    background: #003366;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  h3 {
+    font-size: 1.45rem;
     color: #0a2148;
-    text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 0.8rem;
   }
 
-  .ethics-sections {
-    width: 100%;
-    max-width: 1000px;
-    display: flex;
-    flex-direction: column;
-    gap: 1.8rem;
-
-    .ethics-section {
-      background: #ffffff;
-      border-radius: 10px;
-      padding: 1.5rem 2rem;
-      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
-      transition: transform 0.2s, box-shadow 0.2s;
-
-      &:hover {
-        transform: translateY(-3px);
-        box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.12);
-      }
-
-      h3 {
-        font-size: 1.4rem;
-        color: #0a2148;
-        margin-bottom: 0.8rem;
-      }
-
-      p {
-        font-size: 1rem;
-        line-height: 1.6;
-        color: #333;
-      }
-    }
+  p {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: #444;
   }
 }
 
-/* Responsive adjustments */
+/* Tablet */
 @media (max-width: 768px) {
-  .code-of-ethics-page {
-    padding: 2rem 3%;
-
+  .ethics-hero {
     h2 {
-      font-size: 1.8rem;
+      font-size: 2.2rem;
     }
+  }
 
-    .ethics-sections {
-      .ethics-section {
-        padding: 1.2rem 1.5rem;
+  .ethics-card {
+    padding: 1.6rem 1.4rem;
 
-        h3 {
-          font-size: 1.25rem;
-        }
-
-        p {
-          font-size: 0.95rem;
-        }
-      }
+    h3 {
+      font-size: 1.3rem;
     }
   }
 }
 
+/* Mobile */
 @media (max-width: 480px) {
-  .code-of-ethics-page {
-    padding: 1.5rem 2%;
-
+  .ethics-hero {
+    padding: 2rem 3%;
     h2 {
-      font-size: 1.5rem;
+      font-size: 1.9rem;
+    }
+  }
+
+  .ethics-card {
+    .ethics-index {
+      font-size: 0.75rem;
     }
 
-    .ethics-sections {
-      .ethics-section {
-        padding: 1rem 1rem;
-
-        h3 {
-          font-size: 1.15rem;
-        }
-
-        p {
-          font-size: 0.9rem;
-        }
-      }
+    h3 {
+      font-size: 1.15rem;
     }
   }
 }

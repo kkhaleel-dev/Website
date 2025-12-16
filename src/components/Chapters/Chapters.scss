@@ -1,120 +1,142 @@
 .chapters-page {
   min-height: 100vh;
-  padding: 2rem 5%;
-  background: #f5f7fa;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  background: #eef4fb;
+  padding: 2.8rem 4%;
+  font-family: "Inter", sans-serif;
+}
+
+/* Header */
+.chapters-header {
+  max-width: 850px;
+  margin: 0 auto 2.5rem;
+  text-align: center;
 
   h2 {
-    font-size: 2rem;
+    font-size: 2.5rem;
     color: #0a2148;
-    margin-bottom: 2rem;
-    text-align: center;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 1.08rem;
+    color: #555;
+    line-height: 1.6;
+  }
+}
+
+/* Grid */
+.chapters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1.5rem;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+/* Card */
+.chapter-card {
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
+  }
+}
+
+/* Image */
+.chapter-image {
+  img {
+    width: 100%;
+    height: 185px;
+    object-fit: cover;
+  }
+}
+
+/* Content */
+.chapter-content {
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+
+  h3 {
+    font-size: 1.3rem;
+    color: #0a2148;
+    font-weight: 600;
+  }
+
+  .chapter-location {
+    font-size: 0.88rem;
+    color: #777;
+    font-weight: 500;
+  }
+
+  .chapter-members {
+    font-size: 0.9rem;
+    color: #444;
+    font-weight: 600;
+  }
+
+  .chapter-link {
+    margin-top: auto;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #105bbf;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .chapters-header h2 {
+    font-size: 2.2rem;
+  }
+
+  .chapter-image img {
+    height: 165px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .chapters-page {
+    padding: 2rem 3%;
+  }
+
+  .chapters-header h2 {
+    font-size: 1.9rem;
   }
 
   .chapters-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    width: 100%;
-    max-width: 1200px;
+    gap: 1.2rem;
   }
 
-  .chapter-card {
-    background: #ffffff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-    display: flex;
-    flex-direction: column;
-
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-    }
-
-    .chapter-image img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-
-    .chapter-content {
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-
-      h3 {
-        font-size: 1.3rem;
-        color: #0a2148;
-      }
-
-      .chapter-location,
-      .chapter-members {
-        font-size: 0.9rem;
-        color: #555;
-        display: block;
-      }
-
-      .chapter-link {
-        margin-top: auto;
-        font-size: 0.95rem;
-        font-weight: 500;
-        color: #105bbf;
-        text-decoration: none;
-
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-    }
+  .chapter-image img {
+    height: 145px;
   }
-}
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .chapters-page {
-    padding: 2rem 3%;
+  .chapter-content {
+    padding: 1.15rem;
 
-    .chapter-card {
-      .chapter-content {
-        padding: 1.2rem;
-      }
-
-      .chapter-image img {
-        height: 150px;
-      }
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .chapters-page {
-    padding: 1.5rem 2%;
-    h2 {
-      font-size: 1.6rem;
+    h3 {
+      font-size: 1.2rem;
     }
 
-    .chapter-card {
-      .chapter-content {
-        padding: 1rem;
-
-        h3 {
-          font-size: 1.2rem;
-        }
-
-        .chapter-location,
-        .chapter-members {
-          font-size: 0.85rem;
-        }
-      }
-
-      .chapter-image img {
-        height: 130px;
-      }
+    .chapter-location,
+    .chapter-members {
+      font-size: 0.85rem;
     }
   }
 }

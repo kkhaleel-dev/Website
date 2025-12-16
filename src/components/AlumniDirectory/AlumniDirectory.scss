@@ -1,0 +1,129 @@
+.alumni-directory-page {
+  min-height: 100vh;
+  padding: 2rem 5%;
+  background: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h2 {
+    font-size: 2rem;
+    color: #0a2148;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .alumni-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.8rem;
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  .alumni-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .alumni-photo {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-bottom: 1rem;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .alumni-info {
+      text-align: center;
+
+      h3 {
+        font-size: 1.25rem;
+        color: #0a2148;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        font-size: 0.95rem;
+        color: #333;
+        margin: 0.3rem 0;
+
+        a {
+          color: #105bbf;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .alumni-directory-page {
+    padding: 2rem 3%;
+    .alumni-card {
+      padding: 1.2rem;
+
+      .alumni-photo {
+        width: 130px;
+        height: 130px;
+      }
+
+      .alumni-info h3 {
+        font-size: 1.1rem;
+      }
+
+      .alumni-info p {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .alumni-directory-page {
+    padding: 1.5rem 2%;
+
+    h2 {
+      font-size: 1.6rem;
+    }
+
+    .alumni-card {
+      padding: 1rem;
+
+      .alumni-photo {
+        width: 110px;
+        height: 110px;
+      }
+
+      .alumni-info h3 {
+        font-size: 1rem;
+      }
+
+      .alumni-info p {
+        font-size: 0.85rem;
+      }
+    }
+  }
+}

@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import "./Carousel4.scss";
 import { FaArrowRight } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
-
-import img1 from "../assets/1.png";
+import Ashokraj from "../assets/Ashokraj.jpg";
+import img1 from "../assets/person-logo.png";
 
 const Carousel4 = () => {
   const containerRef = useRef(null);
@@ -16,52 +16,52 @@ const Carousel4 = () => {
 
   const profiles = [
     {
-      img: img1,
-      name: "Dr. Asha Ram Sihag, Class of 1981",
-      role: "Former Secretary, Government of India",
-      desc: "CIT chennai Alumni Award “Outstanding Contribution for National Development (OCND)” in Public Service.",
+      img: Ashokraj,
+      name: "Ashok Raj V, Class of 1993",
+      role: "CEO of Intelizest & Expanz, India",
+      desc: "Innovative CEO inspiring teams, fostering growth, and achieving remarkable success. Strategic leader driving innovation, growth, and excellence company-wide every day.",
     },
     {
       img: img1,
-      name: "Dr. Asha Ram Sihag, Class of 1981",
-      role: "Former Secretary, Government of India",
-      desc: "CIT chennai Alumni Award “Outstanding Contribution for National Development (OCND)” in Public Service.",
+      name: "Thiagarajan P , Class of 1977",
+      role: "India",
+      desc: "CIT chennai Alumni Award",
     },
     {
       img: img1,
-      name: "Dr. Asha Ram Sihag, Class of 1981",
-      role: "Former Secretary, Government of India",
-      desc: "CIT chennai Alumni Award “Outstanding Contribution for National Development (OCND)” in Public Service.",
+      name: "Balaji Mayilan M P , Class of 2019",
+      role: "India",
+      desc: "CIT chennai Alumni Award",
     },
     {
       img: img1,
-      name: "Dr. Asha Ram Sihag, Class of 1981",
-      role: "Former Secretary, Government of India",
-      desc: "CIT chennai Alumni Award “Outstanding Contribution for National Development (OCND)” in Public Service.",
+      name: "Ramesh M , Class of 1983",
+      role: "India",
+      desc: "CIT chennai Alumni Award",
     },
     {
       img: img1,
-      name: "Dr. Asha Ram Sihag, Class of 1981",
-      role: "Former Secretary, Government of India",
-      desc: "CIT chennai Alumni Award “Outstanding Contribution for National Development (OCND)” in Public Service.",
+      name: "Subramanian R  , Class of 1978",
+      role: "India",
+      desc: "CIT chennai Alumni Award",
     },
     {
       img: img1,
-      name: "Dr. Asha Ram Sihag, Class of 1981",
-      role: "Former Secretary, Government of India",
-      desc: "CIT chennai Alumni Award “Outstanding Contribution for National Development (OCND)” in Public Service.",
+      name: "Vasantha Kumar, Class of 1996",
+      role: "India",
+      desc: "CIT chennai Alumni Award",
     },
     {
       img: img1,
-      name: "Dr. Asha Ram Sihag, Class of 1981",
-      role: "Former Secretary, Government of India",
-      desc: "CIT chennai Alumni Award “Outstanding Contribution for National Development (OCND)” in Public Service.",
+      name: "Elangovan P P , Class of 1984",
+      role: "India",
+      desc: "CIT chennai Alumni Award",
     },
     {
       img: img1,
-      name: "Dr. Asha Ram Sihag, Class of 1981",
-      role: "Former Secretary, Government of India",
-      desc: "CIT chennai Alumni Award “Outstanding Contribution for National Development (OCND)” in Public Service.",
+      name: "Naveen Prabhu D , Class of 2005",
+      role: "India",
+      desc: "CIT chennai Alumni Award",
     },
   ];
 

@@ -5,63 +5,86 @@ const Chapters = () => {
   const [chapters, setChapters] = useState([]);
 
   useEffect(() => {
-    // Replace with API fetch if needed
-    const fetchChapters = async () => {
-      const data = [
-        {
-          id: 1,
-          name: "Delhi NCR Chapter",
-          members: 120,
-          location: "Delhi, India",
-          image: "https://via.placeholder.com/400x250.png?text=Delhi+NCR",
-          link: "/chapters/delhi-ncr",
-        },
-        {
-          id: 2,
-          name: "Mumbai Chapter",
-          members: 90,
-          location: "Mumbai, India",
-          image: "https://via.placeholder.com/400x250.png?text=Mumbai",
-          link: "/chapters/mumbai",
-        },
-        {
-          id: 3,
-          name: "Bangalore Chapter",
-          members: 75,
-          location: "Bangalore, India",
-          image: "https://via.placeholder.com/400x250.png?text=Bangalore",
-          link: "/chapters/bangalore",
-        },
-        {
-          id: 4,
-          name: "London Chapter",
-          members: 50,
-          location: "London, UK",
-          image: "https://via.placeholder.com/400x250.png?text=London",
-          link: "/chapters/london",
-        },
-      ];
-      setChapters(data);
-    };
+    const data = [
+      {
+        id: 1,
+        name: "Chennai Chapter",
+        members: 320,
+        location: "Chennai, Tamil Nadu, India",
+        image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220",
+        link: "/events/chapters",
+      },
+      {
+        id: 2,
+        name: "Bangalore Chapter",
+        members: 210,
+        location: "Bangalore, Karnataka, India",
+        image: "https://images.unsplash.com/photo-1596176530529-78163a4f7af2",
+        link: "/events/chapters",
+      },
+      {
+        id: 3,
+        name: "Delhi NCR Chapter",
+        members: 180,
+        location: "Delhi NCR, India",
+        image: "https://images.unsplash.com/photo-1587474260584-136574528ed5",
+        link: "/events/chapters",
+      },
+      {
+        id: 4,
+        name: "Mumbai Chapter",
+        members: 145,
+        location: "Mumbai, Maharashtra, India",
+        image: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f",
+        link: "/events/chapters",
+      },
+      {
+        id: 5,
+        name: "Middle East Chapter",
+        members: 95,
+        location: "UAE, Qatar & Saudi Arabia",
+        image: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da",
+        link: "/events/chapters",
+      },
+      {
+        id: 6,
+        name: "USA Chapter",
+        members: 120,
+        location: "United States of America",
+        image: "https://images.unsplash.com/photo-1501466044931-62695aada8e9",
+        link: "/events/chapters",
+      },
+    ];
 
-    fetchChapters();
+    setChapters(data);
   }, []);
 
   return (
     <div className="chapters-page">
-      <h2>Alumni Chapters</h2>
+      <div className="chapters-header">
+        <h2>Alumni Chapters</h2>
+        <p>
+          CIT alumni chapters across India and abroad strengthen professional
+          networking, mentorship, and lifelong connections among alumni.
+        </p>
+      </div>
+
       <div className="chapters-grid">
         {chapters.map((chapter) => (
           <div className="chapter-card" key={chapter.id}>
             <div className="chapter-image">
               <img src={chapter.image} alt={chapter.name} />
             </div>
+
             <div className="chapter-content">
               <h3>{chapter.name}</h3>
               <span className="chapter-location">{chapter.location}</span>
-              <span className="chapter-members">{chapter.members} Members</span>
+              <span className="chapter-members">
+                {chapter.members}+ Members
+              </span>
+
               <a href={chapter.link} className="chapter-link">
-                Learn More
+                View Chapter →
               </a>
             </div>
           </div>

@@ -1,0 +1,135 @@
+.visit-alma-mater-page {
+  min-height: 100vh;
+  padding: 2rem 5%;
+  background: #f5f7fa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Roboto", sans-serif;
+
+  h2 {
+    font-size: 2rem;
+    color: #0a2148;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #333;
+    text-align: center;
+    max-width: 800px;
+    margin-bottom: 2rem;
+  }
+
+  .visit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.8rem;
+    width: 100%;
+    max-width: 1200px;
+    margin-bottom: 2rem;
+  }
+
+  .visit-card {
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .visit-image img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .visit-content {
+      padding: 1rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      h3 {
+        font-size: 1.2rem;
+        color: #0a2148;
+      }
+
+      p {
+        font-size: 0.95rem;
+        color: #555;
+      }
+    }
+  }
+
+  .visit-cta {
+    font-size: 1rem;
+    background: #105bbf;
+    color: #fff;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.3s;
+
+    &:hover {
+      background: #0d4691;
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .visit-alma-mater-page {
+    padding: 2rem 3%;
+
+    .visit-grid {
+      gap: 1.5rem;
+    }
+
+    .visit-card {
+      .visit-content {
+        padding: 0.8rem 1rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .visit-alma-mater-page {
+    padding: 1.5rem 2%;
+    h2 {
+      font-size: 1.6rem;
+    }
+    p {
+      font-size: 0.95rem;
+    }
+
+    .visit-card {
+      .visit-content {
+        padding: 0.7rem 0.9rem;
+        h3 {
+          font-size: 1.1rem;
+        }
+        p {
+          font-size: 0.9rem;
+        }
+      }
+
+      .visit-image img {
+        height: 140px;
+      }
+    }
+
+    .visit-cta {
+      font-size: 0.95rem;
+      padding: 0.6rem 1.2rem;
+    }
+  }
+}

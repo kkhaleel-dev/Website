@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import "./Carousel7.scss";
-import img1 from "../assets/1.png";
-import img2 from "../assets/2.png";
-import img3 from "../assets/4.png";
+import img1 from "../assets/Carousel1.png";
+import img2 from "../assets/Carousel2.png";
+import img3 from "../assets/Carousel4.png";
+
 const images = [
   {
     src: img1,
@@ -28,10 +29,11 @@ const Carousel7 = () => {
     <div className="carousel7">
       <div className="carousel7-header">
         <h2>Gallery</h2>
-        <button className="view-all" onClick={() => navigate("/gallery")}>
+        <button className="view-all" onClick={() => navigate("/gallery/list")}>
           View All
         </button>
       </div>
+
       <div className="carousel7-items">
         {images.map((img, index) => (
           <div key={index} className="carousel7-item">

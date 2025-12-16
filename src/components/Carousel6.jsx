@@ -2,13 +2,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Carousel6.scss";
-import sampleImg from "../assets/2.png"; // your uploaded image
+import sampleImg from "../assets/Carousel2.png"; // your uploaded image
 
 const Carousel6 = () => {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    navigate("/accounts");
+    navigate("/smart-card");
   };
 
   return (

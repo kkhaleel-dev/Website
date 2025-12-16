@@ -12,7 +12,7 @@ const Carousel3 = () => {
       header: "Alumni in your city",
       subheader: "Find alumni living in your city & connect with them",
       buttonText: "Alumni In My City",
-      route: "/alumniInYourCity",
+      route: "/services/alumniNearby",
     },
     {
       icon: <PiStudent className="icon-svg" />,
@@ -20,7 +20,7 @@ const Carousel3 = () => {
       subheader:
         "View our exclusive batchmates directory to know about whereabouts of your batchmates",
       buttonText: "My Batchmates",
-      route: "/batchmates",
+      route: "/about/team",
     },
     {
       icon: <FaUserGraduate className="icon-svg" />,
@@ -28,7 +28,7 @@ const Carousel3 = () => {
       subheader:
         "Explore complete alumni directory & connect with alumni with your interests & domain.",
       buttonText: "View Directory",
-      route: "/directory",
+      route: "/services/alumniDirectory",
     },
     {
       icon: <LiaIdCardSolid className="icon-svg" />,
@@ -36,7 +36,7 @@ const Carousel3 = () => {
       subheader:
         "Create & complete your alumni profile and remain connected with all opportunities matching.",
       buttonText: "My Profile",
-      route: "/accounts",
+      route: "/smart-card",
     },
   ];
 

@@ -1,107 +1,43 @@
 .team-page {
-  min-height: 100vh; // Full page height
-  padding: 2rem;
-  background: #f5f7fa;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    color: #0a2148;
-    text-align: center;
-  }
-
-  .team-grid {
-    display: grid;
-    gap: 1.8rem;
-    width: 100%;
-    max-width: 1200px;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
-
-  .team-card {
-    background: #ffffff;
-    border-radius: 10px;
-    padding: 1.5rem;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.2s, box-shadow 0.2s;
-
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.15);
-    }
-
-    .team-photo {
-      width: 120px;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 50%;
-      margin-bottom: 1rem;
-    }
-
-    h3 {
-      font-size: 1.2rem;
-      margin: 0.5rem 0;
-      color: #0a2148;
-    }
-
-    p {
-      font-size: 1rem;
-      color: #555;
-      margin-bottom: 1rem;
-    }
-
-    .team-social {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-
-      a {
-        font-size: 0.9rem;
-        color: #105bbf;
-        text-decoration: none;
-        font-weight: 500;
-
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-    }
-  }
+  padding: 40px;
+  text-align: center;
+  min-height: 100vh;
 }
 
-/* Responsive adjustments */
-@media (max-width: 480px) {
-  .team-page {
-    padding: 1rem;
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+  margin-top: 30px;
+}
 
-    h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
+.team-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
 
-    .team-card {
-      padding: 1rem;
+.team-card:hover {
+  transform: translateY(-5px);
+}
 
-      .team-photo {
-        width: 100px;
-        height: 100px;
-      }
+.team-profile {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 16px;
+}
 
-      h3 {
-        font-size: 1.1rem;
-      }
+.team-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 8px 0;
+}
 
-      p {
-        font-size: 0.95rem;
-      }
-
-      .team-social a {
-        font-size: 0.85rem;
-      }
-    }
-  }
+.team-meta {
+  font-size: 14px;
+  color: #666;
 }

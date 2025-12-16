@@ -6,46 +6,58 @@ const ChapterPolicy = () => {
     {
       title: "Introduction",
       content:
-        "The Chapter Policy outlines the rules and guidelines for establishing and managing alumni chapters. It ensures all chapters operate in alignment with the Institute's mission and alumni objectives.",
+        "The Chapter Policy defines the framework for establishing, managing, and governing alumni chapters. It ensures consistency, transparency, and alignment with the values and vision of Coimbatore Institute of Technology Alumni Association.",
     },
     {
       title: "Chapter Formation",
       content:
-        "Any group of at least 10 alumni can form a chapter. Chapters must register officially with the Alumni Association and provide necessary documentation.",
+        "A minimum of ten registered alumni may initiate the formation of a chapter. All chapters must be formally registered with the Alumni Association and comply with institutional guidelines.",
     },
     {
-      title: "Roles and Responsibilities",
+      title: "Governance & Leadership",
       content:
-        "Each chapter must have a President, Secretary, and Treasurer. They are responsible for organizing events, maintaining records, and ensuring compliance with the Alumni Association's rules.",
+        "Each chapter shall appoint a President, Secretary, and Treasurer. These office bearers are responsible for leadership, coordination of activities, and maintaining proper records.",
     },
     {
-      title: "Financial Guidelines",
+      title: "Financial Management",
       content:
-        "Chapters may collect membership fees and donations. All funds must be reported annually to the Alumni Association and used solely for chapter-related activities.",
+        "Chapters may collect membership contributions and donations. All financial activities must be transparent and reported annually to the Alumni Association.",
     },
     {
-      title: "Events and Activities",
+      title: "Events & Engagement",
       content:
-        "Chapters can organize local meet-ups, networking events, and alumni services. All events must comply with the Institute’s code of conduct and policies.",
+        "Chapters are encouraged to organize professional networking events, social gatherings, mentorship programs, and community initiatives that reflect the Institute’s ethos.",
     },
     {
-      title: "Reporting and Compliance",
+      title: "Reporting & Compliance",
       content:
-        "Chapters are required to submit an annual report of activities, finances, and membership updates. Non-compliance may result in suspension of chapter privileges.",
+        "Annual reports detailing membership, activities, and finances must be submitted. Non-compliance may lead to review or suspension of chapter recognition.",
     },
     {
-      title: "Amendments",
+      title: "Policy Amendments",
       content:
-        "The Alumni Association reserves the right to update the Chapter Policy as needed. All chapters will be notified of changes in a timely manner.",
+        "The Alumni Association reserves the right to amend this policy when necessary. All registered chapters will be notified of updates in advance.",
     },
   ];
 
   return (
     <div className="chapter-policy-page">
-      <h2>Chapter Policy</h2>
-      <div className="policy-sections">
+      {/* Header */}
+      <div className="policy-hero">
+        <h2>Chapter Policy</h2>
+        <p>
+          Guidelines for the formation, governance, and operation of alumni
+          chapters under the CIT Alumni Association.
+        </p>
+      </div>
+
+      {/* Content */}
+      <div className="policy-container">
         {policySections.map((section, index) => (
-          <div className="policy-section" key={index}>
+          <div className="policy-card" key={index}>
+            <span className="policy-index">
+              {String(index + 1).padStart(2, "0")}
+            </span>
             <h3>{section.title}</h3>
             <p>{section.content}</p>
           </div>

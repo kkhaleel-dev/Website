@@ -8,10 +8,11 @@
 
   .carousel6-content {
     display: flex;
-    max-width: 1200px;
-    width: 90%;
+    max-width: 1280px;
+    width: 100%;
     border-radius: 8px;
     overflow: hidden;
+    min-height: 320px;
 
     .text-section {
       background-color: #8a1010;
@@ -64,21 +65,25 @@
 }
 
 @media (max-width: 768px) {
-  .carousel6-content {
-    flex-direction: column;
+  .carousel6-wrapper {
+    padding: 20px 0;
+    .carousel6-content {
+      padding: 0px 15px;
+      flex-direction: column;
 
-    .text-section,
-    .image-section {
-      flex: unset;
-      width: 100%;
-    }
+      .text-section,
+      .image-section {
+        flex: unset;
+        width: 100%;
+      }
 
-    .text-section {
-      padding: 20px;
-    }
+      .text-section {
+        padding: 20px;
+      }
 
-    .image-section img {
-      height: 300px; // adjust for mobile
+      .image-section img {
+        height: 300px; // adjust for mobile
+      }
     }
   }
 }

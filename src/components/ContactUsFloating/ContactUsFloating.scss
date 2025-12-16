@@ -1,0 +1,62 @@
+/* ContactUsFloating.scss */
+.contact-us-floating {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #7a0a0a; /* maroon */
+  color: #fff;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+
+  .icon {
+    font-size: 18px;
+  }
+
+  .text {
+    display: inline-block;
+  }
+
+  &:hover {
+    background-color: #5c0606;
+    transform: translateY(-2px);
+  }
+
+  /* Tablet responsiveness */
+  @media (max-width: 768px) {
+    padding: 10px 14px;
+    .icon {
+      font-size: 16px;
+    }
+    .text {
+      font-size: 14px;
+    }
+  }
+
+  /* Mobile responsiveness */
+  @media (max-width: 480px) {
+    // border: 1px solid white;
+    bottom: 15px;
+    right: 15px;
+    padding: 8px 8px;
+    border-radius: 50%;
+    flex-direction: column;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    .text {
+      display: none; /* hide text on very small screens */
+    }
+    .icon {
+      font-size: 20px;
+    }
+  }
+}

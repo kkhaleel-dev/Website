@@ -1,0 +1,84 @@
+.signup-page {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.signup-hero {
+  background: #690000;
+  padding: 15px;
+  text-align: center;
+
+  h1 {
+    color: white;
+  }
+}
+
+.signup-content {
+  max-width: 1100px;
+  margin: 40px auto;
+  display: flex;
+  gap: 40px;
+  padding: 0 20px;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
+}
+
+.signup-card-left {
+  width: 40%;
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+
+  @media (max-width: 900px) {
+    width: 100%;
+  }
+}
+
+.signup-card-right {
+  width: 50%;
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  input {
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+
+  .go {
+    grid-column: span 2;
+    background: #690000;
+    color: white;
+    padding: 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+  }
+
+  @media (max-width: 900px) {
+    width: 100%;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .signup-card-right {
+    display: flex; /* override grid */
+    flex-direction: column; /* stack fields */
+  }
+
+  .signup-card-right input,
+  .signup-card-right .go {
+    width: 100%;
+  }
+}

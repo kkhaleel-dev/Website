@@ -1,8 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Accounts.scss";
 import Favicon from "../assets/Favicon.png";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 const Accounts = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const toast = (msg) => {
+    const t = document.createElement("div");
+    t.innerText = msg;
+    t.style.cssText = `
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #222;
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 6px;
+      z-index: 9999;
+    `;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 5000);
+  };
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      toast("Enter email & password");
+      return;
+    }
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      toast("Login successful");
+      navigate(-1);
+    } catch {
+      toast("Invalid credentials");
+    }
+  };
+
   return (
     <div className="accounts-page">
       <div className="accounts-hero">
@@ -10,24 +49,37 @@ const Accounts = () => {
       </div>
 
       <div className="accounts-content">
-        <div className="card-left">
-          <img src={Favicon} alt="logo" style={{ height: 60 }} />
+        <div className="accounts-card-left">
+          <img src={Favicon} alt="logo" height={60} />
           <h2>CIT Alumni Association</h2>
-          <p>Sign up or log in to stay connected with your community</p>
+          <p>Sign up or log in to stay connected</p>
         </div>
 
-        <div className="card-right">
-          <h3>Choose any one of the following to Signup/Login</h3>
+        <div className="accounts-card-right">
+          <h3>Choose any one of the following</h3>
 
-          <button className="social fb">CONNECT WITH FACEBOOK</button>
-          <button className="social google">CONNECT WITH GOOGLE</button>
-          <button className="social linkedin">CONNECT WITH LINKEDIN</button>
+          <div className="accounts-email-row">
+            <input
+              type="email"
+              placeholder="Enter your Email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-          <div className="or">OR</div>
+            <button className="go" onClick={handleLogin}>
+              Login
+            </button>
 
-          <div className="email-row">
-            <input placeholder="Enter your Email..." type="email" />
-            <button className="go">→</button>
+            <button
+              className="go secondary"
+              onClick={() => navigate("/signup", { state: { email } })}
+            >
+              Signup
+            </button>
           </div>
         </div>
       </div>

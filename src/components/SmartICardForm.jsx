@@ -1,142 +1,68 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./SmartICardForm.scss";
+import { auth, db } from "../firebase";
+import { ref, get } from "firebase/database";
+import { onAuthStateChanged } from "firebase/auth";
+import Signup from "../../src/pages/Signup";
+import logo from "../assets/Favicon.png";
+import personImg from "../assets/person-logo.png";
+import qrCode from "../assets/citQR.png";
 
 const SmartICardForm = () => {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    entryNumber: "",
-    graduationYear: "",
-    photo: null,
-    degreeCert: null,
-    idProof: null,
-  });
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]: files ? files[0] : value,
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const userRef = ref(db, `users/${user.uid}`);
+          const snapshot = await get(userRef);
+          if (snapshot.exists()) {
+            setUserData(snapshot.val());
+          }
+        } catch (err) {
+          console.error("Error fetching user data:", err);
+        }
+      }
+      setLoading(false);
     });
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // TODO: send to backend (API endpoint)
-    console.log("Submitted:", formData);
-  };
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+
+  // If not logged in, show signup form
+  if (!userData) return <Signup />;
 
   return (
     <div className="smart-i-card-container">
-      <h2>Smart Identy‑Card Application</h2>
-      <form className="smart-i-card-form" onSubmit={handleSubmit}>
-        {/* Full Name */}
-        <label>
-          Full Name (as in CIT chennai records) *
-          <input
-            type="text"
-            name="fullName"
-            value={formData.fullName}
-            onChange={handleChange}
-            required
-          />
-        </label>
+      <h2>Smart ID Card</h2>
+      <div className="smart-i-card-wrapper">
+        <div className="card left-card">
+          <div className="card-content">
+            <img src={logo} alt="Logo" className="logo" />
+            <img src={personImg} alt="User" className="person-img" />
+            <p className="name">{userData.fullname}</p>
+            <p className="branch">{userData.branch}</p>
+            <p className="membership">ID: {userData.membershipId}</p>
+          </div>
+        </div>
 
-        {/* Email */}
-        <label>
-          Email ID *
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </label>
-
-        {/* Phone Number */}
-        <label>
-          Phone / WhatsApp *
-          <input
-            type="tel"
-            name="phone"
-            placeholder="+91-XXXXXXXXXX"
-            value={formData.phone}
-            onChange={handleChange}
-            required
-          />
-        </label>
-
-        {/* Entry Number */}
-        <label>
-          CIT Entry Number *
-          <input
-            type="text"
-            name="entryNumber"
-            value={formData.entryNumber}
-            onChange={handleChange}
-            required
-          />
-        </label>
-
-        {/* Graduation Year */}
-        <label>
-          Year of Graduation *
-          <select
-            name="graduationYear"
-            value={formData.graduationYear}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Year</option>
-            {Array.from({ length: 60 }, (_, i) => 1966 + i).map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        {/* Photo Upload */}
-        <label>
-          Upload Stamp‑Sized Photograph *
-          <input
-            type="file"
-            name="photo"
-            accept="image/*"
-            onChange={handleChange}
-            required
-          />
-        </label>
-
-        {/* Degree/Certificate Upload */}
-        <label>
-          Upload Photocopy of Degree/Certificate *
-          <input
-            type="file"
-            name="degreeCert"
-            accept=".pdf,image/*"
-            onChange={handleChange}
-            required
-          />
-        </label>
-
-        {/* ID Proof Upload */}
-        <label>
-          Upload Photo ID Proof *
-          <input
-            type="file"
-            name="idProof"
-            accept=".pdf,image/*"
-            onChange={handleChange}
-            required
-          />
-        </label>
-
-        {/* Submit */}
-        <button type="submit">Submit Application</button>
-      </form>
+        <div className="card right-card">
+          <div className="card-content">
+            <p className="year">
+              <strong>Year of Passing:</strong> {userData.batch}
+            </p>
+            <p className="batch">
+              <strong>Mobile No:</strong> {userData.mobile}
+            </p>
+            <img src={qrCode} alt="QR Code" className="qr-code" />
+            <p className="website">www.citacc.com</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

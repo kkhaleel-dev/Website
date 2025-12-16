@@ -1,71 +1,87 @@
-// Carousel5.jsx
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Carousel5.scss";
-import img3 from "../assets/3.png";
+import event1 from "../assets/Event1.png";
+import event2 from "../assets/Event2.png";
+import event3 from "../assets/Event3.png";
+import event4 from "../assets/Event4.png";
 
-const CARD_WIDTH = 320;
-const CARD_HEIGHT = 400;
-const CARD_GAP = 20;
-const VISIBLE_CARDS = 3;
-const SLIDE_SIZE = CARD_WIDTH + CARD_GAP;
+const CARD_GAP = 16;
 
 const events = [
   {
-    title: "Felicitation of Prof. G. N. Tiwari",
-    type: "Upcoming Event",
-    start: "Dec 14, 2025 - 12:00 PM",
-    end: "04:00 PM",
-    img: img3,
-    imgAlt: "Felicitation Event",
+    title: "CIT Alumni Association – Upcoming Reunion Announcement",
+    type: "Alumni Event",
+    start: "Jan 15, 2026",
+    end: "Jan 16, 2026",
+    img: event1,
   },
   {
-    title: "PEARL REUNION BATCH OF 1991",
-    type: "Upcoming Event",
-    start: "Dec 19, 2025",
-    end: "Dec 20, 2025",
-    img: img3,
-    imgAlt: "Pearl Reunion 1991",
+    title: "CIT Alumni Association – Distinguished Alumni Recognition",
+    type: "Alumni Highlight",
+    start: "Feb 10, 2026 - 10:00 AM",
+    end: "02:00 PM",
+    img: event2,
   },
   {
-    title: "Silver Jubilee Reunion Batch of 2000",
-    type: "Upcoming Event",
-    start: "Dec 20, 2025",
-    end: "Dec 23, 2025",
-    img: img3,
-    imgAlt: "Silver Jubilee 2000",
+    title:
+      "CIT Alumni Regional Chapter Meet (Chennai / Bangalore / Salem / Neyveli / Trichy)",
+    type: "Networking Event",
+    start: "Mar 05, 2026",
+    end: "Mar 06, 2026",
+    img: event3,
   },
   {
-    title: "Extra Event Example",
-    type: "Upcoming Event",
-    start: "Jan 1, 2026",
-    end: "Jan 2, 2026",
-    img: img3,
-    imgAlt: "Extra Event",
+    title: "CIT Alumni Engagement Event (Login Required)",
+    type: "Official Event",
+    start: "Apr 20, 2026",
+    end: "Apr 21, 2026",
+    img: event4,
   },
 ];
 
 const Carousel5 = () => {
-  const [active, setActive] = useState(0);
   const navigate = useNavigate();
+  const cardRef = useRef(null);
+
+  const [active, setActive] = useState(0);
+  const [slideSize, setSlideSize] = useState(0);
+  const [isDesktop, setIsDesktop] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (cardRef.current && isDesktop) {
+      setSlideSize(cardRef.current.offsetWidth + CARD_GAP);
+    }
+  }, [isDesktop]);
+
+  const maxSlide = Math.max(events.length - 3, 0);
 
   const nextSlide = () => {
-    if (active < events.length - VISIBLE_CARDS) setActive(active + 1);
+    if (active < maxSlide) setActive(active + 1);
   };
 
   const prevSlide = () => {
     if (active > 0) setActive(active - 1);
   };
 
-  const handleViewAll = () => {
-    navigate("/events/list");
-  };
-
   return (
     <div className="events-wrapper">
       <div className="header">
         <h2>Events</h2>
-        <button className="view-all-btn" onClick={handleViewAll}>
+        <button
+          className="view-all-btn"
+          onClick={() => navigate("/events/list")}
+        >
           View All
         </button>
       </div>
@@ -74,24 +90,28 @@ const Carousel5 = () => {
         <div className="events-inner-wrapper">
           <div
             className="events-inner"
-            style={{ transform: `translateX(-${active * SLIDE_SIZE}px)` }}
+            style={
+              isDesktop
+                ? { transform: `translateX(-${active * slideSize}px)` }
+                : {}
+            }
           >
             {events.map((e, i) => (
               <div
                 className="event-card"
                 key={i}
-                style={{ width: CARD_WIDTH, height: CARD_HEIGHT }}
+                ref={i === 0 ? cardRef : null}
               >
                 <div
                   className="event-img"
                   style={{ backgroundImage: `url(${e.img})` }}
-                  aria-label={e.imgAlt}
-                ></div>
+                />
                 <div className="event-content">
                   <h3 className="event-title">{e.title}</h3>
                   <span className="event-type">{e.type}</span>
                   <p className="event-date">
-                    {e.start} {e.end && `- ${e.end}`}
+                    {e.start}
+                    {e.end && ` - ${e.end}`}
                   </p>
                   <button className="event-btn">View Event</button>
                 </div>
