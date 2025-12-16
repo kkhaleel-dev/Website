@@ -26,7 +26,7 @@ const GalleryList = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="carousel7">
+    <div className="carousellist7">
       <div className="carousel7-header">
         <h2>Gallery</h2>
       </div>
