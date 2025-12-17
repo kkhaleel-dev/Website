@@ -14,7 +14,7 @@ const Footer = () => {
     <footer className="footer">
       <div className="social-icons">
         <a
-          href="https://in.linkedin.com/school/coimbatore-institute-of-technology/"
+          href="https://in.linkedin.com/school/coimbatore-institute-of-technology/people"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -28,7 +28,7 @@ const Footer = () => {
           <FaTwitter />
         </a>
         <a
-          href="https://www.facebook.com/citcovai/"
+          href="https://www.facebook.com/groups/alumni.cit/"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -42,7 +42,7 @@ const Footer = () => {
           <FaInstagram />
         </a>
         <a
-          href="https://www.youtube.com/@coimbatoreinstituteoftechn2094"
+          href="https://www.youtube.com/channel/UC-4x325LTCverLeIRzcUPmQ"
           target="_blank"
           rel="noopener noreferrer"
         >

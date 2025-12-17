@@ -5,10 +5,12 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase";
 import { ref, set, get } from "firebase/database";
 import { useLocation, useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Signup = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [showPassword, setShowPassword] = useState(false);
 
   const [form, setForm] = useState({
     fullname: "",
@@ -25,6 +27,24 @@ const Signup = () => {
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
+
+  // ✅ FREE geocoding (NO API KEY)
+  const getLatLng = async (city, state, country) => {
+    const address = `${city}, ${state}, ${country}`;
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+        address
+      )}`
+    );
+    const data = await res.json();
+
+    if (!data.length) throw new Error("Location not found");
+
+    return {
+      lat: parseFloat(data[0].lat),
+      lng: parseFloat(data[0].lon),
+    };
+  };
 
   const generateMembershipId = async () => {
     const counterRef = ref(db, "membershipCounter");
@@ -44,8 +64,13 @@ const Signup = () => {
 
       const membershipId = await generateMembershipId();
 
+      // 📍 convert city/state/country → lat/lng
+      const locationData = await getLatLng(form.city, form.state, form.country);
+
       await set(ref(db, `users/${cred.user.uid}`), {
         ...form,
+        lat: locationData.lat,
+        lng: locationData.lng,
         membershipId,
         createdAt: Date.now(),
       });
@@ -71,15 +96,33 @@ const Signup = () => {
         </div>
 
         <div className="signup-card-right">
-          {Object.keys(form).map((key) => (
-            <input
-              key={key}
-              name={key}
-              placeholder={key.toUpperCase()}
-              value={form[key]}
-              onChange={handleChange}
-            />
-          ))}
+          {Object.keys(form).map((key) =>
+            key === "password" ? (
+              <div key={key} className="password-field">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="PASSWORD"
+                  value={form.password}
+                  onChange={handleChange}
+                />
+                <span
+                  className="eye-icon"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEye /> : <FaEyeSlash />}
+                </span>
+              </div>
+            ) : (
+              <input
+                key={key}
+                name={key}
+                placeholder={key.toUpperCase()}
+                value={form[key]}
+                onChange={handleChange}
+              />
+            )
+          )}
 
           <button className="go" onClick={handleSignup}>
             Create Account

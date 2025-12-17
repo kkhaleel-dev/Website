@@ -29,7 +29,7 @@
     .view-all-btn {
       padding: 10px 20px;
       border: none;
-      background: #800000;
+      background: $options-card-bg !important;
       color: #fff;
       border-radius: 6px;
       cursor: pointer;
@@ -37,7 +37,7 @@
       font-size: 16px;
 
       &:hover {
-        background: #a00000;
+        background: $common-bg !important;
       }
 
       @media (max-width: 1023px) {
@@ -141,7 +141,7 @@
     .event-btn {
       margin-top: auto;
       padding: 9px;
-      background: #800000;
+      background: $options-card-bg !important;
       color: #fff;
       border: none;
       border-radius: 6px;
@@ -149,7 +149,7 @@
       cursor: pointer;
 
       &:hover {
-        background: #a00000;
+        background: $common-bg !important;
       }
     }
   }

@@ -1,10 +1,12 @@
+@import "../variables.scss";
+
 .signup-page {
   min-height: 100vh;
   background: #f5f5f5;
 }
 
 .signup-hero {
-  background: #690000;
+  background: $option-hover;
   padding: 15px;
   text-align: center;
 
@@ -57,7 +59,7 @@
 
   .go {
     grid-column: span 2;
-    background: #690000;
+    background: $common-bg;
     color: white;
     padding: 14px;
     border-radius: 8px;
@@ -80,5 +82,31 @@
   .signup-card-right input,
   .signup-card-right .go {
     width: 100%;
+  }
+}
+
+.password-field {
+  position: relative;
+  grid-column: span 1;
+
+  input {
+    width: 100%;
+    padding-right: 40px;
+  }
+
+  .eye-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 900px) {
+  .password-field {
+    grid-column: span 1;
   }
 }

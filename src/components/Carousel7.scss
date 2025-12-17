@@ -1,3 +1,5 @@
+@import "../variables.scss";
+
 .carousel7 {
   width: 100%;
   padding: 25px;
@@ -17,7 +19,7 @@
     .view-all {
       padding: 10px 20px;
       border: none;
-      background: #800000;
+      background: $options-card-bg;
       color: #fff;
       border-radius: 5px;
       cursor: pointer;
@@ -26,7 +28,7 @@
       transition: background 0.3s;
 
       &:hover {
-        background: #a00000;
+        background: $common-bg;
       }
     }
   }

@@ -1,3 +1,4 @@
+@import "../variables.scss";
 /* Carousel6.scss */
 .carousel6-wrapper {
   width: 100%;
@@ -15,7 +16,7 @@
     min-height: 320px;
 
     .text-section {
-      background-color: #8a1010;
+      background-color: $options-card-bg;
       color: white;
       padding: 40px;
       flex: 0 0 40%; // takes 40% width
@@ -36,7 +37,7 @@
 
       .cta-btn {
         background-color: white;
-        color: #8a1010;
+        color: $options-card-bg;
         border: none;
         padding: 12px 24px;
         font-size: 16px;

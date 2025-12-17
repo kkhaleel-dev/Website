@@ -1,73 +1,57 @@
 .alumni-nearby-page {
   padding: 1.5rem 3%;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   background: #f9f9f9;
+}
 
-  .map-header {
-    width: 100%;
-    max-width: 1200px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+.map-header {
+  max-width: 1200px;
+  margin-bottom: 1rem;
 
-    h2 {
-      font-size: 1.8rem;
-      color: #0a2148;
-    }
-
-    .filter-btn {
-      background-color: #105bbf;
-      color: #fff;
-      border: none;
-      padding: 0.6rem 1rem;
-      border-radius: 6px;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.2s;
-
-      &:hover {
-        background-color: #0a3e8c;
-      }
-    }
+  h2 {
+    font-size: 1.8rem;
+    color: #0a2148;
   }
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .alumni-nearby-page {
-    padding: 1.2rem;
-
-    .map-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.8rem;
-
-      h2 {
-        font-size: 1.5rem;
-      }
-
-      .filter-btn {
-        width: 100%;
-        text-align: center;
-      }
-    }
-  }
+/* Marker */
+.city-marker {
+  background: transparent;
+  border: none;
 }
 
-@media (max-width: 480px) {
-  .alumni-nearby-page {
-    padding: 1rem;
+.city-badge {
+  min-width: 80px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  text-align: center;
+  color: #000;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+}
 
-    .map-header h2 {
-      font-size: 1.3rem;
-    }
+.city-name {
+  font-size: 12px;
+  font-weight: 600;
+}
 
-    .map-header .filter-btn {
-      font-size: 0.85rem;
-    }
-  }
+.city-count {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Popup */
+.popup-content {
+  width: 200px;
+}
+
+.popup-list {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.popup-item {
+  font-size: 13px;
+  padding: 4px 0;
+  border-bottom: 1px solid #eee;
 }
