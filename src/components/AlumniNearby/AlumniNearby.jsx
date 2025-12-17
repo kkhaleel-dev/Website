@@ -91,11 +91,14 @@ const AlumniNearby = () => {
             lat: parseFloat(u.lat),
             lng: parseFloat(u.lng),
             count: 1,
-            alumni: [u.fullname],
+            alumni: [{ name: u.fullname, batch: u.batch }],
           };
         } else {
           grouped[u.city].count++;
-          grouped[u.city].alumni.push(u.fullname);
+          grouped[u.city].alumni.push({
+            name: u.fullname,
+            batch: u.batch,
+          });
         }
       });
 
@@ -148,9 +151,10 @@ const AlumniNearby = () => {
                   <h3>{city.city}</h3>
                   <p>Total Alumni: {city.count}</p>
                   <div className="popup-list">
-                    {city.alumni.map((name, i) => (
+                    {city.alumni.map((alumni, i) => (
                       <div key={i} className="popup-item">
-                        {name}
+                        <strong>{alumni.name}</strong>
+                        <span className="batch"> (Batch: {alumni.batch})</span>
                       </div>
                     ))}
                   </div>

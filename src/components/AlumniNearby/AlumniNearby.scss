@@ -42,7 +42,7 @@
 
 /* Popup */
 .popup-content {
-  width: 200px;
+  width: 250px;
 }
 
 .popup-list {
@@ -54,4 +54,15 @@
   font-size: 13px;
   padding: 4px 0;
   border-bottom: 1px solid #eee;
+}
+
+.popup-item {
+  font-size: 13px;
+  padding: 4px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.popup-item .batch {
+  color: #555;
+  font-size: 12px;
 }
