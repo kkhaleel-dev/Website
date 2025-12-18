@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./Accounts.scss";
 import Favicon from "../assets/Favicon.png";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { auth, db } from "../firebase";
+import { ref, get } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 
 const Accounts = () => {
@@ -34,11 +35,32 @@ const Accounts = () => {
     }
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      // Sign in with Firebase Auth
+      const cred = await signInWithEmailAndPassword(auth, email, password);
+
+      // Fetch user info from Realtime DB
+      const userRef = ref(db, `users/${cred.user.uid}`);
+      const snapshot = await get(userRef);
+
+      if (!snapshot.exists()) {
+        toast("User data not found");
+        await signOut(auth);
+        return;
+      }
+
+      const userData = snapshot.val();
+
+      // Check approval status
+      if (!userData.approved && userData.role !== "admin") {
+        toast("Your account is not approved yet. Please wait for admin approval.");
+        await signOut(auth);
+        return;
+      }
+
       toast("Login successful");
-      navigate(-1);
-    } catch {
-      toast("Invalid credentials");
+      navigate(-1); // go back to previous page
+    } catch (err) {
+      toast(err.message || "Invalid credentials");
     }
   };
 
@@ -62,11 +84,13 @@ const Accounts = () => {
             <input
               type="email"
               placeholder="Enter your Email"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
               type="password"
               placeholder="Password"
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
 

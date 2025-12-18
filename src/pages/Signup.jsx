@@ -55,32 +55,76 @@ const Signup = () => {
   };
 
   const handleSignup = async () => {
-    try {
-      const cred = await createUserWithEmailAndPassword(
-        auth,
-        form.email,
-        form.password
-      );
+  try {
+    const cred = await createUserWithEmailAndPassword(
+      auth,
+      form.email,
+      form.password
+    );
 
-      const membershipId = await generateMembershipId();
+    const membershipId = await generateMembershipId();
+    const locationData = await getLatLng(form.city, form.state, form.country);
 
-      // 📍 convert city/state/country → lat/lng
-      const locationData = await getLatLng(form.city, form.state, form.country);
+    await set(ref(db, `users/${cred.user.uid}`), {
+      ...form,
+      lat: locationData.lat,
+      lng: locationData.lng,
+      membershipId,
+      createdAt: Date.now(),
+      approved: false,
+      role: "user",
+    });
 
-      await set(ref(db, `users/${cred.user.uid}`), {
-        ...form,
-        lat: locationData.lat,
-        lng: locationData.lng,
-        membershipId,
-        createdAt: Date.now(),
-      });
+    alert("Account created successfully. Please wait for admin approval.");
+    navigate("/accounts");
 
-      alert("Account created successfully");
-      navigate("/accounts");
-    } catch (err) {
-      alert(err.message);
+  } catch (err) {
+    // 🔥 HANDLE DUPLICATE EMAIL ERROR
+    if (err.code === "auth/email-already-in-use") {
+      alert("This email is already registered. Please contact the admin.");
+    } 
+    else if (err.code === "auth/invalid-email") {
+      alert("Please enter a valid email address.");
     }
-  };
+    else if (err.code === "auth/weak-password") {
+      alert("Password must be at least 6 characters.");
+    }
+    else {
+      console.error(err);
+      alert("Something went wrong. Please try again later.");
+    }
+  }
+};
+
+  // const handleSignup = async () => {
+  //   try {
+  //     const cred = await createUserWithEmailAndPassword(
+  //       auth,
+  //       form.email,
+  //       form.password
+  //     );
+
+  //     const membershipId = await generateMembershipId();
+
+  //     // 📍 convert city/state/country → lat/lng
+  //     const locationData = await getLatLng(form.city, form.state, form.country);
+
+  //     await set(ref(db, `users/${cred.user.uid}`), {
+  //       ...form,
+  //       lat: locationData.lat,
+  //       lng: locationData.lng,
+  //       membershipId,
+  //       createdAt: Date.now(),
+  //       approved: false,
+  //       role: "user", 
+  //     });
+
+  //     alert("Account created successfully");
+  //     navigate("/accounts");
+  //   } catch (err) {
+  //     alert(err.message);
+  //   }
+  // };
 
   return (
     <div className="signup-page">

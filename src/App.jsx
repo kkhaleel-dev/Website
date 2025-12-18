@@ -40,6 +40,7 @@ import VisitAlmaMater from "./components/VisitAlmaMater/VisitAlmaMater.jsx";
 import EventsList from "./components/EventsList/EventsList.jsx";
 import GalleryList from "./components/GalleryList/GalleryList.jsx";
 import "leaflet/dist/leaflet.css";
+import AdminUsers from "./pages/AdminUsers.jsx";
 
 /* 🔐 Protected Route */
 const ProtectedRoute = ({ children }) => {
@@ -78,6 +79,15 @@ const AppContent = () => {
 
       <div className="main-content">
         <Routes>
+          <Route
+            path="/admin/users"
+            element={
+              <ProtectedRoute>
+                <AdminUsers />
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/accounts" element={<Accounts />} />
