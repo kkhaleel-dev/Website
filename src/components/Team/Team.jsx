@@ -5,14 +5,12 @@ import { ref, get } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth";
 import personLogo from "../../assets/person-logo.png";
 
-const PUBLIC_LIMIT = 5;
-
 const Team = () => {
   const [members, setMembers] = useState([]);
   const [canViewAll, setCanViewAll] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // 🔐 Determine access
+  // 🔐 Check auth & approval
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -37,7 +35,15 @@ const Team = () => {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const snapshot = await get(ref(db, "users"));
+        let snapshot;
+
+        if (canViewAll) {
+          // ✅ Admin / approved users
+          snapshot = await get(ref(db, "users"));
+        } else {
+          // 🌐 Public / unapproved users
+          snapshot = await get(ref(db, "publicTeamPreview"));
+        }
 
         if (!snapshot.exists()) {
           setMembers([]);
@@ -53,9 +59,9 @@ const Team = () => {
           batch: data[uid].batch || "—",
         }));
 
-        setMembers(canViewAll ? list : list.slice(0, PUBLIC_LIMIT));
+        setMembers(list);
       } catch (err) {
-        console.error(err);
+        console.error("Team fetch error:", err);
       } finally {
         setLoading(false);
       }
@@ -73,7 +79,11 @@ const Team = () => {
       <div className={`team-grid ${!canViewAll ? "blurred" : ""}`}>
         {members.map((member) => (
           <div className="team-card" key={member.id}>
-            <img src={personLogo} alt={member.fullname} className="team-profile" />
+            <img
+              src={personLogo}
+              alt={member.fullname}
+              className="team-profile"
+            />
             <h3 className="team-name">{member.fullname}</h3>
             <p className="team-meta">
               {member.branch} • {member.batch}
@@ -85,9 +95,9 @@ const Team = () => {
       {!canViewAll && (
         <div className="team-overlay">
           <h3>Want to see all alumni members?</h3>
-          <p>Signup & get admin approval to unlock full access</p>
+          <p>Login / Signup & get approval to unlock full access</p>
           <button onClick={() => (window.location.href = "/accounts")}>
-            Signup & Get Approved
+            Login / Signup
           </button>
         </div>
       )}
@@ -96,4 +106,3 @@ const Team = () => {
 };
 
 export default Team;
-///working
