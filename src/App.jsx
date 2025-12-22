@@ -41,26 +41,7 @@ import EventsList from "./components/EventsList/EventsList.jsx";
 import GalleryList from "./components/GalleryList/GalleryList.jsx";
 import "leaflet/dist/leaflet.css";
 import AdminUsers from "./pages/AdminUsers.jsx";
-
-/* 🔐 Protected Route */
-const ProtectedRoute = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [checking, setChecking] = useState(true);
-
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setChecking(false);
-    });
-    return () => unsub();
-  }, []);
-
-  if (checking) return null;
-
-  if (!user) return <Navigate to="/accounts" replace />;
-
-  return children;
-};
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 const AppContent = () => {
   const location = useLocation();

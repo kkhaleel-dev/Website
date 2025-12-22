@@ -21,7 +21,7 @@ const images = [
 
 const Carousel = () => {
   const [active, setActive] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const intervalRef = useRef(null);
 
   useEffect(() => {

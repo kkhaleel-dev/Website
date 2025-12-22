@@ -63,6 +63,17 @@ const SmartICardForm = () => {
           </div>
         </div>
       </div>
+
+      {/* Offers Section */}
+      <div className="smart-offers">
+        <h3>Exclusive Offers for Approved Smart Card Users</h3>
+        <ul>
+          <li>🎁 10% off on alumni merchandise</li>
+          <li>🍽️ Special discounts at partner restaurants</li>
+          <li>🎫 Early access to workshops & events</li>
+          <li>💳 Cashback on annual membership renewal</li>
+        </ul>
+      </div>
     </div>
   );
 };

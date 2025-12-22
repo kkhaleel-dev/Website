@@ -3,6 +3,7 @@
   width: 95%;
   margin: 2rem auto;
   padding: 2rem;
+  margin-top: -5px;
   font-family: "Arial", sans-serif;
 
   h2 {
@@ -80,14 +81,49 @@
       }
     }
 
-    .left-card {
-      background: #ffffff;
-      border: 1px solid #d0d0d0;
-    }
-
+    .left-card,
     .right-card {
       background: #ffffff;
       border: 1px solid #d0d0d0;
+    }
+  }
+
+  /* New Offers Section Styling */
+  .smart-offers {
+    margin-top: 2rem;
+    background: #f0f4ff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #0a2148;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+
+      li {
+        margin-bottom: 8px;
+        font-size: 1rem;
+        padding-left: 1.5rem;
+        position: relative;
+        color: #0a2148;
+
+        &:before {
+          content: "✔"; // check mark icon
+          position: absolute;
+          left: 0;
+          color: #223a5e;
+          font-weight: bold;
+        }
+      }
     }
   }
 

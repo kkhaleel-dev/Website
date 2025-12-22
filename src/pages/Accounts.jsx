@@ -1,3 +1,4 @@
+// Accounts.jsx (UPDATED)
 import React, { useState } from "react";
 import "./Accounts.scss";
 import Favicon from "../assets/Favicon.png";
@@ -35,10 +36,7 @@ const Accounts = () => {
     }
 
     try {
-      // Sign in with Firebase Auth
       const cred = await signInWithEmailAndPassword(auth, email, password);
-
-      // Fetch user info from Realtime DB
       const userRef = ref(db, `users/${cred.user.uid}`);
       const snapshot = await get(userRef);
 
@@ -50,7 +48,6 @@ const Accounts = () => {
 
       const userData = snapshot.val();
 
-      // Check approval status
       if (!userData.approved && userData.role !== "admin") {
         toast("Your account is not approved yet. Please wait for admin approval.");
         await signOut(auth);
@@ -58,7 +55,7 @@ const Accounts = () => {
       }
 
       toast("Login successful");
-      navigate(-1); // go back to previous page
+      navigate(-1);
     } catch (err) {
       toast(err.message || "Invalid credentials");
     }
@@ -106,6 +103,28 @@ const Accounts = () => {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* ✅ OFFERS SECTION (NEW) */}
+      <div className="accounts-offers">
+        <h3>Exclusive Offers for CIT Alumni</h3>
+        <p className="offers-sub">
+          Fast signup & approval unlocks these benefits for verified alumni
+        </p>
+
+        <ul className="offers-list">
+          <li>🎁 Alumni merchandise discounts</li>
+          <li>🍽️ Partner restaurant special pricing</li>
+          <li>🎫 Priority access to events & reunions</li>
+          <li>💳 Smart Card–based rewards & benefits</li>
+        </ul>
+
+        <button
+          className="offers-cta"
+          onClick={() => navigate("/signup")}
+        >
+          Signup & Get Approved
+        </button>
       </div>
     </div>
   );

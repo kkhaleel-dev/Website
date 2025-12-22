@@ -1,5 +1,5 @@
 @import "../variables.scss";
-/* Carousel6.scss */
+
 .carousel6-wrapper {
   width: 100%;
   display: flex;
@@ -19,7 +19,7 @@
       background-color: $options-card-bg;
       color: white;
       padding: 40px;
-      flex: 0 0 40%; // takes 40% width
+      flex: 0 0 40%;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -50,40 +50,69 @@
           background-color: #f2f2f2;
         }
       }
+
+      /* Offers Section */
+      .offers-section {
+        margin-top: 30px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 6px;
+
+        h3 {
+          margin-bottom: 10px;
+          font-size: 18px;
+          font-weight: 700;
+        }
+
+        ul {
+          margin: 0;
+          padding-left: 20px;
+
+          li {
+            margin-bottom: 6px;
+            font-size: 14px;
+            list-style-type: disc;
+          }
+        }
+      }
     }
 
     .image-section {
-      flex: 0 0 60%; // takes 60% width
+      flex: 0 0 60%;
       position: relative;
 
       img {
         width: 100%;
         height: 100%;
-        object-fit: cover; // fully cover its container
+        object-fit: cover;
       }
     }
   }
 }
 
+/* Responsive */
 @media (max-width: 768px) {
   .carousel6-wrapper {
     padding: 20px 0;
     .carousel6-content {
-      padding: 0px 15px;
       flex-direction: column;
+      padding: 0 15px;
 
       .text-section,
       .image-section {
-        flex: unset;
         width: 100%;
       }
 
       .text-section {
         padding: 20px;
+
+        .offers-section {
+          margin-top: 20px;
+        }
       }
 
       .image-section img {
-        height: 300px; // adjust for mobile
+        height: 300px;
       }
     }
   }
