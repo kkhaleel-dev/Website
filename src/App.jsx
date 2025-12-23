@@ -42,6 +42,7 @@ import GalleryList from "./components/GalleryList/GalleryList.jsx";
 import "leaflet/dist/leaflet.css";
 import AdminUsers from "./pages/AdminUsers.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import AlumniProfile from "./pages/AlumniProfile.jsx";
 
 const AppContent = () => {
   const location = useLocation();
@@ -68,6 +69,15 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
+          <Route
+  path="/profile/:uid"
+  element={
+    <ProtectedRoute>
+      <AlumniProfile />
+    </ProtectedRoute>
+  }
+/>
+
 
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />

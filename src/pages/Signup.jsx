@@ -6,6 +6,7 @@ import { auth, db } from "../firebase";
 import { ref, set, get } from "firebase/database";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { signOut } from "firebase/auth";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -74,6 +75,7 @@ const Signup = () => {
       approved: false,
       role: "user",
     });
+    await signOut(auth);
 
     alert("Account created successfully. Please wait for admin approval.");
     navigate("/accounts");
