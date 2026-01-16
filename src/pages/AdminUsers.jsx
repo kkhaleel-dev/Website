@@ -1,6 +1,7 @@
+// AdminUsers.jsx
 import React, { useState, useEffect } from "react";
 import { db } from "../firebase";
-import { ref, get, update, remove } from "firebase/database";
+import { ref, get, set, update, remove } from "firebase/database";
 import "./AdminUsers.scss";
 
 const AdminUsers = () => {
@@ -8,26 +9,30 @@ const AdminUsers = () => {
   const [approvedUsers, setApprovedUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch all users from DB
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const snapshot = await get(ref(db, "users"));
-      const allUsers = snapshot.val() || {};
-      const pending = [];
-      const approved = [];
+      /* 🔹 FETCH PENDING USERS */
+      const pendingSnap = await get(ref(db, "UnapprovedUsers"));
+      const pendingData = pendingSnap.exists() ? pendingSnap.val() : {};
 
-      Object.entries(allUsers).forEach(([uid, user]) => {
-        if (user.role === "user") {
-          if (!user.approved) pending.push({ uid, ...user });
-          else approved.push({ uid, ...user });
-        }
-      });
+      const pending = Object.entries(pendingData).map(([uid, user]) => ({
+        uid,
+        ...user,
+      }));
+
+      /* 🔹 FETCH APPROVED USERS */
+      const approvedSnap = await get(ref(db, "users"));
+      const approvedData = approvedSnap.exists() ? approvedSnap.val() : {};
+
+      const approved = Object.entries(approvedData)
+        .map(([uid, user]) => ({ uid, ...user }))
+        .filter((u) => u.role === "user" && u.approved === true);
 
       setPendingUsers(pending);
       setApprovedUsers(approved);
     } catch (err) {
-      console.error("Failed to fetch users:", err);
+      console.error("Admin fetch error:", err);
     } finally {
       setLoading(false);
     }
@@ -37,41 +42,87 @@ const AdminUsers = () => {
     fetchUsers();
   }, []);
 
-  // Approve a pending user
+  /* ✅ APPROVE USER */
   const handleApprove = async (uid) => {
     try {
-      await update(ref(db, `users/${uid}`), { approved: true });
+      const snap = await get(ref(db, `UnapprovedUsers/${uid}`));
+      if (!snap.exists()) return alert("User not found");
+
+      const user = snap.val();
+
+      /* 1️⃣ MOVE TO users */
+      await set(ref(db, `users/${uid}`), {
+        ...user,
+        approved: true,
+      });
+
+      /* 2️⃣ MEMBERSHIP COUNTER */
+      const counterRef = ref(db, "membershipCounter");
+      const counterSnap = await get(counterRef);
+      const count = counterSnap.exists() ? counterSnap.val() : 0;
+      await set(counterRef, count + 1);
+
+      /* 3️⃣ PUBLIC CITY STATS */
+      const cityRef = ref(db, `publicCityStats/${user.city}`);
+      const citySnap = await get(cityRef);
+
+      if (!citySnap.exists()) {
+        await set(cityRef, {
+          city: user.city,
+          count: 1,
+          lat: user.lat,
+          lng: user.lng,
+        });
+      } else {
+        await update(cityRef, {
+          count: citySnap.val().count + 1,
+        });
+      }
+
+      /* 4️⃣ TEAM PREVIEW (LAST 5) */
+      const teamRef = ref(db, "publicTeamPreview");
+      const teamSnap = await get(teamRef);
+      const team = teamSnap.exists() ? teamSnap.val() : {};
+
+      const teamArr = Object.values(team);
+      teamArr.push({
+        fullname: user.fullname,
+        batch: user.batch,
+        city: user.city,
+        age: user.age,
+      });
+
+      const lastFive = teamArr.slice(-5);
+
+      const newTeam = {};
+      lastFive.forEach((u, i) => {
+        newTeam[`member_${i}`] = u;
+      });
+
+      await set(teamRef, newTeam);
+
+      /* 5️⃣ REMOVE FROM UnapprovedUsers */
+      await remove(ref(db, `UnapprovedUsers/${uid}`));
+
       fetchUsers();
     } catch (err) {
-      console.error("Error approving user:", err);
-      alert("Failed to approve user");
+      console.error(err);
+      alert("Approval failed");
     }
   };
 
-  // Reject / delete a pending user
+  /* ❌ REJECT USER */
   const handleReject = async (uid) => {
-    try {
-      if (window.confirm("Are you sure you want to reject and delete this user?")) {
-        await remove(ref(db, `users/${uid}`));
-        fetchUsers();
-      }
-    } catch (err) {
-      console.error("Error deleting user:", err);
-      alert("Failed to delete user");
-    }
+    if (!window.confirm("Reject and delete this user?")) return;
+    await remove(ref(db, `UnapprovedUsers/${uid}`));
+    fetchUsers();
   };
 
-  // Remove an approved user from DB
+  /* 🗑 REMOVE APPROVED USER */
   const handleRemoveApproved = async (uid) => {
-    try {
-      if (window.confirm("Are you sure you want to remove this user?")) {
-        await remove(ref(db, `users/${uid}`));
-        fetchUsers();
-      }
-    } catch (err) {
-      console.error("Error removing approved user:", err);
-      alert("Failed to remove user");
-    }
+    if (!window.confirm("Remove this approved user?")) return;
+    await remove(ref(db, `users/${uid}`));
+    fetchUsers();
   };
 
   return (
@@ -82,12 +133,11 @@ const AdminUsers = () => {
         <p>Loading users...</p>
       ) : (
         <>
-          {/* Pending Users Table */}
           <h3>Pending Users</h3>
           {pendingUsers.length === 0 ? (
             <p>No pending users</p>
           ) : (
-            <table border="1" cellPadding="10" cellSpacing="0">
+            <table border="1" cellPadding="10">
               <thead>
                 <tr>
                   <th>Name</th>
@@ -97,14 +147,14 @@ const AdminUsers = () => {
                 </tr>
               </thead>
               <tbody>
-                {pendingUsers.map((user) => (
-                  <tr key={user.uid}>
-                    <td>{user.fullname}</td>
-                    <td>{user.email}</td>
-                    <td>{user.membershipId}</td>
+                {pendingUsers.map((u) => (
+                  <tr key={u.uid}>
+                    <td>{u.fullname}</td>
+                    <td>{u.email}</td>
+                    <td>{u.membershipId}</td>
                     <td>
-                      <button onClick={() => handleApprove(user.uid)}>Approve</button>
-                      <button onClick={() => handleReject(user.uid)}>Reject</button>
+                      <button onClick={() => handleApprove(u.uid)}>Approve</button>
+                      <button onClick={() => handleReject(u.uid)}>Reject</button>
                     </td>
                   </tr>
                 ))}
@@ -112,31 +162,29 @@ const AdminUsers = () => {
             </table>
           )}
 
-          {/* Approved Users Table */}
           <h3>Approved Users</h3>
           {approvedUsers.length === 0 ? (
             <p>No approved users yet</p>
           ) : (
-            <table border="1" cellPadding="10" cellSpacing="0">
+            <table border="1" cellPadding="10">
               <thead>
                 <tr>
                   <th>Name</th>
                   <th>Email</th>
                   <th>Membership ID</th>
-                  <th>Status / Actions</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {approvedUsers.map((user) => (
-                  <tr key={user.uid}>
-                    <td>{user.fullname}</td>
-                    <td>{user.email}</td>
-                    <td>{user.membershipId}</td>
+                {approvedUsers.map((u) => (
+                  <tr key={u.uid}>
+                    <td>{u.fullname}</td>
+                    <td>{u.email}</td>
+                    <td>{u.membershipId}</td>
                     <td>
-                      <button disabled style={{ marginRight: "10px" }}>
-                        Approved
+                      <button onClick={() => handleRemoveApproved(u.uid)}>
+                        Remove User
                       </button>
-                      <button onClick={() => handleRemoveApproved(user.uid)}>Remove User</button>
                     </td>
                   </tr>
                 ))}
