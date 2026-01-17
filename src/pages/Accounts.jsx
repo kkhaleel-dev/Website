@@ -1,4 +1,4 @@
-// Accounts.jsx
+// Accounts.jsx (UPDATED)
 import React, { useState } from "react";
 import "./Accounts.scss";
 import Favicon from "../assets/Favicon.png";
@@ -26,7 +26,7 @@ const Accounts = () => {
       z-index: 9999;
     `;
     document.body.appendChild(t);
-    setTimeout(() => t.remove(), 4000);
+    setTimeout(() => t.remove(), 5000);
   };
 
   const handleLogin = async () => {
@@ -37,46 +37,28 @@ const Accounts = () => {
 
     try {
       const cred = await signInWithEmailAndPassword(auth, email, password);
-
-      // ✅ EMAIL VERIFICATION CHECK FIRST
-      if (!cred.user.emailVerified) {
-        toast("Please verify your email before login.");
-        await signOut(auth);
-        return;
-      }
-
       const userRef = ref(db, `users/${cred.user.uid}`);
       const snapshot = await get(userRef);
 
       if (!snapshot.exists()) {
-        toast("User profile not found");
+        toast("User data not found");
         await signOut(auth);
         return;
       }
 
       const userData = snapshot.val();
 
-      // ✅ ADMIN APPROVAL CHECK
-      if (userData.role === "user" && userData.approved !== true)  {
-        toast("Account pending admin approval");
+      if (!userData.approved && userData.role !== "admin") {
+        toast("Your account is not approved yet. Please wait for admin approval.");
         await signOut(auth);
         return;
       }
 
       toast("Login successful");
       navigate(-1);
-    }catch (err) {
-  console.error(err);
-
-  if (err.code === "auth/wrong-password" || err.code === "auth/user-not-found") {
-    toast("Invalid email or password");
-  } else if (err.code === "PERMISSION_DENIED") {
-    toast("Access denied. Please contact admin.");
-  } else {
-    toast("Login failed. Try again.");
-  }
-}
-
+    } catch (err) {
+      toast(err.message || "Invalid credentials");
+    }
   };
 
   return (
@@ -93,12 +75,12 @@ const Accounts = () => {
         </div>
 
         <div className="accounts-card-right">
-          <h3>Email Login</h3>
+          <h3>Choose any one of the following</h3>
 
           <div className="accounts-email-row">
             <input
               type="email"
-              placeholder="Email"
+              placeholder="Enter your Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
