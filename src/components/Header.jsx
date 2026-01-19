@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Header.scss";
 // import Logo from "../assets/CollegeFullNameLogo.png";
-import Logo from "../assets/SPL2.jpg";
+import Logo from "../assets/SPL2.png";
 import { FaChevronDown } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { MdClose } from "react-icons/md";
@@ -154,8 +154,11 @@ const Header = () => {
                     <Link to="/updates/awards">CIT Awards</Link>
                   </li>
                   <li>
-                    <Link to="/updates/alumniNews">Alumni News</Link>
+                    <Link to="/updates/entrepreneurs">Entrepreneurs</Link>
                   </li>
+                  {/* <li>
+                    <Link to="/updates/alumniNews">Alumni News</Link>
+                  </li> */}
                 </ul>
               </li>
 

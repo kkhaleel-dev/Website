@@ -1,81 +1,197 @@
-.about-section {
+.about-page {
+  background: #eef4fb;
+  padding-bottom: 4rem;
+  font-family: "Inter", sans-serif;
+}
+
+/* HERO */
+.about-hero {
+  text-align: center;
+  padding: 3rem 5%;
+  background: linear-gradient(90deg, #0a2148, #003366);
+  color: #fff;
+
+  h2 {
+    font-size: 2.7rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+
+  p {
+    font-size: 1.15rem;
+    opacity: 0.85;
+    max-width: 780px;
+    margin: 0 auto;
+  }
+}
+
+/* CONTENT */
+.about-content {
   max-width: 900px;
-  margin: 0 auto 60px auto;
-  text-align: left;
-}
-
-.about-title {
-  font-size: 42px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  margin-bottom: 10px;
-  margin-top: 30px;
-  color: #111;
-}
-
-.about-subtitle {
-  font-size: 18px;
-  font-weight: 500;
-  color: #666;
-  margin-bottom: 30px;
-}
-
-.about-description {
-  font-size: 17px;
+  margin: 2.5rem auto;
+  padding: 0 5%;
+  font-size: 1.05rem;
   line-height: 1.9;
   color: #444;
-  margin-bottom: 18px;
+
+  p {
+    margin-bottom: 1.2rem;
+  }
 }
 
+/* STATS */
 .about-stats {
-  display: flex;
-  gap: 40px;
-  margin-top: 40px;
-  flex-wrap: wrap;
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 0 5%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
 }
 
-.stat {
-  display: flex;
-  flex-direction: column;
-}
+.stat-card {
+  background: #fff;
+  padding: 1.8rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 
-.stat-number {
-  font-size: 32px;
-  font-weight: 700;
-  color: #0b5ed7;
-}
-
-.stat-label {
-  font-size: 14px;
-  color: #666;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .about-title {
-    font-size: 30px;
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #003366;
   }
 
-  .about-subtitle {
-    font-size: 16px;
-  }
-
-  .about-stats {
-    gap: 20px;
+  .stat-label {
+    font-size: 0.95rem;
+    color: #666;
   }
 }
 
-/* Tablet & Mobile side padding fix */
-@media (max-width: 1024px) {
-  .about-section {
-    padding-left: 16px;
-    padding-right: 16px;
+/* HIGHLIGHT SECTIONS */
+.about-highlight {
+  max-width: 900px;
+  margin: 3.5rem auto;
+  padding: 0 5%;
+  text-align: center;
+
+  h3 {
+    font-size: 2rem;
+    color: #0a2148;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1.05rem;
+    color: #444;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .about-quote {
+    font-weight: 600;
+    color: #003366;
   }
 }
 
-@media (max-width: 480px) {
-  .about-section {
-    padding-left: 14px;
-    padding-right: 14px;
+/* CARD GRIDS */
+.about-section-block {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 5%;
+
+  h3 {
+    font-size: 2rem;
+    color: #0a2148;
+    margin-bottom: 1.8rem;
+    text-align: center;
+  }
+}
+
+.about-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.about-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  position: relative;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
+  }
+
+  .card-index {
+    position: absolute;
+    top: -14px;
+    left: -14px;
+    background: #003366;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .card-tag {
+    display: inline-block;
+    background: #eef4fb;
+    color: #003366;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+  }
+
+  h4 {
+    font-size: 1.35rem;
+    color: #0a2148;
+    margin-bottom: 0.7rem;
+  }
+
+  p {
+    font-size: 0.98rem;
+    color: #444;
+    line-height: 1.6;
+  }
+}
+
+/* CTA */
+.about-cta {
+  text-align: center;
+  padding: 3.5rem 5%;
+
+  h3 {
+    font-size: 2rem;
+    color: #0a2148;
+    margin-bottom: 0.8rem;
+  }
+
+  p {
+    font-size: 1.05rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+  }
+
+  button {
+    background: #003366;
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+
+    &:hover {
+      background: #0a2148;
+    }
   }
 }

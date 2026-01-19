@@ -43,6 +43,7 @@ import "leaflet/dist/leaflet.css";
 import AdminUsers from "./pages/AdminUsers.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import AlumniProfile from "./pages/AlumniProfile.jsx";
+import Entrepreneurs from "./components/Entrepreneurs/Entrepreneurs.jsx";
 
 const AppContent = () => {
   const location = useLocation();
@@ -111,7 +112,8 @@ const AppContent = () => {
 
           <Route path="/updates/magazines" element={<Magazines />} />
           <Route path="/updates/awards" element={<Awards />} />
-          <Route path="/updates/alumniNews" element={<AlumniNews />} />
+          <Route path="/updates/entrepreneurs" element={<Entrepreneurs />} />
+          {/* <Route path="/updates/alumniNews" element={<AlumniNews />} /> */}
 
           <Route path="/services/donation" element={<Donation />} />
           <Route
