@@ -6,7 +6,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import Signup from "../../src/pages/Signup";
 import logo from "../assets/Favicon.png";
 import personImg from "../assets/person-logo.png";
-import qrCode from "../assets/citQR.jpg";
+import { QRCodeSVG } from "qrcode.react";
 
 const SmartICardForm = () => {
   const [userData, setUserData] = useState(null);
@@ -80,7 +80,18 @@ const SmartICardForm = () => {
               <strong>Mobile No:</strong> {userData.mobile}
             </p>
 
-            <img src={qrCode} alt="QR Code" className="qr-code" />
+            {/* <img src={qrCode} alt="QR Code" className="qr-code" /> */}
+          
+            <QRCodeSVG
+              value={`https://website-delta-six-36.vercel.app//${userData.membershipId}`}
+              size={160} // size in px
+              bgColor="#ffffff"
+              fgColor="#000000"
+              level="H" // error correction
+              includeMargin={true}
+            />
+
+
             <p className="website">www.citacc.com</p>
           </div>
         </div>
