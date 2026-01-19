@@ -51,33 +51,76 @@ const AdminUsers = () => {
   }, []);
 
   // ✅ APPROVE USER
-  const approveUser = async (uid, user) => {
-    try {
-      const counterRef = ref(db, "meta/membershipCounter");
+ const approveUser = async (uid, user) => {
+  try {
+    /* =========================
+       1️⃣ Membership Counter
+       ========================= */
+    const counterRef = ref(db, "meta/membershipCounter");
 
-      const result = await runTransaction(counterRef, (current) => {
-        return (current || 0) + 1;
+    const result = await runTransaction(counterRef, (current) => {
+      return (current || 0) + 1;
+    });
+
+    if (!result.committed) throw new Error("Counter update failed");
+
+    const newCount = result.snapshot.val();
+    const membershipId = `LTM${String(newCount).padStart(4, "0")}`;
+
+    /* =========================
+       2️⃣ Save Approved User
+       ========================= */
+    await set(ref(db, `users/${uid}`), {
+      ...user,
+      approved: true,
+      role: "user",
+      membershipId,
+    });
+
+    /* =========================
+       3️⃣ Update publicCityStats
+       ========================= */
+    if (user.city) {
+      const cityName = user.city.trim();
+      const cityKey = cityName.toLowerCase(); // 🔑 normalized key
+
+      const lat = Number(user.lat) || 0;
+      const lng = Number(user.lng) || 0;
+
+      const cityRef = ref(db, `publicCityStats/${cityKey}`);
+
+      await runTransaction(cityRef, (currentData) => {
+        if (currentData) {
+          // ✅ City exists → increment only
+          return {
+            ...currentData,
+            count: (currentData.count || 0) + 1,
+          };
+        }
+
+        // ✅ New city → create full entry
+        return {
+          city: cityName, // display name
+          count: 1,
+          lat,
+          lng,
+          createdAt: Date.now(),
+        };
       });
-
-      if (!result.committed) throw new Error("Counter update failed");
-
-      const newCount = result.snapshot.val();
-      const membershipId = `LTM${String(newCount).padStart(4, "0")}`;
-
-      await set(ref(db, `users/${uid}`), {
-        ...user,
-        approved: true,
-        role: "user",
-        membershipId,
-      });
-
-      await remove(ref(db, `UnapprovedUsers/${uid}`));
-      fetchAll();
-    } catch (err) {
-      console.error(err);
-      alert("Approve failed");
     }
-  };
+
+    /* =========================
+       4️⃣ Remove from Pending
+       ========================= */
+    await remove(ref(db, `UnapprovedUsers/${uid}`));
+
+    fetchAll();
+  } catch (err) {
+    console.error(err);
+    alert("Approve failed");
+  }
+};
+
 
   // ❌ Reject user
   const rejectUser = async (uid) => {

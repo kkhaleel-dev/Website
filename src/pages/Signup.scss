@@ -27,52 +27,58 @@
   }
 }
 
-.signup-card-left {
-  width: 40%;
+.signup-card-left,
+.signup-card-right {
   background: white;
   padding: 40px;
   border-radius: 12px;
-  text-align: center;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+/* LEFT CARD */
+.signup-card-left {
+  width: 40%;
+  text-align: center;
 
   @media (max-width: 900px) {
     width: 100%;
   }
 
   .profile-upload {
-  margin-top: 20px;
-  text-align: center;
+    margin-top: 20px;
 
-  .profile-preview {
-    width: 130px;
-    height: 130px;
-    object-fit: cover;
-    border-radius: 5%;
-    border: 2px dashed #aaa;
-    cursor: pointer;
-    margin-bottom: 8px;
-  }
+    .profile-preview {
+      width: 130px;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 5%;
+      border: 2px dashed #aaa;
+      cursor: pointer;
+      margin-bottom: 8px;
+    }
 
-  p {
-    font-size: 14px;
-    color: #555;
+    p {
+      font-size: 14px;
+      color: #555;
+    }
   }
 }
 
-}
-
+/* RIGHT CARD */
 .signup-card-right {
   width: 50%;
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 
-  input {
+  @media (max-width: 900px) {
+    width: 100%;
+    grid-template-columns: 1fr;
+  }
+
+  input,
+  select {
     padding: 12px;
     border-radius: 6px;
     border: 1px solid #ccc;
@@ -86,48 +92,95 @@
     border-radius: 8px;
     border: none;
     cursor: pointer;
+
+    &:hover {
+      opacity: 0.9;
+    }
   }
 
-  @media (max-width: 900px) {
-    width: 100%;
-    grid-template-columns: 1fr;
+  .password-field {
+    position: relative;
+    grid-column: span 1;
+
+    input {
+      width: 100%;
+      padding-right: 40px;
+    }
+
+    .eye-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #666;
+      font-size: 18px;
+    }
   }
 }
 
 @media (max-width: 768px) {
   .signup-card-right {
     display: flex; /* override grid */
-    flex-direction: column; /* stack fields */
-  }
+    flex-direction: column;
 
-  .signup-card-right input,
-  .signup-card-right .go {
-    width: 100%;
-  }
-}
-
-.password-field {
-  position: relative;
-  grid-column: span 1;
-
-  input {
-    width: 100%;
-    padding-right: 40px;
-  }
-
-  .eye-icon {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: #666;
-    font-size: 18px;
+    input,
+    select,
+    .go {
+      width: 100%;
+    }
   }
 }
+.signup-card-right input[type="tel"] {
+  width: 100%;
+  padding: 12px 12px 12px 50px; // leave space for flag
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
 
-@media (max-width: 900px) {
-  .password-field {
-    grid-column: span 1;
-  }
+/* Force the main container to full width */
+.iti {
+  width: 100%;
+}
+
+/* Flag inside input */
+.iti__selected-flag {
+  top: 50%;
+  transform: translateY(-50%);
+  left: 12px;
+  z-index: 4;
+}
+
+/* Dropdown country list */
+.iti__country-list {
+  width: 280px !important; // wider so search input fits
+  max-height: 240px !important;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+/* Country search input */
+.iti__country-list .iti__search {
+  width: 90%;
+  padding: 6px 10px;
+  margin: 6px auto 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  display: block;
+}
+
+/* Search icon */
+.iti__country-list .iti__search + .iti__country {
+  display: flex;
+  align-items: center;
+}
+
+/* Fix hover & highlight */
+.iti__country:hover {
+  background-color: #f0f0f0;
+}
+
+.iti__search-icon-svg{
+  display: none !important;
 }

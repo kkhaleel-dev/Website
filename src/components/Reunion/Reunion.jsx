@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Reunion.scss";
+import Placeholderpage from "../Placeholderpage";
 
 const Reunion = () => {
   const [reunionEvents, setReunionEvents] = useState([]);
@@ -42,36 +43,37 @@ const Reunion = () => {
   }, []);
 
   return (
-    <div className="reunion-page">
-      <div className="reunion-header">
-        <h2>Alumni Reunion Events</h2>
-        <p>
-          Reconnect with your alma mater, relive cherished memories, and
-          celebrate the enduring spirit of the Coimbatore Institute of
-          Technology alumni community.
-        </p>
-      </div>
+    // <div className="reunion-page">
+    //   <div className="reunion-header">
+    //     <h2>Alumni Reunion Events</h2>
+    //     <p>
+    //       Reconnect with your alma mater, relive cherished memories, and
+    //       celebrate the enduring spirit of the Coimbatore Institute of
+    //       Technology alumni community.
+    //     </p>
+    //   </div>
 
-      <div className="reunion-grid">
-        {reunionEvents.map((event) => (
-          <div className="reunion-card" key={event.id}>
-            <div className="reunion-image">
-              <img src={event.image} alt={event.title} />
-              <span className="date-badge">{event.date}</span>
-            </div>
+    //   <div className="reunion-grid">
+    //     {reunionEvents.map((event) => (
+    //       <div className="reunion-card" key={event.id}>
+    //         <div className="reunion-image">
+    //           <img src={event.image} alt={event.title} />
+    //           <span className="date-badge">{event.date}</span>
+    //         </div>
 
-            <div className="reunion-content">
-              <h3>{event.title}</h3>
-              <span className="reunion-location">{event.location}</span>
-              <p>{event.description}</p>
-              <a href={event.link} className="reunion-link">
-                View Details →
-              </a>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    //         <div className="reunion-content">
+    //           <h3>{event.title}</h3>
+    //           <span className="reunion-location">{event.location}</span>
+    //           <p>{event.description}</p>
+    //           <a href={event.link} className="reunion-link">
+    //             View Details →
+    //           </a>
+    //         </div>
+    //       </div>
+    //     ))}
+    //   </div>
+    // </div>
+    <Placeholderpage />
   );
 };
 

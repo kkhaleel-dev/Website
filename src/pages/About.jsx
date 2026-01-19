@@ -158,9 +158,9 @@ const About = () => {
       </section>
 
       {/* MAP */}
-      <section className="map-section">
+      {/* <section className="map-section">
         <Map />
-      </section>
+      </section> */}
     </div>
   );
 };

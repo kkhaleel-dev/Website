@@ -17,12 +17,13 @@
 
   .entrepreneurs-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 2rem;
-    width: 100%;
+    grid-template-columns: repeat(4, 1fr); /* 4 cards max per row */
+    gap: 1.8rem;
     max-width: 1200px;
+    margin: 0 auto;
+    justify-content: center;
+    }
   }
-}
 
 /* ===============================
    Entrepreneur Card
@@ -167,4 +168,84 @@
       font-size: 0.85rem;
     }
   }
+}
+/* ===============================
+   Entrepreneurs Overlay (LOCKED VIEW)
+   =============================== */
+
+.entrepreneurs-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 33, 72, 0.65);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 1rem;
+  margin-top: 60px;
+
+  .overlay-box {
+    background: #ffffff;
+    max-width: 420px;
+    width: 100%;
+    padding: 2.4rem 2rem;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    animation: overlayFade 0.35s ease;
+
+    h3 {
+      font-size: 1.5rem;
+      color: #0a2148;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: #374151;
+      margin-bottom: 1.8rem;
+      line-height: 1.5;
+    }
+
+    button {
+      background: linear-gradient(135deg, #003366, #0a2148);
+      color: #ffffff;
+      border: none;
+      border-radius: 28px;
+      padding: 0.75rem 2.2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(0, 51, 102, 0.35);
+      }
+    }
+  }
+}
+
+/* Overlay animation */
+@keyframes overlayFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   Blur effect stays untouched
+   =============================== */
+
+.entrepreneurs-grid.blurred {
+  filter: blur(4px);
+  pointer-events: none;
+  user-select: none;
 }

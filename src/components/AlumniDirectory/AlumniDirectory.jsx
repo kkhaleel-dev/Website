@@ -1,104 +1,136 @@
 import React, { useEffect, useState } from "react";
 import "./AlumniDirectory.scss";
-import profileImg from "../../assets/person-logo.png";
-
-// Example data; can later replace with Firebase/REST API fetch
-const sampleAlumni = [
-  {
-    id: 1,
-    fullname: "Dr. Rajesh Kumar",
-    branch: "EEE",
-    batch: "2005",
-    location: "Chennai, India",
-    email: "rajesh.kumar@cit.ac.in",
-    linkedin: "https://linkedin.com/in/rajeshkumar",
-    image: profileImg,
-  },
-  {
-    id: 2,
-    fullname: "Ms. Priya Sharma",
-    branch: "CSE",
-    batch: "2010",
-    location: "Bangalore, India",
-    email: "priya.sharma@cit.ac.in",
-    linkedin: "https://linkedin.com/in/priyasharma",
-    image: profileImg,
-  },
-  {
-    id: 3,
-    fullname: "Mr. Anil Verma",
-    branch: "MECH",
-    batch: "2012",
-    location: "Delhi, India",
-    email: "anil.verma@cit.ac.in",
-    linkedin: "",
-    image: profileImg,
-  },
-  {
-    id: 4,
-    fullname: "Dr. L. Meenakshi",
-    branch: "CSE",
-    batch: "2008",
-    location: "Coimbatore, India",
-    email: "meenakshi.l@cit.ac.in",
-    linkedin: "https://linkedin.com/in/lmeenakshi",
-    image: profileImg,
-  },
-  {
-    id: 5,
-    fullname: "Mr. R. Rajan",
-    branch: "EEE",
-    batch: "2015",
-    location: "Mumbai, India",
-    email: "rajan.r@cit.ac.in",
-    linkedin: "",
-    image: profileImg,
-  },
-];
+import { db, auth } from "../../firebase";
+import { ref, get } from "firebase/database";
+import { onAuthStateChanged } from "firebase/auth";
+import personLogo from "../../assets/person-logo.png";
 
 const AlumniDirectory = () => {
   const [alumni, setAlumni] = useState([]);
+  const [canViewAll, setCanViewAll] = useState(false);
+  const [loading, setLoading] = useState(true);
 
+  /* 🔐 Auth & approval check */
   useEffect(() => {
-    // Replace this with API or Firebase fetch
-    setAlumni(sampleAlumni);
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        setCanViewAll(false);
+        return;
+      }
+
+      const snap = await get(ref(db, `users/${user.uid}`));
+      const data = snap.val();
+
+      if (data?.approved === true || data?.role === "admin") {
+        setCanViewAll(true);
+      } else {
+        setCanViewAll(false);
+      }
+    });
+
+    return () => unsub();
   }, []);
+
+  /* 📦 Fetch alumni */
+  useEffect(() => {
+    const fetchAlumni = async () => {
+      try {
+        let snapshot;
+
+        if (canViewAll) {
+          snapshot = await get(ref(db, "users"));
+        } else {
+          snapshot = await get(ref(db, "publicTeamPreview"));
+        }
+
+        if (!snapshot.exists()) {
+          setAlumni([]);
+          return;
+        }
+
+        const data = snapshot.val();
+
+        const list = Object.keys(data).map((uid) => ({
+          id: uid,
+          fullname: data[uid].fullname || "Unnamed",
+          branch: data[uid].branch || "",
+          batch: data[uid].batch || "",
+          profession: data[uid].profession || "",
+          email: data[uid].email || "",
+          city: data[uid].city || "",
+          state: data[uid].state || "",
+          country: data[uid].country || "",
+          profileImage: data[uid].profileImage || personLogo,
+        }));
+
+        setAlumni(list);
+      } catch (err) {
+        console.error("Alumni directory fetch error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAlumni();
+  }, [canViewAll]);
+
+  if (loading) return <p className="alumni-loading">Loading alumni...</p>;
 
   return (
     <div className="alumni-directory-page">
       <h2>CIT Alumni Directory</h2>
-      <div className="alumni-grid">
+
+      <div className={`alumni-grid ${!canViewAll ? "blurred" : ""}`}>
         {alumni.map((member) => (
           <div className="alumni-card" key={member.id}>
             <div className="alumni-photo">
-              <img src={member.image} alt={member.fullname} />
+              <img src={member.profileImage} alt={member.fullname} />
             </div>
+
             <div className="alumni-info">
               <h3>{member.fullname}</h3>
+
               <p>
                 <strong>Branch:</strong> {member.branch}
               </p>
               <p>
                 <strong>Batch:</strong> {member.batch}
               </p>
-              <p>
-                <strong>Location:</strong> {member.location}
-              </p>
-              <p>
-                <strong>Email:</strong>{" "}
-                <a href={`mailto:${member.email}`}>{member.email}</a>
-              </p>
-              {member.linkedin && (
-                <p>
-                  <a href={member.linkedin} target="_blank" rel="noreferrer">
-                    LinkedIn Profile
-                  </a>
-                </p>
+
+              {canViewAll && (
+                <>
+                  <p>
+                    <strong>Profession:</strong> {member.profession}
+                  </p>
+                  <p>
+                    <strong>Location:</strong>{" "}
+                    {member.city}, {member.state}, {member.country}
+                  </p>
+
+                  {member.email && (
+                    <p>
+                      <strong>Email:</strong>{" "}
+                      <a href={`mailto:${member.email}`}>
+                        {member.email}
+                      </a>
+                    </p>
+                  )}
+                </>
               )}
             </div>
           </div>
         ))}
       </div>
+
+      {!canViewAll && (
+        <div className="alumni-overlay">
+          <h3>Want to view full alumni details?</h3>
+          <p>Login / Signup & get approved to unlock full access</p>
+          <button onClick={() => (window.location.href = "/accounts")}>
+            Login / Signup
+          </button>
+        </div>
+      )}
     </div>
   );
 };

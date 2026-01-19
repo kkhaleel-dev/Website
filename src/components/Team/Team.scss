@@ -1,40 +1,62 @@
 .team-page {
-  padding: 40px;
-  text-align: center;
   min-height: 100vh;
+  padding: 2rem 5%;
+  background: #f9f9f9;
+  text-align: center;
+
+  h2 {
+    font-size: 2rem;
+    color: #0a2148;
+    margin-bottom: 2rem;
+  }
 }
 
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 24px;
-  margin-top: 30px;
-  position: relative;
+  grid-template-columns: repeat(4, 1fr); /* 4 cards max per row */
+  gap: 1.8rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  justify-content: center; /* ✅ centers 1-3 cards */
 }
 
 .team-card {
   background: #fff;
-  border-radius: 12px;
-  padding: 24px 16px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 1.6rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.14);
+  }
 }
 
 .team-profile {
-  width: 140px;
-  height: 140px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
-  margin-bottom: 16px;
   object-fit: cover;
+  margin-bottom: 1rem;
+  border: 2px solid #e0e0e0;
 }
 
 .team-name {
-  font-size: 18px;
+  font-size: 1.25rem;
   font-weight: 600;
+  color: #0a2148;
+  margin-bottom: 0.6rem;
 }
 
 .team-meta {
-  font-size: 14px;
-  color: #666;
+  font-size: 0.95rem;
+  color: #444;
+  margin: 0.25rem 0;
 }
 
 /* 🔒 LOCKED STATE */
@@ -43,27 +65,66 @@
   pointer-events: none;
 }
 
-/* 🔐 CTA OVERLAY */
+/* 🔐 CTA overlay */
 .team-overlay {
-  margin-top: 10px;
-  padding: 40px;
-  background: linear-gradient(to top, #ffffff 60%, rgba(255,255,255,0.7));
-  position: relative;
-  z-index: 5;
+  margin-top: 2rem;
+  padding: 2.5rem;
+  background: linear-gradient(to top, #ffffff 60%, rgba(255,255,255,0.8));
+  text-align: center;
+  border-radius: 12px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+
+  h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: #555;
+  }
+
+  button {
+    margin-top: 1rem;
+    padding: 10px 26px;
+    background: #0a2148;
+    color: #fff;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      background: #12326d;
+    }
+  }
 }
 
-.team-overlay h3 {
-  margin-bottom: 8px;
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .team-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
-.team-overlay button {
-  margin-top: 12px;
-  padding: 10px 24px;
-  background: #000;
-  color: #fff;
-  border-radius: 6px;
-  cursor: pointer;
-  border: none;
+@media (max-width: 768px) {
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .team-profile {
+    width: 130px;
+    height: 130px;
+  }
 }
 
-////wrking
+@media (max-width: 480px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .team-profile {
+    width: 110px;
+    height: 110px;
+  }
+}

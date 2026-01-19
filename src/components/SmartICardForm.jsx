@@ -62,8 +62,8 @@ const SmartICardForm = () => {
               }}
             />
 
-            <p className="name">{userData.fullname}</p>
-            <p className="branch">{userData.branch}</p>
+            <p className="name">Name: {userData.fullname}</p>
+            <p className="branch">Branch: {userData.branch}</p>
             <p className="membership">
               ID: {userData.membershipId}
             </p>
@@ -90,7 +90,7 @@ const SmartICardForm = () => {
       <div className="smart-offers">
         <h3>Exclusive Offers for Approved Smart Card Users</h3>
         <ul>
-          <li>🎁 10% off on alumni merchandise</li>
+          <li>🎁 Discount on alumni merchandise</li>
           <li>🍽️ Special discounts at partner restaurants</li>
           <li>🎫 Early access to workshops & events</li>
           <li>💳 Cashback on annual membership renewal</li>
