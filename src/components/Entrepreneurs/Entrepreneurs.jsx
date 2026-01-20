@@ -88,58 +88,75 @@ const Entrepreneurs = () => {
     <div className="entrepreneurs-page">
       <h2>CIT Alumni Entrepreneurs</h2>
 
-      <div className={`entrepreneurs-grid ${!canViewAll ? "blurred" : ""}`}>
-        {entrepreneurs.map((person) => (
-          <div className="entrepreneur-card" key={person.id}>
-            <div className="entrepreneur-photo">
-              <img src={person.profileImage} alt={person.fullname} />
-            </div>
+     {entrepreneurs.length === 0 ? (
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      minHeight: "300px",
+      width: "100%",
+      fontSize: "18px",
+      fontWeight: "500",
+      color: "#666",
+      textAlign: "center",
+    }}
+  >
+    No entrepreneurs are listed here
+  </div>
+) : (
+  <div className={`entrepreneurs-grid ${!canViewAll ? "blurred" : ""}`}>
+    {entrepreneurs.map((person) => (
+      <div className="entrepreneur-card" key={person.id}>
+        <div className="entrepreneur-photo">
+          <img src={person.profileImage} alt={person.fullname} />
+        </div>
 
-            <div className="entrepreneur-info">
-              <h3>{person.fullname}</h3>
+        <div className="entrepreneur-info">
+          <h3>{person.fullname}</h3>
 
-              {person.company && (
-                <p>
-                  <strong>Company:</strong> {person.company}
-                </p>
-              )}
+          {person.company && (
+            <p>
+              <strong>Company:</strong> {person.company}
+            </p>
+          )}
 
-              {person.industry && (
-                <p>
-                  <strong>Industry:</strong> {person.industry}
-                </p>
-              )}
+          {person.industry && (
+            <p>
+              <strong>Industry:</strong> {person.industry}
+            </p>
+          )}
 
-              <p>
-                <strong>Location:</strong>{" "}
-                {person.city}, {person.state}, {person.country}
-              </p>
+          <p>
+            <strong>Location:</strong>{" "}
+            {person.city}, {person.state}, {person.country}
+          </p>
 
-              {canViewAll && person.email && (
-                <p>
-                  <strong>Email:</strong>{" "}
-                  <a href={`mailto:${person.email}`}>
-                    {person.email}
-                  </a>
-                </p>
-              )}
+          {canViewAll && person.email && (
+            <p>
+              <strong>Email:</strong>{" "}
+              <a href={`mailto:${person.email}`}>{person.email}</a>
+            </p>
+          )}
 
-              {canViewAll && person.website && (
-                <p>
-                  <a
-                    href={person.website}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="website-link"
-                  >
-                    Visit Website
-                  </a>
-                </p>
-              )}
-            </div>
-          </div>
-        ))}
+          {canViewAll && person.website && (
+            <p>
+              <a
+                href={person.website}
+                target="_blank"
+                rel="noreferrer"
+                className="website-link"
+              >
+                Visit Website
+              </a>
+            </p>
+          )}
+        </div>
       </div>
+    ))}
+  </div>
+)}
+
 
       {!canViewAll && (
         <div className="entrepreneurs-overlay">

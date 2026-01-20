@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import "./Signup.scss";
 import Favicon from "../assets/Favicon.png";
 import DummyLogo from "../assets/person-logo.png";
@@ -7,15 +7,12 @@ import { auth, db } from "../firebase";
 import { ref, set } from "firebase/database";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import intlTelInput from "intl-tel-input";
-import "intl-tel-input/build/css/intlTelInput.css";
 
 const Signup = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
   const [profileImage, setProfileImage] = useState("");
-  const phoneRef = useRef(null);
 
   const currentYear = new Date().getFullYear();
 
@@ -31,31 +28,8 @@ const Signup = () => {
     state: "",
     country: "",
     profession: "",
-    registrationNumber: "",
-    // role: "",
+    website: "",
   });
-
-  // Initialize intl-tel-input
-  useEffect(() => {
-    if (phoneRef.current) {
-      const iti = intlTelInput(phoneRef.current, {
-        initialCountry: "auto",
-        geoIpLookup: (callback) => {
-          fetch("https://ipapi.co/json")
-            .then((res) => res.json())
-            .then((data) => callback(data.country_code))
-            .catch(() => callback("us"));
-        },
-        utilsScript:
-          "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
-        separateDialCode: false, // everything in same input
-      });
-
-      phoneRef.current.addEventListener("change", () => {
-        setForm((prev) => ({ ...prev, mobile: iti.getNumber() }));
-      });
-    }
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,10 +42,19 @@ const Signup = () => {
     }
   };
 
-  // Signup logic remains the same...
   const handleSignup = async () => {
     try {
+      if (!form.fullname) return alert("Please enter Fullname.");
+      // if (!form.batch) return alert("Please select Batch.");
+      // if (!form.branch) return alert("Please select Branch.");
+      if (!form.email) return alert("Please enter Email.");
+      if (!form.mobile) return alert("Please enter your mobile number.");
+      if (!form.password) return alert("Please enter Password.");
+      if (!form.city) return alert("Please enter City.");
+      if (!form.state) return alert("Please enter State.");
+      if (!form.country) return alert("Please enter Country.");
       if (!form.profession) return alert("Please select Profession.");
+
       const cred = await createUserWithEmailAndPassword(auth, form.email, form.password);
 
       const locationData = await fetch(
@@ -166,8 +149,14 @@ const Signup = () => {
             {branches.map((b) => <option key={b}>{b}</option>)}
           </select>
 
-          {/* Mobile input with intl-tel-input */}
-          <input type="tel" name="mobile" ref={phoneRef} placeholder="MOBILE*" />
+          {/* Simple mobile input */}
+          <input
+            type="tel"
+            name="mobile"
+            placeholder="MOBILE*  (with country code)"
+            value={form.mobile}
+            onChange={handleChange}
+          />
 
           <input type="email" name="email" placeholder="EMAIL*" value={form.email} onChange={handleChange} />
 
@@ -194,14 +183,14 @@ const Signup = () => {
             <option value="Entrepreneur">Entrepreneur</option>
           </select>
 
-          {/* <input type="text" name="role" placeholder="ROLE (Optional)" value={form.role} onChange={handleChange} /> */}
           <input
             type="text"
-            name="registrationNumber"
-            placeholder="Reg.No. (ID Card)"
-            value={form.registrationNumber || ""}
+            name="website"
+            placeholder="Website"
+            value={form.website || ""}
             onChange={handleChange}
           />
+
           <button className="go" onClick={handleSignup}>Create Account</button>
         </div>
       </div>
