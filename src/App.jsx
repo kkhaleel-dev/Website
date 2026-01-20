@@ -44,6 +44,7 @@ import AdminUsers from "./pages/AdminUsers.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import AlumniProfile from "./pages/AlumniProfile.jsx";
 import Entrepreneurs from "./components/Entrepreneurs/Entrepreneurs.jsx";
+import ScanMembership from "./components/ScanMembership.jsx";
 
 const AppContent = () => {
   const location = useLocation();
@@ -77,6 +78,11 @@ const AppContent = () => {
       <AlumniProfile />
     </ProtectedRoute>
   }
+/>
+{/* // PUBLIC SCAN PAGE (anyone can access) */}
+<Route
+  path="/scan/:membershipId"
+  element={<ScanMembership />}
 />
 
 

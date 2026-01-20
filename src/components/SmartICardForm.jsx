@@ -83,7 +83,7 @@ const SmartICardForm = () => {
             {/* <img src={qrCode} alt="QR Code" className="qr-code" /> */}
           
             <QRCodeSVG
-              value={`https://website-delta-six-36.vercel.app/${userData.membershipId}`}
+              value={`https://website-delta-six-36.vercel.app/scan/${userData.membershipId}`}
               size={160} // size in px
               bgColor="#ffffff"
               fgColor="#000000"
