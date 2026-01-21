@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { db } from "../firebase";
 import { ref, get } from "firebase/database";
 import personImg from "../assets/person-logo.png";
+import { QRCodeSVG } from "qrcode.react";
 import "./ScanMembership.scss";
 
 const ScanMembership = () => {
@@ -41,15 +42,15 @@ const ScanMembership = () => {
 
   if (loading) {
     return (
-      <div className="scan-container full-center">
-        <p>Loading...</p>
+      <div className="scan-container full-center dark-bg">
+        <p className="loading-text">Loading...</p>
       </div>
     );
   }
 
   if (!userData) {
     return (
-      <div className="scan-container full-center">
+      <div className="scan-container full-center dark-bg">
         <div className="not-found-card">
           <h2>Membership Not Found ❌</h2>
           <p>This membership ID is invalid or expired.</p>
@@ -58,31 +59,43 @@ const ScanMembership = () => {
     );
   }
 
+  const profileImage =
+    userData.profileImage && userData.profileImage.trim() !== ""
+      ? userData.profileImage
+      : personImg;
+
   return (
-    <div className="scan-container full-center">
-      <div className="scan-card">
-        <img
-          src={userData.profileImage || personImg}
-          alt="User"
-          className="profile-img"
-        />
-        <h1 className="name">{userData.fullname}</h1>
-        <p className="info">
-          <strong>Age:</strong> {userData.age || "N/A"}
-        </p>
-        <p className="info">
-          <strong>Department:</strong> {userData.branch || "N/A"}
-        </p>
-        <p className="membership">
-          <strong>Membership ID:</strong>{" "}
-          <span className="gold">{userData.membershipId}</span>{" "}
-          <button className="copy-btn" onClick={copyMembership}>
-            Copy
-          </button>
-        </p>
-        <p className="instructions">
-          Show this page to get your exclusive discount at partner shops!
-        </p>
+    <div className="scan-container full-center dark-bg">
+      <div className="scan-wrapper">
+        {/* LEFT CARD */}
+        <div className="card left-card">
+          <img src={profileImage} alt="User" className="profile-img" />
+          <h2 className="fullname">{userData.fullname || ""}</h2>
+          <p className="info"><strong>Branch:</strong> {userData.branch || ""}</p>
+          <p className="info"><strong>Batch:</strong> {userData.batch || ""}</p>
+          <p className="membership">
+            <strong>Membership ID:</strong>{" "}
+            <span className="gold">{userData.membershipId || ""}</span>
+            <button className="copy-btn" onClick={copyMembership}>
+              Copy
+            </button>
+          </p>
+        </div>
+
+        {/* RIGHT CARD */}
+        <div className="card right-card">
+          <p className="info"><strong>Year of Passing:</strong> {userData.batch || ""}</p>
+          <p className="info"><strong>Mobile:</strong> {userData.mobile || ""}</p>
+          <p className="info"><strong>Scanner URL:</strong></p>
+          <QRCodeSVG
+            value={`${window.location.origin}/scan/${userData.membershipId}`}
+            size={150}
+            bgColor="#1e1e1e"
+            fgColor="#f0b429"
+            level="H"
+            includeMargin={true}
+          />
+        </div>
       </div>
     </div>
   );
