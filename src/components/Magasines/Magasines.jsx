@@ -5,27 +5,29 @@ import { ref as sRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import { onAuthStateChanged } from "firebase/auth";
 import "./Magazines.scss";
 
+/* ✅ EMPTY FORM */
+const emptyForm = {
+  title: "",
+  edition: "",
+  description: "",
+  pdfUrl: ""
+};
+
 const Magazines = () => {
   const [magazines, setMagazines] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editingMagazine, setEditingMagazine] = useState(null);
   const [file, setFile] = useState(null);
-
-  const [form, setForm] = useState({
-    title: "",
-    edition: "",
-    description: "",
-    pdfUrl: "",
-  });
+  const [form, setForm] = useState(emptyForm);
 
   // 🔐 AUTH CHECK
   useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, (user) => {
       if (!user) return;
-      const snap = await ref(db, `users/${user.uid}`);
-      onValue(snap, (snapshot) => {
-        if (snapshot.exists() && snapshot.val().role === "admin") setIsAdmin(true);
+      const userRef = ref(db, `users/${user.uid}`);
+      onValue(userRef, (snapshot) => {
+        setIsAdmin(snapshot.val()?.role === "admin");
       });
     });
   }, []);
@@ -35,47 +37,76 @@ const Magazines = () => {
     const magRef = ref(db, "magazinesList");
     onValue(magRef, (snapshot) => {
       const data = snapshot.val() || {};
-      const list = Object.entries(data).map(([id, m]) => ({ id, ...m }));
+      const list = Object.entries(data).map(([id, m]) => ({
+        id,
+        ...m
+      }));
       setMagazines(list.reverse());
     });
   }, []);
 
-  // ✏️ FORM CHANGE
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  // ✏️ FORM HANDLERS
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
+
   const handleFileChange = (e) => setFile(e.target.files[0]);
+
+  // 🆕 OPEN CREATE MODAL (RESET EVERYTHING)
+  const openCreateModal = () => {
+    setEditingMagazine(null);
+    setForm(emptyForm);
+    setFile(null);
+    setShowModal(true);
+  };
+
+  // ❌ CLOSE MODAL (RESET EVERYTHING)
+  const closeModal = () => {
+    setShowModal(false);
+    setEditingMagazine(null);
+    setForm(emptyForm);
+    setFile(null);
+  };
 
   // 💾 SAVE MAGAZINE
   const saveMagazine = async () => {
     let pdfUrl = form.pdfUrl;
 
-    if (file) {
-      const storageRef = sRef(storage, `magazines/${Date.now()}_${file.name}`);
-      await uploadBytes(storageRef, file);
-      pdfUrl = await getDownloadURL(storageRef);
+    try {
+      if (file) {
+        const storageRef = sRef(
+          storage,
+          `magazines/${Date.now()}_${file.name}`
+        );
+        await uploadBytes(storageRef, file);
+        pdfUrl = await getDownloadURL(storageRef);
+      }
+
+      const data = {
+        title: form.title || file?.name.replace(".pdf", "") || "Untitled",
+        edition: form.edition || "",
+        description: form.description || "",
+        pdfUrl,
+        createdBy: auth.currentUser.uid,
+        publishedAt: Date.now()
+      };
+
+      if (editingMagazine) {
+        await update(
+          ref(db, `magazinesList/${editingMagazine.id}`),
+          data
+        );
+      } else {
+        await push(ref(db, "magazinesList"), data);
+      }
+
+      closeModal();
+    } catch (err) {
+      console.error("Error saving magazine:", err);
+      alert("Something went wrong. Please try again.");
     }
-
-    const data = {
-      title: form.title || (file ? file.name.replace(".pdf", "") : "Untitled"),
-      edition: form.edition || "Latest",
-      description: form.description || "",
-      pdfUrl: pdfUrl || "",
-      createdBy: auth.currentUser.uid,
-      publishedAt: Date.now(),
-    };
-
-    if (editingMagazine) {
-      await update(ref(db, `magazinesList/${editingMagazine.id}`), data);
-    } else {
-      await push(ref(db, "magazinesList"), data);
-    }
-
-    setShowModal(false);
-    setEditingMagazine(null);
-    setFile(null);
-    setForm({ title: "", edition: "", description: "", pdfUrl: "" });
   };
 
-  // 🗑 DELETE
+  // 🗑 DELETE MAGAZINE
   const deleteMagazine = async (id) => {
     if (!window.confirm("Delete this magazine?")) return;
     await remove(ref(db, `magazinesList/${id}`));
@@ -85,9 +116,10 @@ const Magazines = () => {
     <div className="magazines-page">
       <div className="magazines-header">
         <h2>Magazines & Newsletters</h2>
+
         {isAdmin && (
-          <button className="add-job-btn" onClick={() => setShowModal(true)}>
-            + Add Magazine
+          <button className="add-job-btn" onClick={openCreateModal}>
+            Add Magazine
           </button>
         )}
       </div>
@@ -101,23 +133,36 @@ const Magazines = () => {
               <h3>{mag.title}</h3>
               <span>{mag.edition}</span>
               <p>{mag.description}</p>
+
               {mag.pdfUrl && (
                 <a href={mag.pdfUrl} target="_blank" rel="noreferrer">
                   Download PDF
                 </a>
               )}
+
               {isAdmin && (
                 <div className="mag-actions">
                   <button
+                    className="edit-btn"
                     onClick={() => {
                       setEditingMagazine(mag);
-                      setForm(mag);
+                      setForm({
+                        title: mag.title || "",
+                        edition: mag.edition || "",
+                        description: mag.description || "",
+                        pdfUrl: mag.pdfUrl || ""
+                      });
+                      setFile(null);
                       setShowModal(true);
                     }}
                   >
                     Edit
                   </button>
-                  <button className="delete-btn" onClick={() => deleteMagazine(mag.id)}>
+
+                  <button
+                    className="delete-btn"
+                    onClick={() => deleteMagazine(mag.id)}
+                  >
                     Delete
                   </button>
                 </div>
@@ -127,17 +172,35 @@ const Magazines = () => {
         </div>
       )}
 
+      {/* 🔲 MODAL */}
       {showModal && (
         <div className="job-modal">
           <div className="modal-content">
             <h3>{editingMagazine ? "Edit Magazine" : "Add Magazine"}</h3>
-            <input name="title" placeholder="Title" value={form.title} onChange={handleChange} />
-            <input name="edition" placeholder="Edition" value={form.edition} onChange={handleChange} />
-            <textarea name="description" placeholder="Description" value={form.description} onChange={handleChange} />
+
+            <input
+              name="title"
+              placeholder="Title"
+              value={form.title}
+              onChange={handleChange}
+            />
+            <input
+              name="edition"
+              placeholder="Edition"
+              value={form.edition}
+              onChange={handleChange}
+            />
+            <textarea
+              name="description"
+              placeholder="Description"
+              value={form.description}
+              onChange={handleChange}
+            />
             <input type="file" onChange={handleFileChange} />
+
             <div className="modal-actions">
               <button onClick={saveMagazine}>Save</button>
-              <button onClick={() => setShowModal(false)}>Cancel</button>
+              <button onClick={closeModal}>Cancel</button>
             </div>
           </div>
         </div>
@@ -147,6 +210,7 @@ const Magazines = () => {
 };
 
 export default Magazines;
+
 
 
 // import React, { useEffect, useState } from "react";

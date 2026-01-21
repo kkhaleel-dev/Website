@@ -1,3 +1,5 @@
+@import "../../variables.scss";
+
 .jobs-page {
   padding: 2.5rem;
   background: #f5f7fb;
@@ -19,20 +21,18 @@
 }
 
 .add-job-btn {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  position: absolute;
+  font-size: 13px;
+  top: 5rem;
+  right: 1.3rem;
+  background: $common-bg;
   color: #fff;
-  border: none;
-  padding: 0.65rem 1.2rem;
+  padding: 0.7rem 1.3rem;
   border-radius: 8px;
-  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.25);
+  z-index: 1002;
   transition: all 0.25s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 20px rgba(37, 99, 235, 0.35);
-  }
 }
 
 /* 📦 Jobs Grid */
@@ -50,6 +50,13 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 
+  /* ✅ Uniform card height */
+  min-height: 260px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 16px 30px rgba(0, 0, 0, 0.1);
@@ -60,6 +67,7 @@
     font-weight: 600;
     color: #111827;
     margin-bottom: 0.4rem;
+    min-height: 26px; /* ✅ fixed row */
   }
 
   span {
@@ -67,6 +75,7 @@
     font-size: 0.85rem;
     color: #6b7280;
     margin-bottom: 0.25rem;
+    min-height: 18px; /* ✅ fixed row */
   }
 
   p {
@@ -74,6 +83,9 @@
     font-size: 0.9rem;
     line-height: 1.5;
     color: #374151;
+
+    min-height: 60px; /* ✅ uniform description space */
+    overflow: hidden;
   }
 }
 
@@ -94,16 +106,16 @@
   }
 
   button:first-child {
-    background: #fbbf24;
-    color: #78350f;
+    background: $common-bg;
+    color: $white;
 
     &:hover {
-      background: #f59e0b;
+      background: darken($common-bg, 8%);
     }
   }
 
   button:last-child {
-    background: #ef4444;
+    background: #b90f0f;
     color: #fff;
 
     &:hover {
@@ -178,44 +190,36 @@
     transition: all 0.2s ease;
   }
 
+  /* 💾 Save */
   button:first-child {
-    background: #2563eb;
-    color: #fff;
+    background: $common-bg;
+    color: $white;
 
     &:hover {
-      background: #1d4ed8;
+      background: darken($common-bg, 8%);
     }
   }
 
+  /* ❌ Cancel */
   button:last-child {
-    background: #e5e7eb;
-    color: #111827;
+    background: #b90f0f;
+    color: #fff;
 
     &:hover {
-      background: #d1d5db;
+      background: #dc2626;
     }
   }
 }
 
 /* ✨ Animations */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slideUp {
-  from {
-    transform: translateY(25px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(25px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 /* 📱 Mobile */

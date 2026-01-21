@@ -4,29 +4,29 @@ import { ref, onValue, push, update, remove } from "firebase/database";
 import { auth, db } from "../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
+const emptyForm = {
+  title: "",
+  company: "",
+  location: "",
+  experience: "",
+  description: ""
+};
+
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editingJob, setEditingJob] = useState(null);
-
-  const [form, setForm] = useState({
-    title: "",
-    company: "",
-    location: "",
-    experience: "",
-    description: ""
-  });
+  const [form, setForm] = useState(emptyForm);
 
   // 🔐 Check role
   useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, (user) => {
       if (!user) return;
 
       const userRef = ref(db, `users/${user.uid}`);
       onValue(userRef, (snap) => {
-        const data = snap.val();
-        setIsAdmin(data?.role === "admin");
+        setIsAdmin(snap.val()?.role === "admin");
       });
     });
   }, []);
@@ -44,38 +44,45 @@ const Jobs = () => {
     });
   }, []);
 
-  // ✏️ Handle form input
+  // ✏️ Handle input
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  // 💾 Save job
-  const saveJob = async () => {
-    if (!form.title || !form.company) return alert("Missing fields");
+  // 🆕 Open Create Job Modal
+  const openCreateModal = () => {
+    setEditingJob(null);
+    setForm(emptyForm);
+    setShowModal(true);
+  };
 
-    const jobsRef = ref(db, "joblistings");
+  // 💾 Save Job
+  const saveJob = async () => {
+    if (!form.title || !form.company) {
+      alert("Title and Company are required");
+      return;
+    }
 
     if (editingJob) {
       await update(ref(db, `joblistings/${editingJob.id}`), form);
     } else {
-      await push(jobsRef, {
+      await push(ref(db, "joblistings"), {
         ...form,
         createdAt: Date.now(),
         createdBy: auth.currentUser.uid
       });
     }
 
-    setShowModal(false);
-    setEditingJob(null);
-    setForm({
-      title: "",
-      company: "",
-      location: "",
-      experience: "",
-      description: ""
-    });
+    closeModal();
   };
 
-  // 🗑 Delete job
+  // ❌ Close Modal (RESET STATE)
+  const closeModal = () => {
+    setShowModal(false);
+    setEditingJob(null);
+    setForm(emptyForm);
+  };
+
+  // 🗑 Delete Job
   const deleteJob = async (id) => {
     if (!window.confirm("Delete this job?")) return;
     await remove(ref(db, `joblistings/${id}`));
@@ -87,57 +94,48 @@ const Jobs = () => {
         <h2>Alumni Job Opportunities</h2>
 
         {isAdmin && (
-          <button className="add-job-btn" onClick={() => setShowModal(true)}>
-            + Add Job
+          <button className="add-job-btn" onClick={openCreateModal}>
+            Add Job
           </button>
         )}
       </div>
 
-     {jobs.length === 0 ? (
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      minHeight: "300px",
-      width: "100%",
-      fontSize: "18px",
-      fontWeight: "500",
-      color: "#666",
-      textAlign: "center",
-    }}
-  >
-    There are still no openings
-  </div>
-) : (
-  <div className="jobs-grid">
-    {jobs.map((job) => (
-      <div className="job-card" key={job.id}>
-        <h3>{job.title}</h3>
-        <span>{job.company}</span>
-        <span>{job.location}</span>
-        <span>Experience: {job.experience}</span>
-        <p>{job.description}</p>
+      {jobs.length === 0 ? (
+        <div className="no-jobs">There are still no openings</div>
+      ) : (
+        <div className="jobs-grid">
+          {jobs.map((job) => (
+            <div className="job-card" key={job.id}>
+              <h3>{job.title}</h3>
+              <span>{job.company}</span>
+              <span>{job.location}</span>
+              <span>Experience: {job.experience}</span>
+              <p>{job.description}</p>
 
-        {isAdmin && (
-          <div className="job-actions">
-            <button
-              onClick={() => {
-                setEditingJob(job);
-                setForm(job);
-                setShowModal(true);
-              }}
-            >
-              Edit
-            </button>
-            <button onClick={() => deleteJob(job.id)}>Delete</button>
-          </div>
-        )}
-      </div>
-    ))}
-  </div>
-)}
-
+              {isAdmin && (
+                <div className="job-actions">
+                  <button
+                    onClick={() => {
+                      setEditingJob(job);
+                      setForm({
+                        title: job.title || "",
+                        company: job.company || "",
+                        location: job.location || "",
+                        experience: job.experience || "",
+                        description: job.description || ""
+                      });
+                      setShowModal(true);
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button onClick={() => deleteJob(job.id)}>Delete</button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* 🔲 MODAL */}
       {showModal && (
@@ -153,7 +151,7 @@ const Jobs = () => {
 
             <div className="modal-actions">
               <button onClick={saveJob}>Save</button>
-              <button onClick={() => setShowModal(false)}>Cancel</button>
+              <button onClick={closeModal}>Cancel</button>
             </div>
           </div>
         </div>
