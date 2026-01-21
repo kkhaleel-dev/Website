@@ -1,82 +1,177 @@
+// src/components/Magazines/Magazines.jsx
 import React, { useEffect, useState } from "react";
+import { db, storage, auth } from "../../firebase";
+import { ref, get, push, remove } from "firebase/database";
+import { ref as sRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import { onAuthStateChanged } from "firebase/auth";
 import "./Magazines.scss";
 
 const Magazines = () => {
   const [magazines, setMagazines] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [file, setFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+
+  // 🔐 AUTH CHECK
+  useEffect(() => {
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) return;
+      const snap = await get(ref(db, `users/${user.uid}`));
+      if (snap.exists() && snap.val().role === "admin") {
+        setIsAdmin(true);
+      }
+    });
+  }, []);
+
+  // 📥 FETCH MAGAZINES (PUBLIC)
+  const fetchMagazines = async () => {
+    const snap = await get(ref(db, "magazines"));
+    const data = snap.val() || {};
+    const list = Object.entries(data).map(([id, m]) => ({ id, ...m }));
+    setMagazines(list.reverse());
+  };
 
   useEffect(() => {
-    const data = [
-      {
-        id: 1,
-        title: "CIT Alumni Newsletter – January 2025",
-        edition: "Vol. 12 | Issue 1",
-        description:
-          "Highlights alumni achievements, campus developments, research initiatives, and messages from the Director and Alumni Association.",
-        cover: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f",
-        link: "/updates/magazines",
-      },
-      {
-        id: 2,
-        title: "CIT Campus Chronicle – 2024",
-        edition: "Annual Edition",
-        description:
-          "An annual publication capturing academic excellence, student activities, alumni contributions, and major institutional milestones.",
-        cover: "https://images.unsplash.com/photo-1507842217343-583bb7270b66",
-        link: "/updates/magazines",
-      },
-      {
-        id: 3,
-        title: "CIT Global Alumni Connect – July 2024",
-        edition: "Vol. 11 | Issue 2",
-        description:
-          "Features global alumni stories, chapter activities, entrepreneurship journeys, and industry insights from CIT graduates worldwide.",
-        cover: "https://images.unsplash.com/photo-1519682337058-a94d519337bc",
-        link: "/updates/magazines",
-      },
-      {
-        id: 4,
-        title: "CIT Research & Innovation Digest",
-        edition: "Special Issue",
-        description:
-          "A special issue dedicated to research publications, patents, funded projects, and innovation-driven initiatives at CIT.",
-        cover: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b",
-        link: "/updates/magazines",
-      },
-    ];
-
-    setMagazines(data);
+    fetchMagazines();
   }, []);
+
+  // 📂 FILE SELECT
+  const onFileChange = (e) => {
+    const selected = e.target.files[0];
+    if (!selected || selected.type !== "application/pdf") {
+      alert("Please select a PDF file only");
+      return;
+    }
+    setFile(selected);
+    setPreviewUrl(URL.createObjectURL(selected));
+    setPreviewTitle(selected.name.replace(".pdf", ""));
+    setShowPopup(true);
+  };
+
+  // 💾 PUBLISH MAGAZINE
+  const publishMagazine = async () => {
+    if (!file) return;
+    try {
+      const storageRef = sRef(storage, `magazines/${Date.now()}_${file.name}`);
+      await uploadBytes(storageRef, file);
+      const pdfUrl = await getDownloadURL(storageRef);
+
+      await push(ref(db, "magazines"), {
+        title: file.name.replace(".pdf", ""),
+        edition: "Latest",
+        description: "Official CIT Publication",
+        pdfUrl,
+        publishedAt: Date.now(),
+        createdBy: auth.currentUser.uid,
+      });
+
+      setShowPopup(false);
+      setFile(null);
+      setPreviewUrl("");
+      fetchMagazines();
+    } catch (err) {
+      console.error("Publish failed:", err);
+      alert("Failed to upload magazine. Check console for details.");
+    }
+  };
+
+  // 🗑 DELETE MAGAZINE
+  const deleteMagazine = async (id) => {
+    if (!window.confirm("Delete this magazine?")) return;
+    await remove(ref(db, `magazines/${id}`));
+    fetchMagazines();
+  };
+
+  // 👁️ PREVIEW MAGAZINE (END USER)
+  const openPreview = (m) => {
+    setPreviewUrl(m.pdfUrl);
+    setPreviewTitle(m.title);
+    setShowPopup(true);
+  };
 
   return (
     <div className="magazines-page">
       <div className="magazines-header">
         <h2>Magazines & Newsletters</h2>
-        <p>
-          Explore official publications from the Coimbatore Institute of
-          Technology showcasing alumni achievements, campus news, and
-          institutional progress.
-        </p>
+
+        {isAdmin && (
+          <label className="create-mag-btn">
+            + Create Magazine
+            <input type="file" hidden onChange={onFileChange} />
+          </label>
+        )}
       </div>
 
       <div className="magazines-grid">
-        {magazines.map((mag) => (
-          <div className="magazine-card" key={mag.id}>
-            <div className="magazine-cover">
-              <img src={mag.cover} alt={mag.title} />
-            </div>
+        {magazines.length === 0 ? (
+          <p className="empty-magazines">No magazines published yet</p>
+        ) : (
+          magazines.map((m) => (
+            <div className="magazine-card" key={m.id}>
+              <div className="magazine-content">
+                <h3>{m.title}</h3>
+                <span className="magazine-edition">{m.edition}</span>
+                <p>{m.description}</p>
 
-            <div className="magazine-content">
-              <h3>{mag.title}</h3>
-              <span className="magazine-edition">{mag.edition}</span>
-              <p>{mag.description}</p>
-
-              <a href={mag.link} className="magazine-link">
-                Read Magazine →
-              </a>
+                <div className="magazine-actions">
+                  <button onClick={() => openPreview(m)}>Preview PDF</button>
+                  <a href={m.pdfUrl} target="_blank" rel="noreferrer">
+                    Download PDF
+                  </a>
+                  {isAdmin && (
+                    <button
+                      className="delete-btn"
+                      onClick={() => deleteMagazine(m.id)}
+                    >
+                      Delete
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
+
+      {/* ================= POPUP ================= */}
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup">
+            <h3>{previewTitle}</h3>
+            <iframe src={previewUrl} title="preview" />
+
+            {isAdmin && file && (
+              <div className="popup-actions">
+                <button onClick={publishMagazine}>Publish</button>
+                <button
+                  onClick={() => {
+                    setShowPopup(false);
+                    setFile(null);
+                    setPreviewUrl("");
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+
+            {!file && (
+              <div className="popup-actions">
+                <button
+                  onClick={() => {
+                    setShowPopup(false);
+                    setPreviewUrl("");
+                  }}
+                >
+                  Close
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

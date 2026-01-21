@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
+import { getStorage } from "firebase/storage";
 
 // Your Firebase configuration
 const firebaseConfig = {
@@ -12,6 +13,7 @@ const firebaseConfig = {
   projectId: "citalumniapp-f692b",
   messagingSenderId: "879637363344",
   appId: "1:879637363344:web:df7fb77f0d4dfcf599b615",
+  storageBucket: "citalumniapp-f692b.appspot.com",
 };
 
 // Initialize Firebase
@@ -19,3 +21,4 @@ const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 export const db = getDatabase(app);
+export const storage = getStorage(app);
