@@ -1,4 +1,3 @@
-// src/components/Magazines/Magazines.jsx
 import React, { useEffect, useState } from "react";
 import { db, storage, auth } from "../../firebase";
 import { ref, get, push, remove } from "firebase/database";
@@ -13,6 +12,7 @@ const Magazines = () => {
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // 🔐 AUTH CHECK
   useEffect(() => {
@@ -27,10 +27,15 @@ const Magazines = () => {
 
   // 📥 FETCH MAGAZINES (PUBLIC)
   const fetchMagazines = async () => {
-    const snap = await get(ref(db, "magazines"));
-    const data = snap.val() || {};
-    const list = Object.entries(data).map(([id, m]) => ({ id, ...m }));
-    setMagazines(list.reverse());
+    try {
+      // console.log("Fetched magazines data:", db);
+      const snap = await get(ref(db, "magazines"));
+      const data = snap.val() || {};
+      const list = Object.entries(data).map(([id, m]) => ({ id, ...m }));
+      setMagazines(list.reverse());
+    } catch (err) {
+      console.error("Error fetching magazines:", err);
+    }
   };
 
   useEffect(() => {
@@ -53,12 +58,14 @@ const Magazines = () => {
   // 💾 PUBLISH MAGAZINE
   const publishMagazine = async () => {
     if (!file) return;
+    setLoading(true);
     try {
       const storageRef = sRef(storage, `magazines/${Date.now()}_${file.name}`);
       await uploadBytes(storageRef, file);
       const pdfUrl = await getDownloadURL(storageRef);
 
-      await push(ref(db, "magazines"), {
+      const newRef = push(ref(db, "magazines"));
+      await newRef.set({
         title: file.name.replace(".pdf", ""),
         edition: "Latest",
         description: "Official CIT Publication",
@@ -71,17 +78,25 @@ const Magazines = () => {
       setFile(null);
       setPreviewUrl("");
       fetchMagazines();
+      alert("Magazine published successfully!");
     } catch (err) {
       console.error("Publish failed:", err);
       alert("Failed to upload magazine. Check console for details.");
+    } finally {
+      setLoading(false);
     }
   };
 
   // 🗑 DELETE MAGAZINE
   const deleteMagazine = async (id) => {
     if (!window.confirm("Delete this magazine?")) return;
-    await remove(ref(db, `magazines/${id}`));
-    fetchMagazines();
+    try {
+      await remove(ref(db, `magazines/${id}`));
+      fetchMagazines();
+    } catch (err) {
+      console.error("Delete failed:", err);
+      alert("Failed to delete magazine.");
+    }
   };
 
   // 👁️ PREVIEW MAGAZINE (END USER)
@@ -93,15 +108,16 @@ const Magazines = () => {
 
   return (
     <div className="magazines-page">
+      {/* CREATE BUTTON - top right corner */}
+      {isAdmin && (
+        <label className="create-mag-btn">
+          Create Magazine
+          <input type="file" hidden onChange={onFileChange} />
+        </label>
+      )}
+
       <div className="magazines-header">
         <h2>Magazines & Newsletters</h2>
-
-        {isAdmin && (
-          <label className="create-mag-btn">
-            + Create Magazine
-            <input type="file" hidden onChange={onFileChange} />
-          </label>
-        )}
       </div>
 
       <div className="magazines-grid">
@@ -114,7 +130,6 @@ const Magazines = () => {
                 <h3>{m.title}</h3>
                 <span className="magazine-edition">{m.edition}</span>
                 <p>{m.description}</p>
-
                 <div className="magazine-actions">
                   <button onClick={() => openPreview(m)}>Preview PDF</button>
                   <a href={m.pdfUrl} target="_blank" rel="noreferrer">
@@ -144,13 +159,16 @@ const Magazines = () => {
 
             {isAdmin && file && (
               <div className="popup-actions">
-                <button onClick={publishMagazine}>Publish</button>
+                <button onClick={publishMagazine} disabled={loading}>
+                  {loading ? "Uploading..." : "Publish"}
+                </button>
                 <button
                   onClick={() => {
                     setShowPopup(false);
                     setFile(null);
                     setPreviewUrl("");
                   }}
+                  disabled={loading}
                 >
                   Cancel
                 </button>
