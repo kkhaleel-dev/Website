@@ -11,6 +11,32 @@ import { QRCodeSVG } from "qrcode.react";
 const SmartICardForm = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      try {
+        const userRef = ref(db, `users/${user.uid}`);
+        const snapshot = await get(userRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          setUserData(data);
+
+          // Set admin flag
+          if (data.role && data.role === "admin") {
+            setIsAdmin(true);
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+      }
+    }
+    setLoading(false);
+  });
+
+  return () => unsubscribe();
+}, []);
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -45,6 +71,17 @@ const SmartICardForm = () => {
   return (
     <div className="smart-i-card-container">
       <h2>Smart ID Card</h2>
+      {isAdmin && (
+  <button
+    className="admin-users-btn"
+    onClick={() => {
+      window.location.href = "/admin/users";
+    }}
+  >
+    Users Management
+  </button>
+)}
+
 
       <div className="smart-i-card-wrapper">
         {/* LEFT CARD */}

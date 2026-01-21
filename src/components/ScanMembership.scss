@@ -1,100 +1,148 @@
 .scan-container {
-  background-color: #000;
   min-height: 100vh;
+  width: 100%;
+  background: #f0f4ff;
   display: flex;
-  align-items: center;
   justify-content: center;
-  color: #fff;
-  padding: 20px;
-  font-family: 'Arial', sans-serif;
+  align-items: center;
+  padding: 1rem;
+  box-sizing: border-box;
 
-  &.not-found {
+  &.full-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .loading-text {
+    font-size: 1.2rem;
+    color: #0a2148;
+  }
+
+  .not-found-card {
+    background: #ffffff;
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     text-align: center;
 
     h2 {
-      color: red;
-      font-size: 2rem;
+      color: #e53e3e;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
     }
 
     p {
-      font-size: 1.2rem;
-      margin-top: 10px;
+      color: #444;
+      font-size: 1rem;
     }
   }
 
   .scan-card {
-    background-color: #111;
-    padding: 30px 40px;
-    border-radius: 20px;
-    text-align: center;
-    max-width: 400px;
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 2rem;
     width: 100%;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-    animation: fadeIn 0.6s ease-in;
+    max-width: 360px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
 
     .profile-img {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      border-radius: 10px;
       object-fit: cover;
-      border: 3px solid gold;
-      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      margin-bottom: 1rem;
     }
 
     .name {
-      font-size: 1.8rem;
-      margin-bottom: 10px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #0a2148;
+      margin-bottom: 0.5rem;
     }
 
     .info {
-      font-size: 1.1rem;
-      margin: 5px 0;
+      font-size: 1rem;
+      color: #0a2148;
+      font-weight: 500;
+      margin: 0.2rem 0;
     }
 
     .membership {
-      margin: 15px 0;
-      font-size: 1.2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
 
       .gold {
-        color: gold;
-        font-weight: bold;
-        font-size: 1.3rem;
+        color: #f0b429;
+        font-weight: 700;
       }
 
       .copy-btn {
-        background-color: gold;
-        color: #000;
+        padding: 0.3rem 0.7rem;
+        font-size: 0.85rem;
+        background: #105bbf;
+        color: #fff;
         border: none;
-        padding: 5px 10px;
-        margin-left: 10px;
-        border-radius: 5px;
+        border-radius: 6px;
         cursor: pointer;
-        font-weight: bold;
-        transition: 0.3s;
+        transition: all 0.2s ease;
 
         &:hover {
-          background-color: #ffd700cc;
+          background: #0a3d8c;
         }
       }
     }
 
     .instructions {
-      margin-top: 15px;
+      margin-top: 1rem;
       font-size: 0.95rem;
-      color: #ccc;
+      color: #444;
     }
   }
 }
 
-/* Fade in animation */
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
+/* Responsive */
+@media (max-width: 480px) {
+  .scan-card {
+    padding: 1.5rem;
+    width: 95%;
+  }
 
-.scan-loading {
-  text-align: center;
-  color: #fff;
-  margin-top: 50px;
-  font-size: 1.5rem;
+  .profile-img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .name {
+    font-size: 1.2rem;
+  }
+
+  .info {
+    font-size: 0.95rem;
+  }
+
+  .membership {
+    font-size: 0.95rem;
+
+    .copy-btn {
+      padding: 0.25rem 0.6rem;
+      font-size: 0.8rem;
+    }
+  }
+
+  .instructions {
+    font-size: 0.9rem;
+  }
 }

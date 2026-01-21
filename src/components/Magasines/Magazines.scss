@@ -1,28 +1,27 @@
+/* Magazines.scss */
+
 .magazines-page {
   min-height: 100vh;
   background: #eef4fb;
-  padding: 2.8rem 4%;
+  padding: 3rem 4% 4rem;
   font-family: "Inter", sans-serif;
   position: relative;
 }
 
-/* CREATE BUTTON TOP-RIGHT */
-.create-mag-btn {
+/* CREATE BUTTON - Fixed Top Right */
+.add-job-btn {
   position: fixed;
-  top: 80px;
-  right: 20px;
+  top: 5rem;
+  right: 1.2rem;
   background: #105bbf;
   color: #fff;
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
+  padding: 0.65rem 1.3rem;
+  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   z-index: 1001;
-  transition: background 0.2s ease;
-
-  &:hover {
-    background: #0a3d8c;
-  }
+  box-shadow: 0 6px 18px rgba(16, 91, 191, 0.35);
+  transition: all 0.25s ease;
 
   input {
     display: none;
@@ -31,125 +30,126 @@
 
 /* Header */
 .magazines-header {
-  max-width: 850px;
-  margin: 0 auto 2.5rem;
   text-align: center;
+  margin-bottom: 2rem;
 
   h2 {
-    font-size: 2.5rem;
-    color: #0a2148;
+    font-size: 2.8rem;
     font-weight: 700;
-    margin-bottom: 0.5rem;
-  }
-
-  p {
-    font-size: 1.08rem;
-    color: #555;
-    line-height: 1.6;
+    color: #0a2148;
   }
 }
 
-/* Grid */
+/* Grid - 4 Cards per row */
 .magazines-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.2rem;
+  grid-template-columns: repeat(4, 1fr); /* exactly 4 cards per row */
+  gap: 2rem;
   max-width: 1500px;
   margin: 0 auto;
+  padding: 0 2%;
 }
 
 /* Card */
 .magazine-card {
-  background: #ffffff;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  min-height: 360px;
+  background: linear-gradient(145deg, #f0f4ff, #ffffff); /* subtle attractive gradient */
+  border-radius: 16px;
+  padding: 2rem 1.8rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.15);
   }
 
-  .magazine-content {
-    padding: 1.4rem;
+  h3 {
+    font-size: 1.45rem;
+    color: #0a2148;
+    margin-bottom: 0.3rem;
+  }
+
+  span {
+    font-size: 0.9rem;
+    color: #105bbf;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.8rem;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #444;
+    line-height: 1.6;
+    flex-grow: 1;
+    margin-bottom: 1rem;
+  }
+
+  a {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #105bbf;
+    text-decoration: none;
+    margin-top: 0.5rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: #0a3d8c;
+      text-decoration: underline;
+    }
+  }
+
+  .mag-actions {
     display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    height: 100%;
+    gap: 0.5rem;
+    margin-top: auto;
 
-    h3 {
-      font-size: 1.28rem;
-      color: #0a2148;
+    button {
+      flex: 1;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: none;
       font-weight: 600;
-      line-height: 1.35;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
 
-    .magazine-edition {
-      font-size: 0.85rem;
-      color: #777;
-      font-weight: 600;
-    }
+    .delete-btn {
+      background: #e53e3e;
+      color: #fff;
 
-    p {
-      font-size: 0.95rem;
-      color: #444;
-      line-height: 1.55;
-    }
-
-    .magazine-actions {
-      margin-top: auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-
-      button,
-      a {
-        font-size: 0.9rem;
-        font-weight: 600;
-        padding: 0.45rem 0.9rem;
-        border-radius: 6px;
-        border: none;
-        cursor: pointer;
-        text-decoration: none;
-        transition: background 0.2s ease;
+      &:hover {
+        background: #a01f1f;
       }
+    }
 
-      button {
-        background: #105bbf;
-        color: #fff;
+    .edit-btn {
+      background: #105bbf;
+      color: #fff;
 
-        &:hover {
-          background: #0a3d8c;
-        }
-
-        &.delete-btn {
-          background: #e53e3e;
-
-          &:hover {
-            background: #a01f1f;
-          }
-        }
-      }
-
-      a {
-        background: #f0f0f0;
-        color: #105bbf;
-        display: inline-flex;
-        align-items: center;
-
-        &:hover {
-          background: #e6e6e6;
-        }
+      &:hover {
+        background: #0a3d8c;
       }
     }
   }
 }
 
-/* POPUP */
-.popup-overlay {
+/* Empty State */
+.empty-magazines {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #777;
+  padding: 80px 0;
+}
+
+/* Modal */
+.job-modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -161,18 +161,15 @@
   align-items: center;
   z-index: 1000;
 
-  .popup {
+  .modal-content {
     background: #fff;
     border-radius: 12px;
     width: 90%;
     max-width: 720px;
     padding: 1.5rem;
-    max-height: 90vh;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    position: relative;
 
     h3 {
       font-size: 1.5rem;
@@ -180,14 +177,27 @@
       margin-bottom: 0.8rem;
     }
 
-    iframe {
+    input,
+    textarea {
       width: 100%;
-      height: 500px;
+      padding: 0.65rem 0.9rem;
+      border-radius: 6px;
       border: 1px solid #ccc;
-      border-radius: 8px;
+      font-size: 0.95rem;
+      margin-bottom: 0.8rem;
+      font-family: "Inter", sans-serif;
     }
 
-    .popup-actions {
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    input[type="file"] {
+      padding: 0.3rem;
+    }
+
+    .modal-actions {
       display: flex;
       justify-content: flex-end;
       gap: 0.7rem;
@@ -222,41 +232,288 @@
   }
 }
 
-/* EMPTY STATE */
-.empty-magazines {
-  grid-column: 1 / -1;
-  text-align: center;
-  font-size: 1.1rem;
-  color: #777;
-  padding: 80px 0;
-}
-
 /* Responsive */
+@media (max-width: 1200px) {
+  .magazines-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .magazines-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
-  .magazines-header h2 {
-    font-size: 2.2rem;
-  }
-
-  iframe {
-    height: 400px;
+  .magazines-grid {
+    grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 480px) {
-  .magazines-page {
-    padding: 2rem 3%;
-  }
 
-  .magazines-header h2 {
-    font-size: 1.9rem;
-  }
 
-  iframe {
-    height: 300px;
-  }
 
-  .magazine-actions {
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-}
+
+// .magazines-page {
+//   min-height: 100vh;
+//   background: #eef4fb;
+//   padding: 2.8rem 4%;
+//   font-family: "Inter", sans-serif;
+//   position: relative;
+// }
+
+// /* CREATE BUTTON TOP-RIGHT */
+// .create-mag-btn {
+//   position: fixed;
+//   top: 80px;
+//   right: 20px;
+//   background: #105bbf;
+//   color: #fff;
+//   padding: 0.6rem 1.2rem;
+//   border-radius: 6px;
+//   font-weight: 600;
+//   cursor: pointer;
+//   z-index: 1001;
+//   transition: background 0.2s ease;
+
+//   &:hover {
+//     background: #0a3d8c;
+//   }
+
+//   input {
+//     display: none;
+//   }
+// }
+
+// /* Header */
+// .magazines-header {
+//   max-width: 850px;
+//   margin: 0 auto 2.5rem;
+//   text-align: center;
+
+//   h2 {
+//     font-size: 2.5rem;
+//     color: #0a2148;
+//     font-weight: 700;
+//     margin-bottom: 0.5rem;
+//   }
+
+//   p {
+//     font-size: 1.08rem;
+//     color: #555;
+//     line-height: 1.6;
+//   }
+// }
+
+// /* Grid */
+// .magazines-grid {
+//   display: grid;
+//   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+//   gap: 1.2rem;
+//   max-width: 1500px;
+//   margin: 0 auto;
+// }
+
+// /* Card */
+// .magazine-card {
+//   background: #ffffff;
+//   border-radius: 14px;
+//   overflow: hidden;
+//   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+//   transition: transform 0.25s ease, box-shadow 0.25s ease;
+//   display: flex;
+//   flex-direction: column;
+
+//   &:hover {
+//     transform: translateY(-4px);
+//     box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
+//   }
+
+//   .magazine-content {
+//     padding: 1.4rem;
+//     display: flex;
+//     flex-direction: column;
+//     gap: 0.6rem;
+//     height: 100%;
+
+//     h3 {
+//       font-size: 1.28rem;
+//       color: #0a2148;
+//       font-weight: 600;
+//       line-height: 1.35;
+//     }
+
+//     .magazine-edition {
+//       font-size: 0.85rem;
+//       color: #777;
+//       font-weight: 600;
+//     }
+
+//     p {
+//       font-size: 0.95rem;
+//       color: #444;
+//       line-height: 1.55;
+//     }
+
+//     .magazine-actions {
+//       margin-top: auto;
+//       display: flex;
+//       flex-wrap: wrap;
+//       gap: 0.5rem;
+
+//       button,
+//       a {
+//         font-size: 0.9rem;
+//         font-weight: 600;
+//         padding: 0.45rem 0.9rem;
+//         border-radius: 6px;
+//         border: none;
+//         cursor: pointer;
+//         text-decoration: none;
+//         transition: background 0.2s ease;
+//       }
+
+//       button {
+//         background: #105bbf;
+//         color: #fff;
+
+//         &:hover {
+//           background: #0a3d8c;
+//         }
+
+//         &.delete-btn {
+//           background: #e53e3e;
+
+//           &:hover {
+//             background: #a01f1f;
+//           }
+//         }
+//       }
+
+//       a {
+//         background: #f0f0f0;
+//         color: #105bbf;
+//         display: inline-flex;
+//         align-items: center;
+
+//         &:hover {
+//           background: #e6e6e6;
+//         }
+//       }
+//     }
+//   }
+// }
+
+// /* POPUP */
+// .popup-overlay {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 100%;
+//   background: rgba(10, 33, 72, 0.65);
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   z-index: 1000;
+
+//   .popup {
+//     background: #fff;
+//     border-radius: 12px;
+//     width: 90%;
+//     max-width: 720px;
+//     padding: 1.5rem;
+//     max-height: 90vh;
+//     overflow-y: auto;
+//     display: flex;
+//     flex-direction: column;
+//     gap: 1rem;
+//     position: relative;
+
+//     h3 {
+//       font-size: 1.5rem;
+//       color: #0a2148;
+//       margin-bottom: 0.8rem;
+//     }
+
+//     iframe {
+//       width: 100%;
+//       height: 500px;
+//       border: 1px solid #ccc;
+//       border-radius: 8px;
+//     }
+
+//     .popup-actions {
+//       display: flex;
+//       justify-content: flex-end;
+//       gap: 0.7rem;
+
+//       button {
+//         padding: 0.55rem 1.2rem;
+//         border-radius: 6px;
+//         font-weight: 600;
+//         border: none;
+//         cursor: pointer;
+//         transition: background 0.2s ease;
+
+//         &:first-child {
+//           background: #105bbf;
+//           color: #fff;
+
+//           &:hover {
+//             background: #0a3d8c;
+//           }
+//         }
+
+//         &:last-child {
+//           background: #e53e3e;
+//           color: #fff;
+
+//           &:hover {
+//             background: #a01f1f;
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
+
+// /* EMPTY STATE */
+// .empty-magazines {
+//   grid-column: 1 / -1;
+//   text-align: center;
+//   font-size: 1.1rem;
+//   color: #777;
+//   padding: 80px 0;
+// }
+
+// /* Responsive */
+// @media (max-width: 768px) {
+//   .magazines-header h2 {
+//     font-size: 2.2rem;
+//   }
+
+//   iframe {
+//     height: 400px;
+//   }
+// }
+
+// @media (max-width: 480px) {
+//   .magazines-page {
+//     padding: 2rem 3%;
+//   }
+
+//   .magazines-header h2 {
+//     font-size: 1.9rem;
+//   }
+
+//   iframe {
+//     height: 300px;
+//   }
+
+//   .magazine-actions {
+//     flex-direction: column;
+//     gap: 0.35rem;
+//   }
+// }
