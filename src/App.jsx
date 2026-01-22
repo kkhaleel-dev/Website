@@ -46,6 +46,7 @@ import AlumniProfile from "./pages/AlumniProfile.jsx";
 import Entrepreneurs from "./components/Entrepreneurs/Entrepreneurs.jsx";
 import ScanMembership from "./components/ScanMembership.jsx";
 import ChennaiChapter from "./components/Chapters/ChennaiChapter/ChennaiChapter.jsx";
+import Messaging from "./components/messaging/messaging.jsx";
 
 const AppContent = () => {
   const location = useLocation();
@@ -152,6 +153,8 @@ const AppContent = () => {
           <Route path="/startup/citAngels" element={<CITAngels />} />
         </Routes>
       </div>
+      
+      <Messaging />
 
       <Footer />
     </>
