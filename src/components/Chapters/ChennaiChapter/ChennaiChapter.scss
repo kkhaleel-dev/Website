@@ -1,0 +1,143 @@
+.chennai-chapter-page {
+  padding: 3rem 5%;
+  background: #f4f7fb;
+  min-height: 100vh;
+}
+
+/* HERO */
+.chapter-hero {
+  background: #0a2148;
+  color: #fff;
+  padding: 2.5rem;
+  border-radius: 14px;
+  margin-bottom: 2.5rem;
+
+  h1 {
+    font-size: 2.4rem;
+    margin-bottom: 0.6rem;
+  }
+
+  p {
+    opacity: 0.9;
+  }
+}
+
+/* STATES */
+.chapter-loading,
+.no-members {
+  text-align: center;
+  font-weight: 600;
+  color: #555;
+}
+
+/* LOGIN LOCK */
+.locked-box {
+  background: #fff;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+
+  button {
+    margin-top: 1rem;
+    background: #105bbf;
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.4rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+}
+
+/* ===========================
+   MEMBERS GRID (IMPORTANT)
+   =========================== */
+
+.members-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* ✅ 4 cards per row */
+  gap: 1.6rem;
+}
+
+/* CARD */
+.member-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+
+  /* ✅ FIXED HEIGHT BEHAVIOR */
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  h3 {
+    color: #0a2148;
+    margin-bottom: 0.3rem;
+    font-size: 1.05rem;
+  }
+
+  .profession {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 0.6rem;
+  }
+
+  .member-id {
+    font-weight: 600;
+    color: #105bbf;
+    margin-bottom: 0.8rem;
+  }
+
+  .contact {
+    margin-top: auto; /* ✅ pushes contact to bottom */
+  }
+
+  .contact a,
+  .contact p {
+    font-size: 0.85rem;
+    color: #0a2148;
+    word-break: break-word;
+  }
+}
+
+/* PHOTO */
+.member-photo img {
+  width: 130px;
+  height: 130px;
+  border-radius: 5%;
+  object-fit: cover;
+  margin-bottom: 0.8rem;
+}
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .members-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Small Tablet */
+@media (max-width: 768px) {
+  .members-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .members-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .member-card {
+    min-height: 300px;
+  }
+}

@@ -149,3 +149,177 @@
   z-index: 1002;
   transition: all 0.25s ease;
 }
+.edit-profile-btn {
+  position: absolute;
+  font-size: 13px;
+  top: 5rem;
+  left: 1.3rem;
+  background: #2563eb;
+  color: #fff;
+  padding: 0.7rem 1.3rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 1002;
+  transition: all 0.25s ease;
+}
+
+.edit-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .edit-content {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+
+    h3 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #0a2148;
+    }
+
+    .edit-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+
+      label {
+        display: flex;
+        flex-direction: column;
+        font-weight: 600;
+        font-size: 0.95rem;
+
+        input {
+          padding: 0.5rem;
+          margin-top: 0.2rem;
+          border-radius: 6px;
+          border: 1px solid #ccc;
+          font-size: 0.9rem;
+        }
+      }
+
+      .edit-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 1rem;
+
+        button {
+          padding: 0.6rem 1.2rem;
+          border-radius: 6px;
+          border: none;
+          cursor: pointer;
+          font-weight: 600;
+          font-size: 0.9rem;
+          transition: all 0.2s ease;
+        }
+
+        .cancel-btn {
+          background: #f0f0f0;
+          color: #333;
+        }
+
+        button:first-child {
+          background: #2563eb;
+          color: #fff;
+        }
+      }
+    }
+  }
+}
+/* ========================= */
+/* EDIT FORM ENHANCEMENTS   */
+/* ========================= */
+
+/* Profile image upload block */
+.edit-form {
+  .profile-image-upload {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    margin-bottom: 10px;
+
+    img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #f9f9f9;
+    }
+
+    span {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #2563eb;
+    }
+
+    &:hover span {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Password inputs highlight */
+.edit-form label input[type="password"] {
+  letter-spacing: 0.05em;
+}
+
+/* Disabled button state safety */
+.edit-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Smooth focus for inputs */
+.edit-form input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+/* Improve popup scrollbar */
+.edit-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.edit-content::-webkit-scrollbar-thumb {
+  background: #c7c7c7;
+  border-radius: 4px;
+}
+
+.edit-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Small screen improvements */
+@media (max-width: 480px) {
+  .edit-content {
+    padding: 1.5rem;
+  }
+
+  .edit-form label {
+    font-size: 0.9rem;
+  }
+
+  .edit-actions {
+    flex-direction: column;
+    gap: 8px;
+
+    button {
+      width: 100%;
+    }
+  }
+}

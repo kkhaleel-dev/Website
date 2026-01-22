@@ -45,6 +45,7 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import AlumniProfile from "./pages/AlumniProfile.jsx";
 import Entrepreneurs from "./components/Entrepreneurs/Entrepreneurs.jsx";
 import ScanMembership from "./components/ScanMembership.jsx";
+import ChennaiChapter from "./components/Chapters/ChennaiChapter/ChennaiChapter.jsx";
 
 const AppContent = () => {
   const location = useLocation();
@@ -111,7 +112,13 @@ const AppContent = () => {
           />
           <Route path="/events/latestEvents" element={<LatestEvents />} />
           <Route path="/events/reunion" element={<Reunion />} />
+
           <Route path="/events/chapters" element={<Chapters />} />
+          <Route
+            path="/events/chapters/chennaiChapter"
+            element={<ChennaiChapter />}
+          />
+
           <Route path="/events/list" element={<EventsList />} />
 
           <Route path="/gallery/list" element={<GalleryList />} />
