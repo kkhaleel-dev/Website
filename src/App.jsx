@@ -74,18 +74,18 @@ const AppContent = () => {
             }
           />
           <Route
-  path="/profile/:uid"
-  element={
-    <ProtectedRoute>
-      <AlumniProfile />
-    </ProtectedRoute>
-  }
-/>
-{/* // PUBLIC SCAN PAGE (anyone can access) */}
-<Route
-  path="/scan/:membershipId"
-  element={<ScanMembership />}
-/>
+            path="/profile/:uid"
+            element={
+              <ProtectedRoute>
+                <AlumniProfile />
+              </ProtectedRoute>
+            }
+          />
+          {/* // PUBLIC SCAN PAGE (anyone can access) */}
+          <Route
+            path="/scan/:membershipId"
+            element={<ScanMembership />}
+          />
 
 
           <Route path="/" element={<Home />} />
