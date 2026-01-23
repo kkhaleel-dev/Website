@@ -1,12 +1,13 @@
+@import '../../variables.scss';
 .team-page {
   min-height: 100vh;
   padding: 2rem 5%;
-  background: #f9f9f9;
+  background: #eaf8f5;
   text-align: center;
 
   h2 {
     font-size: 2rem;
-    color: #0a2148;
+    color: $common-bg;
     margin-bottom: 2rem;
   }
 }
@@ -21,7 +22,7 @@
 }
 
 .team-card {
-  background: #fff;
+  background: #f9fafa;
   border-radius: 14px;
   padding: 1.6rem;
   box-shadow: 0 6px 20px rgba(0,0,0,0.08);
@@ -30,6 +31,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  border: 0.5px solid #ddd;
 
   &:hover {
     transform: translateY(-6px);

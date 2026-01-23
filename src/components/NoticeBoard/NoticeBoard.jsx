@@ -40,6 +40,7 @@ const Noticeboard = () => {
   }, []);
 
   return (
+    <div className="noticeboard-page">
     <div className="noticeboard-container">
       <h2>
         <FaBullhorn /> CIT Chennai Noticeboard
@@ -62,6 +63,7 @@ const Noticeboard = () => {
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 };

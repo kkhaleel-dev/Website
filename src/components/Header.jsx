@@ -244,15 +244,29 @@ const Header = () => {
       {/* MOBILE SIDEBAR */}
       <div className={`mobile-sidebar ${mobileMenuOpen ? "open" : ""}`}>
         <div className="mobile-sidebar-header">
-          <button
-            className="mobile-signup"
-            onClick={() => {
-              navigate("/accounts");
-              setMobileMenuOpen(false);
-            }}
-          >
-            Sign Up / Login
-          </button>
+        {/* Mobile auth button */}
+{!user ? (
+  <button
+    className="mobile-signup"
+    onClick={() => {
+      navigate("/accounts");
+      setMobileMenuOpen(false);
+    }}
+  >
+    Sign Up / Login
+  </button>
+) : (
+  <button
+    className="mobile-signup"
+    onClick={() => {
+      handleLogout();
+      setMobileMenuOpen(false);
+    }}
+  >
+    Logout
+  </button>
+)}
+
           <button
             className="close-btn"
             style={{

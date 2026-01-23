@@ -1,3 +1,12 @@
+@import '../../variables.scss';
+
+.noticeboard-page {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #eaf8f5;
+  padding: 1px 0; // prevents margin-collapse issues
+}
+
 .noticeboard-container {
   max-width: 1200px;
   width: 90%;
@@ -10,7 +19,7 @@
     text-align: center;
     font-size: 2rem;
     margin-bottom: 2rem;
-    color: #0a2148;
+    color: $common-bg;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,11 +33,11 @@
   }
 
   .notice-card {
-    background: linear-gradient(145deg, #ffffff, #e6f0ff);
+    background: linear-gradient(145deg, #ffffff, #f2f7f8);
     border-radius: 12px;
     padding: 1.5rem;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    border-left: 5px solid #105bbf;
+    border-left: 5px solid $common-bg;
     transition: transform 0.3s, box-shadow 0.3s;
 
     &:hover {
@@ -44,13 +53,13 @@
 
       h3 {
         font-size: 1.3rem;
-        color: #0a2148;
+        color: $common-bg;
         font-weight: 600;
       }
 
       .notice-date {
         font-size: 0.9rem;
-        color: #105bbf;
+        color: $common-bg;
         display: flex;
         align-items: center;
         gap: 0.3rem;
@@ -68,7 +77,7 @@
       display: inline-block;
       font-size: 0.95rem;
       color: #ffffff;
-      background-color: #105bbf;
+      background-color: $options-card-bg;
       padding: 0.5rem 1rem;
       border-radius: 6px;
       text-decoration: none;
@@ -76,7 +85,7 @@
       transition: background-color 0.3s;
 
       &:hover {
-        background-color: #0a3a7d;
+        background-color: $common-bg;
       }
     }
   }
@@ -86,30 +95,46 @@
 @media (max-width: 480px) {
   .noticeboard-container {
     padding: 0.5rem;
+    min-height: auto;
 
     h2 {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .noticeboard-grid {
+      gap: 1.2rem;
+      grid-template-columns: 1fr;
     }
 
     .notice-card {
-      padding: 1rem;
+      padding: 0.9rem 1rem;
+      border-radius: 10px;
 
       .notice-header {
         flex-direction: column;
         align-items: flex-start;
+        gap: 0.25rem;
+
+        h3 {
+          font-size: 1.1rem;
+        }
 
         .notice-date {
-          margin-top: 0.3rem;
+          font-size: 0.8rem;
         }
       }
 
       p {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        margin-bottom: 0.8rem;
       }
 
       .notice-link {
-        font-size: 0.9rem;
-        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 5px;
       }
     }
   }

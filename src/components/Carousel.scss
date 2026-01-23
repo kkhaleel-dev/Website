@@ -1,7 +1,9 @@
+@import '../variables.scss';
+
 .carousel-container {
   position: relative;
   width: 100vw;
-  height: 91vh; /* Increased height */
+  height: 91vh; // Desktop height
   overflow: hidden;
   background: #000;
 }
@@ -23,11 +25,13 @@
   }
 }
 
-/* BUTTONS (prev/next) */
+/* ARROWS (prev/next) */
 .carousel-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  width: auto; // remove full width stretching
+  height: auto;
   background: rgba(0, 0, 0, 0.3);
   border: none;
   color: #fff;
@@ -35,18 +39,34 @@
   padding: 8px 15px;
   cursor: pointer;
   transition: 0.3s;
+  z-index: 10;
 
   &:hover {
     background: rgba(0, 0, 0, 0.6);
   }
+
+  @media (max-width: 1024px) {
+    font-size: 24px;
+    padding: 6px 12px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+    padding: 5px 10px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 18px;
+    padding: 4px 8px;
+  }
 }
 
 .prev {
-  left: 20px;
+  left: 10px; // stick to left
 }
 
 .next {
-  right: 20px;
+  right: 10px; // stick to right
 }
 
 /* DOTS */
@@ -57,6 +77,16 @@
   transform: translateX(-50%);
   display: flex;
   gap: 8px;
+
+  @media (max-width: 768px) {
+    gap: 6px;
+    bottom: 10px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 4px;
+    bottom: 8px;
+  }
 }
 
 .dot {
@@ -71,6 +101,16 @@
     background: white;
     width: 16px;
     height: 16px;
+
+    @media (max-width: 768px) {
+      width: 14px;
+      height: 14px;
+    }
+
+    @media (max-width: 480px) {
+      width: 12px;
+      height: 12px;
+    }
   }
 
   &:hover {
@@ -78,13 +118,16 @@
   }
 }
 
+/* PLAY / PAUSE BUTTON */
 .playpause-btn {
   position: absolute;
   bottom: 20px;
   right: 20px;
+  width: auto; // prevent stretching
+  height: auto;
   background: rgba(0, 0, 0, 0.5);
   border: none;
-  color: white;
+  color: $white;
   font-size: 15px;
   padding: 10px;
   border-radius: 50%;
@@ -93,6 +136,7 @@
   align-items: center;
   justify-content: center;
   transition: 0.3s;
+  z-index: 10;
 
   svg {
     font-size: 20px;
@@ -100,5 +144,36 @@
 
   &:hover {
     background: rgba(0, 0, 0, 0.8);
+  }
+
+  /* responsive */
+  @media (max-width: 1024px) {
+    bottom: 18px;
+    right: 18px;
+    padding: 9px;
+
+    svg {
+      font-size: 18px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    bottom: 15px;
+    right: 15px;
+    padding: 8px;
+
+    svg {
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    bottom: 12px;
+    right: 12px;
+    padding: 6px;
+
+    svg {
+      font-size: 14px;
+    }
   }
 }
