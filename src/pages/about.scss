@@ -1,7 +1,5 @@
-@import '../variables.scss';
-
 .about-page {
-  background: #eaf8f5;
+  background: #eef4fb;
   padding-bottom: 4rem;
   font-family: "Inter", sans-serif;
 }
@@ -10,7 +8,7 @@
 .about-hero {
   text-align: center;
   padding: 3rem 5%;
-  background: linear-gradient(90deg, $common-bg, $options-card-bg);
+  background: linear-gradient(90deg, #0a2148, #003366);
   color: #fff;
 
   h2 {
@@ -61,7 +59,7 @@
   .stat-number {
     font-size: 2rem;
     font-weight: 700;
-    color: $common-bg;
+    color: #003366;
   }
 
   .stat-label {
@@ -79,7 +77,7 @@
 
   h3 {
     font-size: 2rem;
-    color: $common-bg;
+    color: #0a2148;
     margin-bottom: 1rem;
   }
 
@@ -92,7 +90,7 @@
 
   .about-quote {
     font-weight: 600;
-    color: $common-bg;
+    color: #003366;
   }
 }
 
@@ -104,7 +102,7 @@
 
   h3 {
     font-size: 2rem;
-    color: $common-bg;
+    color: #0a2148;
     margin-bottom: 1.8rem;
     text-align: center;
   }
@@ -133,7 +131,7 @@
     position: absolute;
     top: -14px;
     left: -14px;
-    background: $common-bg;
+    background: #003366;
     color: #fff;
     padding: 6px 12px;
     border-radius: 20px;
@@ -144,7 +142,7 @@
   .card-tag {
     display: inline-block;
     background: #eef4fb;
-    color: $common-bg;
+    color: #003366;
     font-size: 0.75rem;
     padding: 4px 10px;
     border-radius: 20px;
@@ -154,7 +152,7 @@
 
   h4 {
     font-size: 1.35rem;
-    color: $common-bg;
+    color: #0a2148;
     margin-bottom: 0.7rem;
   }
 
@@ -172,7 +170,7 @@
 
   h3 {
     font-size: 2rem;
-    color: $common-bg;
+    color: #0a2148;
     margin-bottom: 0.8rem;
   }
 
@@ -183,7 +181,7 @@
   }
 
   button {
-    background: $common-bg;
+    background: #003366;
     color: #fff;
     border: none;
     padding: 12px 28px;
@@ -193,7 +191,7 @@
     transition: background 0.3s ease;
 
     &:hover {
-      background: $options-card-bg;
+      background: #0a2148;
     }
   }
 }

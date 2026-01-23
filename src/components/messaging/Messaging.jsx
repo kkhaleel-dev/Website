@@ -204,7 +204,7 @@ const Messaging = () => {
       <div className={`messaging-panel ${open ? "open" : ""}`}>
         <div className="panel-header">
           <span>Messaging</span>
-          <button onClick={() => setOpen(false)} className="customX">✕</button>
+          <button onClick={() => setOpen(false)}>✕</button>
         </div>
 
         {!selectedUser && (
@@ -303,4 +303,3 @@ const Messaging = () => {
 };
 
 export default Messaging;
-//pushed working till

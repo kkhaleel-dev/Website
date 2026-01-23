@@ -154,9 +154,7 @@ const AppContent = () => {
         </Routes>
       </div>
       
-      <ProtectedRoute>
       <Messaging />
-      </ProtectedRoute>
 
       <Footer />
     </>

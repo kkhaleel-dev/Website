@@ -20,7 +20,6 @@
       font-size: 32px;
       margin: 0;
       font-weight: 700;
-      color: $common-bg;
 
       @media (max-width: 768px) {
         font-size: 24px;
@@ -31,7 +30,7 @@
       padding: 10px 20px;
       border: none;
       background: $options-card-bg !important;
-      color: $white;
+      color: #fff;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
@@ -50,7 +49,6 @@
         padding: 7px 14px;
         font-size: 13px;
         border-radius: 5px;
-        width: 100px;
       }
     }
   }
@@ -61,7 +59,6 @@
   overflow: hidden;
 }
 
-/* === MOBILE SCROLL FIX (NO EXTRA SPACE) === */
 .events-inner-wrapper {
   overflow: hidden;
 
@@ -69,10 +66,6 @@
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
-
-    /* removes empty space at start/end */
-    margin-left: -16px;
-    padding-left: 16px;
 
     &::-webkit-scrollbar {
       display: none;
@@ -93,22 +86,22 @@
 
 .event-card {
   width: 310px;
-  background: $white;
+  background: #fff;
   border-radius: 12px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
   flex-shrink: 0;
-  margin: 5px 0 15px;
+  margin-bottom: 15px;
+  margin-top: 5px;
 
   @media (max-width: 1023px) {
     width: 280px;
   }
 
-  /* === ONE CARD PER VIEW (MOBILE) === */
   @media (max-width: 480px) {
-    width: calc(100% - 16px);
+    width: 90%;
   }
 
   .event-img {
@@ -116,7 +109,7 @@
     width: 100%;
     background-size: cover;
     background-position: center;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #ccc;
   }
 
   .event-content {
@@ -127,7 +120,6 @@
     flex: 1;
 
     .event-title {
-      color: $common-bg;
       font-size: 17px;
       font-weight: 600;
       margin: 0;
@@ -135,8 +127,8 @@
 
     .event-type {
       font-size: 12px;
-      background: $options-card-bg !important;
-      color: $white;
+      background: #223a5e;
+      color: #fff;
       padding: 4px 10px;
       border-radius: 4px;
       width: fit-content;
@@ -144,14 +136,14 @@
 
     .event-date {
       font-size: 13px;
-      color: rgba(0, 0, 0, 0.6);
+      color: #555;
     }
 
     .event-btn {
       margin-top: auto;
       padding: 9px;
       background: $options-card-bg !important;
-      color: $white;
+      color: #fff;
       border: none;
       border-radius: 6px;
       font-weight: 600;
@@ -164,7 +156,6 @@
   }
 }
 
-/* kept for safety – not affecting layout */
 .prev {
   left: 10px;
 }

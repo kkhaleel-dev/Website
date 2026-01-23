@@ -230,10 +230,6 @@
 }
 
 @media (max-width: 768px) {
-  .signup-btn {
-    width: 100px;
-    background-color: $common-bg !important;
-  }
   .topbar {
     padding: 0px 0px;
     .topbar-right {
@@ -315,43 +311,5 @@
 @media (min-width: 769px) {
   .nav-item.dropdown:hover .dropdown-menu {
     display: block;
-  }
-}
-/* ================= MOBILE SIDEBAR FIXES ================= */
-@media (max-width: 768px) {
-
-  /* Mobile sidebar header alignment */
-  .mobile-sidebar-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  /* Mobile signup / logout button */
-  .mobile-signup {
-    background: $options-card-bg !important;
-    color: $white;
-    border: none;
-    padding: 10px 14px;
-    font-weight: 700;
-    font-size: 14px;
-    border-radius: 20px;
-    border: 1px solid $options-card-bg !important;
-    width: auto;
-    min-width: 120px;
-    max-width: 70%;
-  }
-
-  /* Close button aligned to far right */
-  .mobile-sidebar-header .close-btn {
-    margin-left: auto;
-    width: 34px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 6px;
-    font-size: 20px;
   }
 }
