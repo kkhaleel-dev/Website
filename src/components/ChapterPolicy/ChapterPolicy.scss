@@ -1,6 +1,8 @@
+@import '../../variables.scss';
+
 .chapter-policy-page {
   min-height: 100vh;
-  background: linear-gradient(180deg, #0a2148 0%, #f4f6fb 35%);
+  background: linear-gradient(180deg, #275a4b 0%, #1d4b3e 35%);
   padding-bottom: 4rem;
   font-family: "Inter", sans-serif;
 }
@@ -9,7 +11,7 @@
 .policy-hero {
   text-align: center;
   padding: 4rem 5% 3rem;
-  color: #ffffff;
+  color: $white;
 
   h2 {
     font-size: 2.6rem;
@@ -39,7 +41,7 @@
 
 /* Individual Card */
 .policy-card {
-  background: #ffffff;
+  background: #f4f7f6;
   border-radius: 14px;
   padding: 2.2rem 2rem;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
@@ -55,7 +57,7 @@
     position: absolute;
     top: -18px;
     right: 20px;
-    background: #0a2148;
+    background: $common-bg;
     color: #ffffff;
     font-size: 0.85rem;
     font-weight: 600;
@@ -66,7 +68,7 @@
 
   h3 {
     font-size: 1.35rem;
-    color: #0a2148;
+    color: $common-bg;
     margin-bottom: 0.8rem;
     font-weight: 600;
   }
@@ -106,30 +108,45 @@
 }
 
 /* Mobile */
+/* Mobile – compact cards */
 @media (max-width: 480px) {
   .policy-hero {
-    padding: 2.5rem 6% 2rem;
+    padding: 2.2rem 5% 1.8rem;
 
     h2 {
-      font-size: 1.8rem;
-    }
-  }
-
-  .policy-card {
-    padding: 1.6rem 1.4rem;
-
-    .policy-index {
-      top: -14px;
-      right: 14px;
-      font-size: 0.75rem;
-    }
-
-    h3 {
-      font-size: 1.15rem;
+      font-size: 1.7rem;
     }
 
     p {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+  }
+
+  .policy-container {
+    gap: 1.3rem;
+  }
+
+  .policy-card {
+    padding: 1.2rem 1.2rem;
+    border-radius: 12px;
+
+    .policy-index {
+      top: -12px;
+      right: 12px;
+      font-size: 0.7rem;
+      padding: 4px 10px;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-size: 0.88rem;
+      line-height: 1.45;
     }
   }
 }
+

@@ -3,20 +3,20 @@
 .carousel3-container {
   width: 100%;
   padding: 50px 40px;
-  background: linear-gradient(180deg, #f0f2f7, #e6e8ee);
+  background: $common-bg; // page background
   display: flex;
   justify-content: center;
   gap: 35px;
-  flex-wrap: wrap; // responsive
+  flex-wrap: wrap;
 }
 
 .carousel-card {
-  background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+  background: $white; // light card background
   width: 300px;
   min-height: 330px;
   padding: 25px 20px;
   border-radius: 12px;
-  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.22);
+  box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,18 +26,18 @@
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-/* gradient border glow */
+/* subtle border glow */
 .carousel-card::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: 12px;
-  padding: 1.5px;
+  padding: 2px;
   background: linear-gradient(
     135deg,
-    #0d2f62,
-    #4fa3ff,
-    #0d2f62
+    $options-card-bg,
+    lighten($options-card-bg, 15%),
+    $options-card-bg
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
@@ -53,77 +53,64 @@
 
 .carousel-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0px 22px 45px rgba(13, 47, 98, 0.35);
+  box-shadow: 0px 22px 50px rgba(0, 0, 0, 0.25);
 }
 
 .icon-svg {
   font-size: 70px;
   margin-bottom: 20px;
-  color: #0d2f62;
+  color: $options-card-bg; // accent icon
   transition: transform 0.35s ease, color 0.35s ease;
 }
 
 .carousel-card:hover .icon-svg {
   transform: scale(1.15) rotate(-6deg);
-  color: #4fa3ff;
+  color: lighten($options-card-bg, 25%);
 }
 
 .carousel-card h3 {
   font-weight: 700;
   letter-spacing: 0.4px;
-  color: #0d2f62;
+  color: black; // readable on white
+  margin-bottom: 10px;
 }
 
 .card-subheader-wrapper {
-  height: 60px;
+  height: 65px;
   overflow-y: auto;
   margin-bottom: 20px;
   padding-right: 4px;
-  color: #4a4a4a;
+  color: #333; // dark gray subheader
   scrollbar-width: thin;
-  scrollbar-color: #0d2f62 transparent;
+  scrollbar-color: $options-card-bg transparent;
 }
 
 .card-btn {
   padding: 10px 24px;
-  background: linear-gradient(135deg, #0d2f62, #1f5fbf);
-  color: #fff;
+  background: $options-card-bg; // button base color
+  color: $white;
   border-radius: 6px;
   text-decoration: none;
   font-weight: 600;
   letter-spacing: 0.4px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease,
-    background 0.3s ease;
-  box-shadow: 0px 6px 15px rgba(13, 47, 98, 0.35);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15);
   position: relative;
   overflow: hidden;
 }
 
 .card-btn:hover {
   transform: translateY(-3px);
-  background: linear-gradient(135deg, #1f5fbf, #0d2f62);
-  box-shadow: 0px 12px 30px rgba(31, 95, 191, 0.55);
+  background: $option-hover; // hover color from theme
+  color: $white;
+  box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.25);
 }
 
 .card-btn::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255, 255, 255, 0.35),
-    transparent
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  content: none; // remove gradient overlay that caused black center
 }
 
-.card-btn:hover::after {
-  opacity: 1;
-}
-
-/* responsive (UNCHANGED SIZES) */
+/* responsive */
 @media (max-width: 1024px) {
   .carousel-card {
     width: 260px;
@@ -142,8 +129,8 @@
 
 @media (max-width: 480px) {
   .carousel3-container {
-    padding: 20px;
-    gap: 10px;
+    padding: 15px;
+    gap: 20px;
   }
   .carousel-card {
     width: 90%;
