@@ -51,6 +51,14 @@ import Messaging from "./components/messaging/Messaging.jsx";
 const AppContent = () => {
   const location = useLocation();
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => {
+      setUser(u);
+    });
+    return () => unsub();
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -153,11 +161,7 @@ const AppContent = () => {
           <Route path="/startup/citAngels" element={<CITAngels />} />
         </Routes>
       </div>
-      
-      <ProtectedRoute>
-      <Messaging />
-      </ProtectedRoute>
-
+           {user && <Messaging />}
       <Footer />
     </>
   );
