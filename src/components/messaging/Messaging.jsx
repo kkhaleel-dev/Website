@@ -1,69 +1,68 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./Messaging.scss";
 import { auth, db } from "../../firebase";
-import { ref, get, set, push, onValue, update, remove } from "firebase/database";
+import { ref, get, set, push, onValue, update } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth";
 import dummyLogo from "../../assets/person-logo.png";
+import { useNavigate } from "react-router-dom";
 
 const Messaging = () => {
+  const navigate = useNavigate();
+
   const [currentUser, setCurrentUser] = useState(null);
   const [open, setOpen] = useState(false);
+
   const [allUsers, setAllUsers] = useState([]);
   const [search, setSearch] = useState("");
-  const [searchActive, setSearchActive] = useState(false);
+
+  const [chats, setChats] = useState({});
+  const [selectedChatId, setSelectedChatId] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [chatId, setChatId] = useState(null);
-  const [chatReady, setChatReady] = useState(false);
 
   const [messages, setMessages] = useState([]);
-  const [chats, setChats] = useState({});
   const [message, setMessage] = useState("");
-  const [typingUser, setTypingUser] = useState(false);
-  const [userStatus, setUserStatus] = useState(null);
 
   const messagesEndRef = useRef(null);
-  const typingTimeoutRef = useRef(null);
 
   /* ================= AUTH ================= */
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => setCurrentUser(user || null));
-    return unsub;
+    return onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user || null);
+    });
   }, []);
 
-  const getChatId = (uid1, uid2) => [uid1, uid2].sort().join("_");
+  const getChatId = (a, b) => [a, b].sort().join("_");
 
-  /* ================= USERS ================= */
+  /* ================= LOAD USERS ================= */
   useEffect(() => {
     if (!currentUser) return;
+
     get(ref(db, "users")).then((snap) => {
       if (!snap.exists()) return;
-      const list = Object.entries(snap.val())
+
+      const users = Object.entries(snap.val())
         .filter(([uid]) => uid !== currentUser.uid)
         .map(([uid, data]) => ({ uid, ...data }));
-      setAllUsers(list);
+
+      setAllUsers(users);
     });
   }, [currentUser]);
 
-  /* ================= CHAT LIST ================= */
+  /* ================= LOAD CHATS ================= */
   useEffect(() => {
     if (!currentUser) return;
+
     const chatsRef = ref(db, "chats");
     return onValue(chatsRef, (snap) => {
-      const all = snap.exists() ? snap.val() : {};
-      const cutoff = Date.now() - 45 * 24 * 60 * 60 * 1000;
-      const filtered = {};
+      if (!snap.exists()) {
+        setChats({});
+        return;
+      }
 
-      Object.entries(all).forEach(([id, c]) => {
-        if (c.members?.[currentUser.uid]) {
-          // Remove old messages
-          const messages45 = {};
-          if (c.messages) {
-            Object.entries(c.messages).forEach(([mid, m]) => {
-              if (m.timestamp >= cutoff) messages45[mid] = m;
-              else remove(ref(db, `chats/${id}/messages/${mid}`));
-            });
-          }
-          filtered[id] = { ...c, messages: messages45 };
+      const filtered = {};
+      Object.entries(snap.val()).forEach(([id, chat]) => {
+        if (chat.members?.[currentUser.uid]) {
+          filtered[id] = chat;
         }
       });
 
@@ -71,271 +70,286 @@ const Messaging = () => {
     });
   }, [currentUser]);
 
-  /* ================= MESSAGES ================= */
+  /* ================= LOAD MESSAGES ================= */
   useEffect(() => {
-    if (!chatId || !currentUser || !chatReady) return;
-    const messagesRef = ref(db, `chats/${chatId}/messages`);
-    return onValue(messagesRef, (snap) => {
-      const cutoff = Date.now() - 45 * 24 * 60 * 60 * 1000;
-      const list = snap.exists()
-        ? Object.entries(snap.val())
-            .filter(([_, m]) => m.timestamp >= cutoff)
-            .map(([id, m]) => ({ id, ...m }))
-        : [];
+    if (!selectedChatId) return;
+
+    const msgRef = ref(db, `chats/${selectedChatId}/messages`);
+    return onValue(msgRef, (snap) => {
+      if (!snap.exists()) {
+        setMessages([]);
+        return;
+      }
+
+      const list = Object.entries(snap.val())
+        .map(([id, m]) => ({ id, ...m }))
+        .sort((a, b) => a.timestamp - b.timestamp);
+
       setMessages(list);
     });
-  }, [chatId, currentUser, chatReady]);
+  }, [selectedChatId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  /* ================= TYPING ================= */
-  useEffect(() => {
-    if (!chatId || !selectedUser) return;
-    return onValue(ref(db, `chats/${chatId}/typing/${selectedUser.uid}`), (snap) =>
-      setTypingUser(snap.val() === true)
-    );
-  }, [chatId, selectedUser]);
-
-  /* ================= STATUS ================= */
-  useEffect(() => {
-    if (!chatId || !selectedUser) return;
-    return onValue(ref(db, `chats/${chatId}/status/${selectedUser.uid}`), (snap) =>
-      setUserStatus(snap.val())
-    );
-  }, [chatId, selectedUser]);
-
   /* ================= OPEN CHAT ================= */
   const openChat = async (user) => {
     if (!currentUser) return;
-    const id = getChatId(currentUser.uid, user.uid);
-    setSelectedUser(user);
-    setChatId(id);
-    setChatReady(false);
-    setSearch("");
-    setSearchActive(false);
 
-    const chatRef = ref(db, `chats/${id}`);
+    const chatId = getChatId(currentUser.uid, user.uid);
+    setSelectedUser(user);
+    setSelectedChatId(chatId);
+
+    const chatRef = ref(db, `chats/${chatId}`);
     const snap = await get(chatRef);
+
     if (!snap.exists()) {
       await set(chatRef, {
-        members: { [currentUser.uid]: true, [user.uid]: true },
+        members: {
+          [currentUser.uid]: true,
+          [user.uid]: true,
+        },
         messages: {},
-        typing: {},
-        status: {},
-        userChats: { [currentUser.uid]: { unreadCount: 0 }, [user.uid]: { unreadCount: 0 } },
+        userChats: {
+          [currentUser.uid]: { unreadCount: 0 },
+          [user.uid]: { unreadCount: 0 },
+        },
         lastMessage: "",
         lastMessageTime: Date.now(),
       });
     }
 
-    await set(ref(db, `chats/${id}/userChats/${currentUser.uid}/unreadCount`), 0);
-
-    const msgSnap = await get(ref(db, `chats/${id}/messages`));
-    if (msgSnap.exists()) {
-      Object.keys(msgSnap.val()).forEach(async (mid) => {
-        await set(ref(db, `chats/${id}/messages/${mid}/seenBy/${currentUser.uid}`), true);
-      });
-    }
-
-    setChatReady(true);
+    // Reset unread count for current user
+    await set(
+      ref(db, `chats/${chatId}/userChats/${currentUser.uid}/unreadCount`),
+      0
+    );
   };
 
   /* ================= SEND MESSAGE ================= */
   const sendMessage = async () => {
-    if (!message.trim() || !chatId || !currentUser || !chatReady) return;
-
-    const chatRef = ref(db, `chats/${chatId}`);
-    const chatSnap = await get(chatRef);
-    if (!chatSnap.exists()) return;
+    if (!message.trim() || !selectedChatId) return;
 
     const timestamp = Date.now();
-    const newMsgRef = push(ref(db, `chats/${chatId}/messages`));
+    const chatRef = ref(db, `chats/${selectedChatId}`);
 
-    await set(newMsgRef, {
+    const msgRef = push(ref(db, `chats/${selectedChatId}/messages`));
+    await set(msgRef, {
       senderId: currentUser.uid,
       text: message.trim(),
       timestamp,
       seenBy: { [currentUser.uid]: true },
     });
 
-    await update(chatRef, { lastMessage: message.trim(), lastMessageTime: timestamp });
-
+    const chatSnap = await get(chatRef);
     const chat = chatSnap.val();
-    Object.keys(chat.members).forEach(async (uid) => {
-      const userChatRef = ref(db, `chats/${chatId}/userChats/${uid}`);
-      const userChatSnap = await get(userChatRef);
 
-      if (uid === currentUser.uid) {
-        await set(userChatRef, { unreadCount: 0 });
-      } else {
-        const oldCount = userChatSnap.exists() ? userChatSnap.val().unreadCount || 0 : 0;
-        await set(userChatRef, { unreadCount: oldCount + 1 });
-      }
+    await update(chatRef, {
+      lastMessage: message.trim(),
+      lastMessageTime: timestamp,
+      lastMessageSender: currentUser.uid,
+    });
+
+    // Update unread count for other members
+    Object.keys(chat.members).forEach(async (uid) => {
+      const uRef = ref(db, `chats/${selectedChatId}/userChats/${uid}`);
+      const uSnap = await get(uRef);
+      const old = uSnap.exists() ? uSnap.val().unreadCount || 0 : 0;
+
+      await set(uRef, {
+        unreadCount: uid === currentUser.uid ? 0 : old + 1,
+        lastMessageTime: timestamp,
+      });
     });
 
     setMessage("");
-    await set(ref(db, `chats/${chatId}/typing/${currentUser.uid}`), false);
   };
 
-  /* ================= HANDLE TYPING ================= */
-  const handleTyping = (e) => {
-    if (!chatId || !currentUser) return;
-    setMessage(e.target.value);
-    const typingRef = ref(db, `chats/${chatId}/typing/${currentUser.uid}`);
-    set(typingRef, true);
-
-    clearTimeout(typingTimeoutRef.current);
-    typingTimeoutRef.current = setTimeout(() => set(typingRef, false), 1200);
+  /* ================= BACK ================= */
+  const handleBack = () => {
+    setSelectedChatId(null);
+    setSelectedUser(null);
+    setSearch("");
   };
 
-  /* ================= SEARCH FILTER ================= */
-  const filteredUsers =
+  /* ================= FORMAT TIMESTAMP ================= */
+  const formatTime = (ts) => {
+    const msgDate = new Date(ts);
+    const now = new Date();
+    const isToday =
+      msgDate.getDate() === now.getDate() &&
+      msgDate.getMonth() === now.getMonth() &&
+      msgDate.getFullYear() === now.getFullYear();
+
+    return isToday
+      ? msgDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+      : msgDate.toLocaleDateString([], { day: "2-digit", month: "2-digit" });
+  };
+
+  /* ================= INBOX ================= */
+  const inboxList = Object.entries(chats)
+    .map(([id, chat]) => {
+      const otherUid = Object.keys(chat.members).find(
+        (u) => u !== currentUser.uid
+      );
+
+      const user =
+        allUsers.find((u) => u.uid === otherUid) || {
+          uid: otherUid,
+          fullname: otherUid,
+          profileImage: dummyLogo,
+        };
+
+      return {
+        id,
+        user,
+        lastMsg: chat.lastMessage || "",
+        time:
+          chat.userChats?.[currentUser.uid]?.lastMessageTime ||
+          chat.lastMessageTime ||
+          0,
+        unread: chat.userChats?.[currentUser.uid]?.unreadCount || 0,
+      };
+    })
+    .sort((a, b) => b.time - a.time);
+
+  /* ================= SEARCH USERS ================= */
+  const searchResults =
     search.trim() === ""
       ? []
-      : allUsers.filter(
-          (u) =>
-            u.fullname?.toLowerCase().includes(search.toLowerCase()) ||
-            u.membershipId?.toLowerCase().includes(search.toLowerCase())
+      : allUsers.filter((u) =>
+          u.fullname?.toLowerCase().includes(search.toLowerCase())
         );
 
-  /* ================= CHAT LIST BELOW SEARCH BAR ================= */
-  const chatList = Object.entries(chats)
-    .map(([id, c]) => {
-      if (!c.members?.[currentUser.uid]) return null;
-
-      const otherUid = Object.keys(c.members).find((uid) => uid !== currentUser.uid);
-      const user = allUsers.find((u) => u.uid === otherUid) || {
-        uid: otherUid,
-        fullname: otherUid,
-        profileImage: dummyLogo,
-        membershipId: "N/A",
-      };
-
-      const lastMsg = c.lastMessage || "";
-      const unread = c.userChats?.[currentUser.uid]?.unreadCount || 0;
-      const lastMessageTime = c.lastMessageTime || 0;
-
-      return { id, user, lastMsg, unread, lastMessageTime };
-    })
-    .filter(Boolean)
-    .sort((a, b) => b.lastMessageTime - a.lastMessageTime);
+  /* ================= UNREAD CHATS COUNT ================= */
+  const unreadChatsCount = Object.values(chats).filter(
+    (chat) => chat.userChats?.[currentUser?.uid]?.unreadCount > 0
+  ).length;
 
   /* ================= UI ================= */
   return (
     <>
-      <div className="messaging-float" onClick={() => setOpen(!open)}>💬</div>
+      <div className="messaging-float" onClick={() => setOpen(!open)}>
+        💬
+        {unreadChatsCount > 0 && (
+          <span className="float-badge">{unreadChatsCount}</span>
+        )}
+      </div>
 
       <div className={`messaging-panel ${open ? "open" : ""}`}>
         <div className="panel-header">
           <span>Messaging</span>
-          <button onClick={() => setOpen(false)} className="customX">✕</button>
+          <button
+            style={{ color: "white", fontWeight: "500" }}
+            onClick={() => setOpen(false)}
+          >
+            ✕
+          </button>
         </div>
 
-        <div className="panel-search">
-          <input
-            placeholder="Search users..."
-            value={search}
-            onFocus={() => setSearchActive(true)}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
+        {!selectedUser && (
+          <div className="panel-search">
+            <input
+              placeholder="Search users..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+        )}
 
         <div className="panel-body">
-          {/* SEARCH RESULTS */}
-          {!selectedUser && searchActive && search && (
-            <div className="user-list">
-              {filteredUsers.map((u) => (
-                <div key={u.uid} className="user-item" onClick={() => openChat(u)}>
-                  <img src={u.profileImage || dummyLogo} alt="" />
-                  <div className="user-info">
-                    <p>{u.fullname}</p>
-                    <span>{u.membershipId}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* INBOX BELOW SEARCH BAR */}
           {!selectedUser && (
             <div className="user-list">
-              {chatList.length === 0 ? (
-                <div className="empty-state">
-                  <p>No chats yet</p>
-                  <span>Search and message someone to get started</span>
-                </div>
-              ) : (
-                chatList.map(({ id, user, lastMsg, unread }) => (
-                  <div key={id} className="user-item" onClick={() => openChat(user)}>
+              {search.trim() &&
+                searchResults.map((user) => (
+                  <div
+                    key={user.uid}
+                    className="user-item"
+                    onClick={() => openChat(user)}
+                  >
+                    <img src={user.profileImage || dummyLogo} alt="" />
+                    <div className="user-info">
+                      <p>{user.fullname}</p>
+                    </div>
+                  </div>
+                ))}
+
+              {!search.trim() &&
+                inboxList.map(({ id, user, lastMsg, time, unread }) => (
+                  <div
+                    key={id}
+                    className="user-item"
+                    onClick={() => openChat(user)}
+                  >
                     <img src={user.profileImage || dummyLogo} alt="" />
                     <div className="user-info">
                       <p>{user.fullname}</p>
                       <div className="last-message">
-                        <span>{lastMsg.length > 25 ? lastMsg.slice(0, 25) + "..." : lastMsg}</span>
-                        {unread > 0 ? <span className="badge">{unread}</span> : <span className="tickread">✓✓</span>}
+                        {unread > 0 && (
+                          <span className="time">{formatTime(time)}</span>
+                        )}
+                        <span>{lastMsg}</span>
+                        {unread > 0 && <span className="badge">{unread}</span>}
                       </div>
                     </div>
                   </div>
-                ))
+                ))}
+
+              {!search.trim() && inboxList.length === 0 && (
+                <div className="empty-state">No conversations yet</div>
               )}
             </div>
           )}
 
-          {/* ACTIVE CHAT WINDOW */}
           {selectedUser && (
             <div className="chat-window">
               <div className="chat-header">
-                <button
-                  onClick={() => {
-                    setSelectedUser(null);
-                    setSearch("");
-                    setSearchActive(false);
-                  }}
+                <button onClick={handleBack}>←</button>
+                <img
+                  src={selectedUser.profileImage || dummyLogo}
+                  alt=""
+                  onClick={() => navigate(`/profile/${selectedUser.uid}`)}
+                  style={{ cursor: "pointer" }}
+                />
+                <p
+                  onClick={() => navigate(`/profile/${selectedUser.uid}`)}
+                  style={{ cursor: "pointer" }}
                 >
-                  ←
-                </button>
-                <img src={selectedUser.profileImage || dummyLogo} alt="" />
-                <div>
-                  <p>{selectedUser.fullname}</p>
-                  <span className="status">
-                    {userStatus?.online
-                      ? "Online"
-                      : userStatus?.lastSeen
-                      ? `Last seen ${new Date(userStatus.lastSeen).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`
-                      : ""}
-                  </span>
-                </div>
+                  {selectedUser.fullname}
+                </p>
               </div>
 
               <div className="chat-messages">
                 {messages.map((m) => (
-                  <div key={m.id} className={`message ${m.senderId === currentUser.uid ? "sent" : "received"}`}>
+                  <div
+                    key={m.id}
+                    className={`message ${
+                      m.senderId === currentUser.uid ? "sent" : "received"
+                    }`}
+                  >
                     {m.text}
                     <div className="message-meta">
-                      <span className="time">{new Date(m.timestamp).toLocaleString()}</span>
+                      <span className="time">{formatTime(m.timestamp)}</span>
                       {m.senderId === currentUser.uid && (
-                        <span className="tick">{Object.keys(m.seenBy || {}).length > 1 ? "✓✓" : "✓"}</span>
+                        <span className="tick">
+                          {Object.keys(m.seenBy || {}).length > 1
+                            ? "✓✓"
+                            : "✓"}
+                        </span>
                       )}
                     </div>
                   </div>
                 ))}
-                {typingUser && <div className="typing">{selectedUser.fullname} is typing...</div>}
                 <div ref={messagesEndRef} />
               </div>
 
               <div className="chat-input">
                 <input
                   value={message}
-                  onChange={handleTyping}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                   placeholder="Type a message..."
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      sendMessage();
-                    }
-                  }}
                 />
                 <button onClick={sendMessage}>➤</button>
               </div>
@@ -348,3 +362,380 @@ const Messaging = () => {
 };
 
 export default Messaging;
+
+
+//working with all mesaging without main messenger logo notiicaiton uncount
+// import React, { useEffect, useState, useRef } from "react";
+// import "./Messaging.scss";
+// import { auth, db } from "../../firebase";
+// import { ref, get, set, push, onValue, update } from "firebase/database";
+// import { onAuthStateChanged } from "firebase/auth";
+// import dummyLogo from "../../assets/person-logo.png";
+// import { useNavigate } from "react-router-dom";
+
+// const Messaging = () => {
+//   const navigate = useNavigate();
+
+//   const [currentUser, setCurrentUser] = useState(null);
+//   const [open, setOpen] = useState(false);
+
+//   const [allUsers, setAllUsers] = useState([]);
+//   const [search, setSearch] = useState("");
+
+//   const [chats, setChats] = useState({});
+//   const [selectedChatId, setSelectedChatId] = useState(null);
+//   const [selectedUser, setSelectedUser] = useState(null);
+
+//   const [messages, setMessages] = useState([]);
+//   const [message, setMessage] = useState("");
+
+//   const messagesEndRef = useRef(null);
+
+//   /* ================= AUTH ================= */
+//   useEffect(() => {
+//     return onAuthStateChanged(auth, (user) => {
+//       setCurrentUser(user || null);
+//     });
+//   }, []);
+
+//   const getChatId = (a, b) => [a, b].sort().join("_");
+
+//   /* ================= LOAD USERS ================= */
+//   useEffect(() => {
+//     if (!currentUser) return;
+
+//     get(ref(db, "users")).then((snap) => {
+//       if (!snap.exists()) return;
+
+//       const users = Object.entries(snap.val())
+//         .filter(([uid]) => uid !== currentUser.uid)
+//         .map(([uid, data]) => ({ uid, ...data }));
+
+//       setAllUsers(users);
+//     });
+//   }, [currentUser]);
+
+//   /* ================= LOAD CHATS ================= */
+//   useEffect(() => {
+//     if (!currentUser) return;
+
+//     const chatsRef = ref(db, "chats");
+//     return onValue(chatsRef, (snap) => {
+//       if (!snap.exists()) {
+//         setChats({});
+//         return;
+//       }
+
+//       const filtered = {};
+//       Object.entries(snap.val()).forEach(([id, chat]) => {
+//         if (chat.members?.[currentUser.uid]) {
+//           filtered[id] = chat;
+//         }
+//       });
+
+//       setChats(filtered);
+//     });
+//   }, [currentUser]);
+
+//   /* ================= LOAD MESSAGES & MARK SEEN ================= */
+//   useEffect(() => {
+//     if (!selectedChatId || !currentUser) return;
+
+//     const msgRef = ref(db, `chats/${selectedChatId}/messages`);
+
+//     const unsubscribe = onValue(msgRef, (snap) => {
+//       if (!snap.exists()) {
+//         setMessages([]);
+//         return;
+//       }
+
+//       // Mark all messages as seen by current user
+//       const updates = {};
+//       Object.entries(snap.val()).forEach(([id, m]) => {
+//         if (!m.seenBy?.[currentUser.uid]) {
+//           updates[`${id}/seenBy/${currentUser.uid}`] = true;
+//         }
+//       });
+//       if (Object.keys(updates).length > 0) {
+//         update(msgRef, updates);
+//       }
+
+//       const list = Object.entries(snap.val())
+//         .map(([id, m]) => ({ id, ...m }))
+//         .sort((a, b) => a.timestamp - b.timestamp);
+
+//       setMessages(list);
+//     });
+
+//     return () => unsubscribe();
+//   }, [selectedChatId, currentUser]);
+
+//   useEffect(() => {
+//     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+//   }, [messages]);
+
+//   /* ================= OPEN CHAT ================= */
+//   const openChat = async (user) => {
+//     if (!currentUser) return;
+
+//     const chatId = getChatId(currentUser.uid, user.uid);
+//     setSelectedUser(user);
+//     setSelectedChatId(chatId);
+
+//     const chatRef = ref(db, `chats/${chatId}`);
+//     const snap = await get(chatRef);
+
+//     if (!snap.exists()) {
+//       await set(chatRef, {
+//         members: {
+//           [currentUser.uid]: true,
+//           [user.uid]: true,
+//         },
+//         messages: {},
+//         userChats: {
+//           [currentUser.uid]: { unreadCount: 0 },
+//           [user.uid]: { unreadCount: 0 },
+//         },
+//         lastMessage: "",
+//         lastMessageTime: Date.now(),
+//       });
+//     }
+
+//     await set(
+//       ref(db, `chats/${chatId}/userChats/${currentUser.uid}/unreadCount`),
+//       0
+//     );
+//   };
+
+//   /* ================= SEND MESSAGE ================= */
+//   const sendMessage = async () => {
+//     if (!message.trim() || !selectedChatId) return;
+
+//     const timestamp = Date.now();
+//     const chatRef = ref(db, `chats/${selectedChatId}`);
+//     const msgRef = push(ref(db, `chats/${selectedChatId}/messages`));
+
+//     await set(msgRef, {
+//       senderId: currentUser.uid,
+//       text: message.trim(),
+//       timestamp,
+//       seenBy: { [currentUser.uid]: true },
+//     });
+
+//     const chatSnap = await get(chatRef);
+//     const chat = chatSnap.val();
+
+//     await update(chatRef, {
+//       lastMessage: message.trim(),
+//       lastMessageTime: timestamp,
+//       lastMessageSender: currentUser.uid,
+//     });
+
+//     // Update unread count for other members
+//     Object.keys(chat.members).forEach(async (uid) => {
+//       const uRef = ref(db, `chats/${selectedChatId}/userChats/${uid}`);
+//       const uSnap = await get(uRef);
+//       const old = uSnap.exists() ? uSnap.val().unreadCount || 0 : 0;
+
+//       await set(uRef, {
+//         unreadCount: uid === currentUser.uid ? 0 : old + 1,
+//         lastMessageTime: timestamp,
+//       });
+//     });
+
+//     setMessage("");
+//   };
+
+//   /* ================= BACK ================= */
+//   const handleBack = () => {
+//     setSelectedChatId(null);
+//     setSelectedUser(null);
+//     setSearch("");
+//   };
+
+//   /* ================= FORMAT TIMESTAMP ================= */
+//   const formatTime = (ts) => {
+//     const msgDate = new Date(ts);
+//     const now = new Date();
+//     const isToday =
+//       msgDate.getDate() === now.getDate() &&
+//       msgDate.getMonth() === now.getMonth() &&
+//       msgDate.getFullYear() === now.getFullYear();
+
+//     return isToday
+//       ? msgDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+//       : msgDate.toLocaleDateString([], { day: "2-digit", month: "2-digit" });
+//   };
+
+//   /* ================= INBOX (CHATTED USERS) ================= */
+//   const inboxList = Object.entries(chats)
+//     .map(([id, chat]) => {
+//       const otherUid = Object.keys(chat.members).find(
+//         (u) => u !== currentUser.uid
+//       );
+
+//       const user =
+//         allUsers.find((u) => u.uid === otherUid) || {
+//           uid: otherUid,
+//           fullname: otherUid,
+//           profileImage: dummyLogo,
+//         };
+
+//       return {
+//         id,
+//         user,
+//         lastMsg: chat.lastMessage || "",
+//         time:
+//           chat.userChats?.[currentUser.uid]?.lastMessageTime ||
+//           chat.lastMessageTime ||
+//           0,
+//         unread: chat.userChats?.[currentUser.uid]?.unreadCount || 0,
+//       };
+//     })
+//     .sort((a, b) => b.time - a.time);
+
+//   /* ================= SEARCH USERS ================= */
+//   const searchResults =
+//     search.trim() === ""
+//       ? []
+//       : allUsers.filter((u) =>
+//           u.fullname?.toLowerCase().includes(search.toLowerCase())
+//         );
+
+//   /* ================= UI ================= */
+//   return (
+//     <>
+//       <div className="messaging-float" onClick={() => setOpen(!open)}>
+//         💬
+//       </div>
+
+//       <div className={`messaging-panel ${open ? "open" : ""}`}>
+//         <div className="panel-header">
+//           <span>Messaging</span>
+//           <button
+//             style={{ color: "white", fontWeight: "500" }}
+//             onClick={() => setOpen(false)}
+//           >
+//             ✕
+//           </button>
+//         </div>
+
+//         {!selectedUser && (
+//           <div className="panel-search">
+//             <input
+//               placeholder="Search users..."
+//               value={search}
+//               onChange={(e) => setSearch(e.target.value)}
+//             />
+//           </div>
+//         )}
+
+//         <div className="panel-body">
+//           {!selectedUser && (
+//             <div className="user-list">
+//               {/* SEARCH MODE */}
+//               {search.trim() &&
+//                 searchResults.map((user) => (
+//                   <div
+//                     key={user.uid}
+//                     className="user-item"
+//                     onClick={() => openChat(user)}
+//                   >
+//                     <img src={user.profileImage || dummyLogo} alt="" />
+//                     <div className="user-info">
+//                       <p>{user.fullname}</p>
+//                     </div>
+//                   </div>
+//                 ))}
+
+//               {/* INBOX MODE */}
+//               {!search.trim() &&
+//                 inboxList.map(({ id, user, lastMsg, time, unread }) => (
+//                   <div
+//                     key={id}
+//                     className="user-item"
+//                     onClick={() => openChat(user)}
+//                   >
+//                     <img src={user.profileImage || dummyLogo} alt="" />
+//                     <div className="user-info">
+//                       <p>{user.fullname}</p>
+//                       <div className="last-message">
+//                         {unread > 0 && (
+//                           <span className="time">{formatTime(time)}</span>
+//                         )}
+//                         <span>{lastMsg}</span>
+//                         {unread > 0 && <span className="badge">{unread}</span>}
+//                       </div>
+//                     </div>
+//                   </div>
+//                 ))}
+
+//               {!search.trim() && inboxList.length === 0 && (
+//                 <div className="empty-state">No conversations yet</div>
+//               )}
+//             </div>
+//           )}
+
+//           {selectedUser && (
+//             <div className="chat-window">
+//               <div className="chat-header">
+//                 <button onClick={handleBack}>←</button>
+//                 <img
+//                   src={selectedUser.profileImage || dummyLogo}
+//                   alt=""
+//                   onClick={() => navigate(`/profile/${selectedUser.uid}`)}
+//                   style={{ cursor: "pointer" }}
+//                 />
+//                 <p
+//                   onClick={() => navigate(`/profile/${selectedUser.uid}`)}
+//                   style={{ cursor: "pointer" }}
+//                 >
+//                   {selectedUser.fullname}
+//                 </p>
+//               </div>
+
+//               <div className="chat-messages">
+//                 {messages.map((m) => (
+//                   <div
+//                     key={m.id}
+//                     className={`message ${
+//                       m.senderId === currentUser.uid ? "sent" : "received"
+//                     }`}
+//                   >
+//                     {m.text}
+//                     <div className="message-meta">
+//                       <span className="time">{formatTime(m.timestamp)}</span>
+//                       {m.senderId === currentUser.uid && (
+//                         <span className="tick">
+//                           {m.seenBy &&
+//                           Object.keys(m.seenBy).some(
+//                             (uid) => uid !== currentUser.uid
+//                           )
+//                             ? "✓✓"
+//                             : "✓"}
+//                         </span>
+//                       )}
+//                     </div>
+//                   </div>
+//                 ))}
+//                 <div ref={messagesEndRef} />
+//               </div>
+
+//               <div className="chat-input">
+//                 <input
+//                   value={message}
+//                   onChange={(e) => setMessage(e.target.value)}
+//                   onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+//                   placeholder="Type a message..."
+//                 />
+//                 <button onClick={sendMessage}>➤</button>
+//               </div>
+//             </div>
+//           )}
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
+
+// export default Messaging;
