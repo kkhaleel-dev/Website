@@ -1,6 +1,8 @@
 # Firebase config
 firebase.js
 
+
+
 # Environment files
 .env
 .env.local
