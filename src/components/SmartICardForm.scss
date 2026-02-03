@@ -419,3 +419,19 @@
     transform: translateX(-50%);
   }
 }
+
+.edit-form select {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid $card-border;
+  font-size: 0.9rem;
+  outline: none;
+  background: $white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-form select:focus {
+  border-color: $brand-primary;
+  box-shadow: 0 0 0 2px rgba(250, 201, 40, 0.25);
+}

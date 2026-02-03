@@ -121,8 +121,16 @@ const SmartICardForm = () => {
 
       const userRef = ref(db, `users/${auth.currentUser.uid}`);
       const { password, ...safeData } = editData; // never store password
-      await update(userRef, safeData);
 
+      // Convert field to array if comma separated (optional)
+      if (safeData.field && typeof safeData.field === "string") {
+        safeData.field = safeData.field
+          .split(",")
+          .map((f) => f.trim())
+          .filter((f) => f !== "");
+      }
+
+      await update(userRef, safeData);
       setUserData(safeData);
       alert("Profile updated successfully!");
       closeEdit();
@@ -132,239 +140,291 @@ const SmartICardForm = () => {
     }
   };
 
-  return (<>
-    <div className="smart-i-card-container">
-      <h2>Smart ID Card</h2>
+  return (
+    <>
+      <div className="smart-i-card-container">
+        <h2>Smart ID Card</h2>
 
-      {isAdmin && (
-        <button
-          className="admin-users-btn"
-          onClick={() => (window.location.href = "/admin/users")}
-        >
-          Users Management
+        {isAdmin && (
+          <button
+            className="admin-users-btn"
+            onClick={() => (window.location.href = "/admin/users")}
+          >
+            Users Management
+          </button>
+        )}
+
+        <button className="edit-profile-btn" onClick={openEdit}>
+          Edit Profile
         </button>
-      )}
 
-      <button className="edit-profile-btn" onClick={openEdit}>
-        Edit Profile
-      </button>
-
-      <div className="smart-i-card-wrapper">
-        <div className="card left-card">
-          <div className="card-content">
-            <img src={logo} alt="Logo" className="logo" />
-            <img
-              src={profileImage}
-              alt="User"
-              className="person-img"
-              onError={(e) => (e.target.src = personImg)}
-            />
-            <p className="name">Name: {userData.fullname}</p>
-            <p className="branch">Branch: {userData.branch}</p>
-            <p className="membership">ID: {userData.membershipId}</p>
+        <div className="smart-i-card-wrapper">
+          <div className="card left-card">
+            <div className="card-content">
+              <img src={logo} alt="Logo" className="logo" />
+              <img
+                src={profileImage}
+                alt="User"
+                className="person-img"
+                onError={(e) => (e.target.src = personImg)}
+              />
+              <p className="name">Name: {userData.fullname}</p>
+              <p className="branch">Branch: {userData.branch}</p>
+              <p className="membership">ID: {userData.membershipId}</p>
+            </div>
           </div>
-        </div>
 
-        <div className="card right-card">
-          <div className="card-content">
-            <p>
-              <strong>Year of Passing:</strong> {userData.batch}
-            </p>
-            <p>
-              <strong>Mobile No:</strong> {userData.mobile}
-            </p>
+          <div className="card right-card">
+            <div className="card-content">
+              <p>
+                <strong>Year of Passing:</strong> {userData.batch}
+              </p>
+              <p>
+                <strong>Mobile No:</strong> {userData.mobile}
+              </p>
 
-            <QRCodeSVG
-              value={`https://website-delta-six-36.vercel.app/scan/${userData.membershipId}`}
-              size={160}
-              includeMargin
-            />
-            <p className="website">www.citacc.com</p>
-          </div>
-        </div>
-      </div>
-
-      {editOpen && (
-        <div className="edit-popup">
-          <div className="edit-content">
-            <h3>Edit Profile</h3>
-
-            <div className="edit-form">
-              <div
-                className="profile-image-upload"
-                onClick={() => fileInputRef.current.click()}
-              >
-                <img src={imagePreview || personImg} alt="Preview" />
-                <span>{imagePreview ? "Replace Image" : "Attach Image"}</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  ref={fileInputRef}
-                  onChange={handleImageSelect}
-                />
-              </div>
-
-              <label>
-                Full Name:
-                <input
-                  type="text"
-                  name="fullname"
-                  value={editData.fullname || ""}
-                  onChange={handleChange}
-                />
-              </label>
-
-              <label>
-                Age:
-                <input
-                  type="number"
-                  name="age"
-                  value={editData.age || ""}
-                  onChange={handleChange}
-                />
-              </label>
-
-              <label>
-                Mobile:
-                <input
-                  type="text"
-                  name="mobile"
-                  value={editData.mobile || ""}
-                  onChange={handleChange}
-                />
-              </label>
-
-              <label>
-                Branch:
-                <input
-                  type="text"
-                  name="branch"
-                  value={editData.branch || ""}
-                  onChange={handleChange}
-                />
-              </label>
-
-              <label>
-                Batch:
-                <input
-                  type="text"
-                  name="batch"
-                  value={editData.batch || ""}
-                  onChange={handleChange}
-                />
-              </label>
-
-              <label>
-                City:
-                <input
-                  type="text"
-                  name="city"
-                  value={editData.city || ""}
-                  onChange={handleChange}
-                />
-              </label>
-
-              <label>
-                State:
-                <input
-                  type="text"
-                  name="state"
-                  value={editData.state || ""}
-                  onChange={handleChange}
-                />
-              </label>
-
-              <label>
-                Country:
-                <input
-                  type="text"
-                  name="country"
-                  value={editData.country || ""}
-                  onChange={handleChange}
-                />
-              </label>
-
-              <label>
-                Profession:
-                <input
-                  type="text"
-                  name="profession"
-                  value={editData.profession || ""}
-                  onChange={handleChange}
-                />
-              </label>
-
-              <label>
-                Website:
-                <input
-                  type="text"
-                  name="website"
-                  value={editData.website || ""}
-                  onChange={handleChange}
-                />
-              </label>
-
-              <label>
-                Old Password:
-                <input
-                  type="password"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                />
-              </label>
-
-              <label>
-                New Password:
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
-              </label>
-
-              <label>
-                Confirm New Password:
-                <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </label>
-
-              <div className="edit-actions">
-                <button onClick={saveProfile}>Update Profile</button>
-                <button onClick={closeEdit} className="cancel-btn">
-                  Cancel
-                </button>
-              </div>
+              <QRCodeSVG
+                value={`https://website-delta-six-36.vercel.app/scan/${userData.membershipId}`}
+                size={160}
+                includeMargin
+              />
+              <p className="website">www.citacc.com</p>
             </div>
           </div>
         </div>
-      )}
-    </div>
-       <div className="smart-offers">
-  <h3>Membership Offers</h3>
 
-  <div className="offers-container">
-    <div className="offers-ticker">
-      <div className="ticker-track">
-        <span>🎁 Alumni Store — Flat 20% OFF</span>
-        <span>🍽️ Partner Restaurants — Member Exclusive Deals</span>
-        <span>🎫 Events & Workshops — Priority Access</span>
-        <span>💳 Renewal Cashback — Earn Rewards</span>
-        <span>📢 Career Alerts — Alumni Hiring Updates</span>
+        {editOpen && (
+          <div className="edit-popup">
+            <div className="edit-content">
+              <h3>Edit Profile</h3>
 
-        {/* duplicate for smooth loop */}
-        <span>🎁 Alumni Store — Flat 20% OFF</span>
-        <span>🍽️ Partner Restaurants — Member Exclusive Deals</span>
+              <div className="edit-form">
+                <div
+                  className="profile-image-upload"
+                  onClick={() => fileInputRef.current.click()}
+                >
+                  <img src={imagePreview || personImg} alt="Preview" />
+                  <span>{imagePreview ? "Replace Image" : "Attach Image"}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    ref={fileInputRef}
+                    onChange={handleImageSelect}
+                  />
+                </div>
+
+                <label>
+                  Full Name:
+                  <input
+                    type="text"
+                    name="fullname"
+                    value={editData.fullname || ""}
+                    onChange={handleChange}
+                  />
+                </label>
+
+                <label>
+                  Age:
+                  <input
+                    type="number"
+                    name="age"
+                    value={editData.age || ""}
+                    onChange={handleChange}
+                  />
+                </label>
+
+                <label>
+                  Mobile:
+                  <input
+                    type="text"
+                    name="mobile"
+                    value={editData.mobile || ""}
+                    onChange={handleChange}
+                  />
+                </label>
+
+                <label>
+                  Branch:
+                  <input
+                    type="text"
+                    name="branch"
+                    value={editData.branch || ""}
+                    onChange={handleChange}
+                  />
+                </label>
+
+                <label>
+                  Batch:
+                  <input
+                    type="text"
+                    name="batch"
+                    value={editData.batch || ""}
+                    onChange={handleChange}
+                  />
+                </label>
+
+                <label>
+                  City:
+                  <input
+                    type="text"
+                    name="city"
+                    value={editData.city || ""}
+                    onChange={handleChange}
+                  />
+                </label>
+
+                <label>
+                  State:
+                  <input
+                    type="text"
+                    name="state"
+                    value={editData.state || ""}
+                    onChange={handleChange}
+                  />
+                </label>
+
+                <label>
+                  Country:
+                  <input
+                    type="text"
+                    name="country"
+                    value={editData.country || ""}
+                    onChange={handleChange}
+                  />
+                </label>
+
+                <label>
+                  Profession:
+                  <select
+                    name="profession"
+                    value={editData.profession || ""}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Profession</option>
+                    <option value="Employed">Employed</option>
+                    <option value="Entrepreneur">Entrepreneur</option>
+                  </select>
+                </label>
+
+                {/* ===== Entrepreneur Fields ===== */}
+                {editData.profession === "Entrepreneur" && (
+                  <>
+                    <label>
+                      Company Name:
+                      <input
+                        type="text"
+                        name="company" // fixed: match DB key
+                        value={editData.company || ""}
+                        onChange={handleChange}
+                      />
+                    </label>
+
+                    <label>
+                      Industry:
+                      <input
+                        type="text"
+                        name="industry"
+                        value={editData.industry || ""}
+                        onChange={handleChange}
+                      />
+                    </label>
+
+                    <label>
+                      Field / Specialization (comma separated):
+                      <input
+                        type="text"
+                        name="field"
+                        value={
+                          Array.isArray(editData.field)
+                            ? editData.field.join(", ")
+                            : editData.field || ""
+                        }
+                        onChange={handleChange}
+                      />
+                    </label>
+
+                    <label>
+                      Company Size:
+                      <input
+                        type="text"
+                        name="companySize"
+                        value={editData.companySize || ""}
+                        onChange={handleChange}
+                      />
+                    </label>
+                  </>
+                )}
+
+                <label>
+                  Website:
+                  <input
+                    type="text"
+                    name="website"
+                    value={editData.website || ""}
+                    onChange={handleChange}
+                  />
+                </label>
+
+                <label>
+                  Old Password:
+                  <input
+                    type="password"
+                    value={oldPassword}
+                    onChange={(e) => setOldPassword(e.target.value)}
+                  />
+                </label>
+
+                <label>
+                  New Password:
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                  />
+                </label>
+
+                <label>
+                  Confirm New Password:
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                </label>
+
+                <div className="edit-actions">
+                  <button onClick={saveProfile}>Update Profile</button>
+                  <button onClick={closeEdit} className="cancel-btn">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
-  </div>
-</div>
-</>
+
+      <div className="smart-offers">
+        <h3>Membership Offers</h3>
+        <div className="offers-container">
+          <div className="offers-ticker">
+            <div className="ticker-track">
+              <span>🎁 Alumni Store — Flat 20% OFF</span>
+              <span>🍽️ Partner Restaurants — Member Exclusive Deals</span>
+              <span>🎫 Events & Workshops — Priority Access</span>
+              <span>💳 Renewal Cashback — Earn Rewards</span>
+              <span>📢 Career Alerts — Alumni Hiring Updates</span>
+
+              {/* duplicate for smooth loop */}
+              <span>🎁 Alumni Store — Flat 20% OFF</span>
+              <span>🍽️ Partner Restaurants — Member Exclusive Deals</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 
 export default SmartICardForm;
-//working wihtout profile update

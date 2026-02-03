@@ -27,8 +27,12 @@ const Signup = () => {
     city: "",
     state: "",
     country: "",
-    profession: "",
     website: "",
+    profession: "",
+    industry: "",
+    company: "",
+    companySize: "",
+    field: "",
   });
 
   const handleChange = (e) => {
@@ -54,6 +58,12 @@ const Signup = () => {
       if (!form.state) return alert("Please enter State.");
       if (!form.country) return alert("Please enter Country.");
       if (!form.profession) return alert("Please select Profession.");
+      if (form.profession === "Entrepreneur") {
+        if (!form.industry) return alert("Please select Industry.");
+        if (!form.company) return alert("Please enter Company Name.");
+        if (!form.companySize) return alert("Please select Company Size.");
+      }
+
 
       const cred = await createUserWithEmailAndPassword(auth, form.email, form.password);
 
@@ -182,6 +192,49 @@ const Signup = () => {
             <option value="Employed">Employed</option>
             <option value="Entrepreneur">Entrepreneur</option>
           </select>
+          {form.profession === "Entrepreneur" && (
+            <>
+              <select name="industry" value={form.industry} onChange={handleChange}>
+                <option value="">INDUSTRY*</option>
+                <option value="IT">IT</option>
+                <option value="Finance">Finance</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="Education">Education</option>
+                <option value="Others">Others</option>
+              </select>
+
+              <input
+                type="text"
+                name="field"
+                placeholder="FIELD OF WORK*"
+                value={form.field}
+                onChange={handleChange}
+              />
+
+              <input
+                type="text"
+                name="company"
+                placeholder="COMPANY NAME*"
+                value={form.company}
+                onChange={handleChange}
+              />
+
+              <select
+                name="companySize"
+                value={form.companySize}
+                onChange={handleChange}
+              >
+                <option value="">COMPANY SIZE*</option>
+                <option value="1-10">1-10</option>
+                <option value="11-50">11-50</option>
+                <option value="51-200">51-200</option>
+                <option value="200+">200-1000</option>
+                <option value="1000+">1000+</option>
+              </select>
+            </>
+          )}
+
 
           <input
             type="text"

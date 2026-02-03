@@ -93,6 +93,21 @@ const Messaging = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+  const handler = async (e) => {
+    const uid = e.detail;
+    const user = allUsers.find((u) => u.uid === uid);
+    if (user) {
+      openChat(user);
+      setOpen(true);
+    }
+  };
+
+  window.addEventListener("openChat", handler);
+  return () => window.removeEventListener("openChat", handler);
+
+}, [allUsers]);
+
   /* ================= OPEN CHAT ================= */
   const openChat = async (user) => {
     if (!currentUser) return;

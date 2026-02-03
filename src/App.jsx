@@ -8,7 +8,10 @@ import {
   Navigate,
 } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase";
+import { auth, db } from "./firebase";
+import { ref, get } from "firebase/database";
+import PopupFirstTime from "./components/PopupFirstTime";
+
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -52,13 +55,37 @@ const AppContent = () => {
   const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
 
+  // useEffect(() => {
+  //   const unsub = onAuthStateChanged(auth, (u) => {
+  //     setUser(u);
+  //   });
+  //   return () => unsub();
+  // }, []);
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (u) => {
-      setUser(u);
-    });
-    return () => unsub();
-  }, []);
+  const unsub = onAuthStateChanged(auth, async (u) => {
+    setUser(u);
+
+    if (!u) return;
+
+    const snap = await get(ref(db, `users/${u.uid}`));
+
+    if (snap.exists()) {
+      const data = snap.val();
+
+      if (
+        (data.approved === true || data.role === "admin") &&
+        !data.firstLoginPopupShown
+      ) {
+        setShowPopup(true);
+      }
+    }
+  });
+
+  return () => unsub();
+}, []);
+
 
   useEffect(() => {
     setLoading(true);
@@ -70,6 +97,10 @@ const AppContent = () => {
     <>
       {loading && <Loading />}
       <Header />
+      {showPopup && (
+        <PopupFirstTime onClose={() => setShowPopup(false)} />
+      )}
+
 
       <div className="main-content">
         <Routes>

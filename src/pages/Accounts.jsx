@@ -63,7 +63,7 @@ const Accounts = () => {
       }
 
       toast("Login successful");
-      navigate(-1);
+      navigate("/");
     }catch (err) {
   console.error(err);
   if (err.code === "auth/wrong-password" || err.code === "auth/user-not-found") {
