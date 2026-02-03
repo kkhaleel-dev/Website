@@ -56,7 +56,6 @@ const AlumniDirectory = () => {
           branch: data[uid].branch || "",
           batch: data[uid].batch || "",
           profession: data[uid].profession || "",
-          email: data[uid].email || "",
           city: data[uid].city || "",
           state: data[uid].state || "",
           country: data[uid].country || "",
@@ -73,6 +72,11 @@ const AlumniDirectory = () => {
 
     fetchAlumni();
   }, [canViewAll]);
+
+  /* 💬 Messaging Event (Same as Entrepreneurs) */
+  const sendMessage = (uid) => {
+    window.dispatchEvent(new CustomEvent("openChat", { detail: uid }));
+  };
 
   if (loading) return <p className="alumni-loading">Loading alumni...</p>;
 
@@ -107,14 +111,12 @@ const AlumniDirectory = () => {
                     {member.city}, {member.state}, {member.country}
                   </p>
 
-                  {member.email && (
-                    <p>
-                      <strong>Email:</strong>{" "}
-                      <a href={`mailto:${member.email}`}>
-                        {member.email}
-                      </a>
-                    </p>
-                  )}
+                  <button
+                    className="send-message-btn"
+                    onClick={() => sendMessage(member.id)}
+                  >
+                    Send Message
+                  </button>
                 </>
               )}
             </div>

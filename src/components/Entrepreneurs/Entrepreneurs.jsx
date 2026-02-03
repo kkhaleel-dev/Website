@@ -12,54 +12,83 @@ const Entrepreneurs = () => {
   const [industryFilter, setIndustryFilter] = useState("");
   const [companyFilter, setCompanyFilter] = useState("");
   const [sizeFilter, setSizeFilter] = useState("");
-  const [fieldFilter, setFieldFilter] = useState("");      // NEW FIELD FILTER
-  const [websiteFilter, setWebsiteFilter] = useState("");  // NEW FIELD FILTER
+  const [fieldFilter, setFieldFilter] = useState("");
+  const [websiteFilter, setWebsiteFilter] = useState("");
 
   const [canViewAll, setCanViewAll] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  /* AUTH CHECK */
+  /* 🔐 AUTH CHECK */
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
-      if (!user) return;
+      if (!user) {
+        setCanViewAll(false);
+        return;
+      }
 
       const snap = await get(ref(db, `users/${user.uid}`));
       const data = snap.val();
 
       if (data?.approved === true || data?.role === "admin") {
         setCanViewAll(true);
+      } else {
+        setCanViewAll(false);
       }
     });
 
     return () => unsub();
   }, []);
 
-  /* FETCH ENTREPRENEURS */
+  /* 📦 FETCH ENTREPRENEURS */
   useEffect(() => {
     const fetchEntrepreneurs = async () => {
-      let snapshot = await get(ref(db, canViewAll ? "users" : "publicTeamPreview"));
+      try {
+        let snapshot = await get(
+          ref(db, canViewAll ? "users" : "publicTeamPreview")
+        );
 
-      if (!snapshot.exists()) return;
+        if (!snapshot.exists()) {
+          setEntrepreneurs([]);
+          setFiltered([]);
+          return;
+        }
 
-      const data = snapshot.val();
+        const data = snapshot.val();
 
-      const list = Object.keys(data)
-        .map((uid) => ({
-          id: uid,
-          ...data[uid],
-          profileImage: data[uid].profileImage || profileImg,
-        }))
-        .filter((u) => u.profession?.toLowerCase() === "entrepreneur");
+        // normalize field to always be array
+        const list = Object.keys(data)
+          .map((uid) => {
+            const person = data[uid];
+            let normalizedField = [];
+            if (person.field) {
+              normalizedField = Array.isArray(person.field)
+                ? person.field
+                : [person.field]; // convert string to array
+            }
+            return {
+              id: uid,
+              ...person,
+              field: normalizedField,
+              profileImage: person.profileImage || profileImg,
+            };
+          })
+          .filter(
+            (u) => u.profession?.toLowerCase() === "entrepreneur"
+          );
 
-      setEntrepreneurs(list);
-      setFiltered(list);
-      setLoading(false);
+        setEntrepreneurs(list);
+        setFiltered(list);
+      } catch (err) {
+        console.error("Entrepreneurs fetch error:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchEntrepreneurs();
   }, [canViewAll]);
 
-  /* FILTER LOGIC */
+  /* 🎯 FILTER LOGIC */
   useEffect(() => {
     let result = entrepreneurs;
 
@@ -76,7 +105,7 @@ const Entrepreneurs = () => {
 
     if (fieldFilter)
       result = result.filter((e) =>
-        e.field?.some((f) =>
+        e.field.some((f) =>
           f.toLowerCase().includes(fieldFilter.toLowerCase())
         )
       );
@@ -87,27 +116,41 @@ const Entrepreneurs = () => {
       );
 
     setFiltered(result);
-  }, [industryFilter, companyFilter, sizeFilter, fieldFilter, websiteFilter, entrepreneurs]);
+  }, [
+    industryFilter,
+    companyFilter,
+    sizeFilter,
+    fieldFilter,
+    websiteFilter,
+    entrepreneurs,
+  ]);
 
-  /* MESSAGE EVENT */
+  /* 💬 MESSAGE EVENT */
   const sendMessage = (uid) => {
     window.dispatchEvent(new CustomEvent("openChat", { detail: uid }));
   };
 
-  const industries = [...new Set(entrepreneurs.map(e => e.industry).filter(Boolean))];
-  const sizes = [...new Set(entrepreneurs.map(e => e.companySize).filter(Boolean))];
-  const fields = [...new Set(entrepreneurs.flatMap(e => e.field || []).filter(Boolean))]; // NEW FIELD OPTIONS
+  const industries = [
+    ...new Set(entrepreneurs.map((e) => e.industry).filter(Boolean)),
+  ];
+
+  const sizes = [
+    ...new Set(entrepreneurs.map((e) => e.companySize).filter(Boolean)),
+  ];
+
+  const fields = [
+    ...new Set(entrepreneurs.flatMap((e) => e.field || []).filter(Boolean)),
+  ];
 
   if (loading) return <p>Loading...</p>;
 
   return (
     <div className="entrepreneurs-page">
-
       <div className="entrepreneurs-header">
         <h2>CIT Alumni Entrepreneurs</h2>
 
+        {/* FILTER BAR */}
         <div className="entrepreneurs-filter-bar">
-
           <div className="filter-group">
             <label>Industry</label>
             <select
@@ -115,7 +158,9 @@ const Entrepreneurs = () => {
               onChange={(e) => setIndustryFilter(e.target.value)}
             >
               <option value="">All</option>
-              {industries.map(i => <option key={i}>{i}</option>)}
+              {industries.map((i) => (
+                <option key={i}>{i}</option>
+              ))}
             </select>
           </div>
 
@@ -135,11 +180,12 @@ const Entrepreneurs = () => {
               onChange={(e) => setSizeFilter(e.target.value)}
             >
               <option value="">All</option>
-              {sizes.map(s => <option key={s}>{s}</option>)}
+              {sizes.map((s) => (
+                <option key={s}>{s}</option>
+              ))}
             </select>
           </div>
 
-          {/* NEW FIELD FILTER */}
           <div className="filter-group">
             <label>Field</label>
             <select
@@ -147,7 +193,9 @@ const Entrepreneurs = () => {
               onChange={(e) => setFieldFilter(e.target.value)}
             >
               <option value="">All</option>
-              {fields.map(f => <option key={f}>{f}</option>)}
+              {fields.map((f) => (
+                <option key={f}>{f}</option>
+              ))}
             </select>
           </div>
 
@@ -159,12 +207,12 @@ const Entrepreneurs = () => {
               onChange={(e) => setWebsiteFilter(e.target.value)}
             />
           </div>
-
         </div>
       </div>
 
+      {/* ⭐ GRID */}
       <div className={`entrepreneurs-grid ${!canViewAll ? "blurred" : ""}`}>
-        {filtered.map(person => (
+        {filtered.map((person) => (
           <div className="entrepreneur-card" key={person.id}>
             <div className="entrepreneur-photo">
               <img src={person.profileImage} alt={person.fullname} />
@@ -173,11 +221,38 @@ const Entrepreneurs = () => {
             <div className="entrepreneur-info">
               <h3>{person.fullname}</h3>
 
-              {person.industry && <p><strong>Industry:</strong> {person.industry}</p>}
-              {person.companySize && <p><strong>Company Size:</strong> {person.companySize}</p>}
-              {person.company && <p><strong>Company:</strong> {person.company}</p>}
-              {person.field && person.field.length > 0 && <p><strong>Field:</strong> {person.field.join(", ")}</p>}
-              {person.website && <p><strong>Website:</strong> <a href={person.website} target="_blank" rel="noreferrer">{person.website}</a></p>}
+              {person.industry && (
+                <p>
+                  <strong>Industry:</strong> {person.industry}
+                </p>
+              )}
+
+              {person.companySize && (
+                <p>
+                  <strong>Company Size:</strong> {person.companySize}
+                </p>
+              )}
+
+              {person.company && (
+                <p>
+                  <strong>Company:</strong> {person.company}
+                </p>
+              )}
+
+              {Array.isArray(person.field) && person.field.length > 0 && (
+                <p>
+                  <strong>Field:</strong> {person.field.join(", ")}
+                </p>
+              )}
+
+              {person.website && (
+                <p>
+                  <strong>Website:</strong>{" "}
+                  <a href={person.website} target="_blank" rel="noreferrer">
+                    {person.website}
+                  </a>
+                </p>
+              )}
 
               {canViewAll && (
                 <button
@@ -191,6 +266,19 @@ const Entrepreneurs = () => {
           </div>
         ))}
       </div>
+
+      {/* ⭐ LOCKED OVERLAY */}
+      {!canViewAll && (
+        <div className="entrepreneurs-overlay">
+          <div className="overlay-box">
+            <h3>Want to view full entrepreneur details?</h3>
+            <p>Login / Signup & get approved to unlock full access</p>
+            <button onClick={() => (window.location.href = "/accounts")}>
+              Login / Signup
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
