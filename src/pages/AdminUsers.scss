@@ -1,28 +1,28 @@
+@import '../variables.scss';
+
 /* ===============================
    Admin User Management – Themed
    =============================== */
-
 .admin-users {
   min-height: 100vh;
-  background: #eef4fb;
+  background: $brand-primary-soft; // soft yellow background
   padding: 3rem 5%;
   font-family: "Inter", system-ui, sans-serif;
-  color: #1f2937;
+  color: $text-primary;
 
   h2 {
     font-size: 2.4rem;
     font-weight: 700;
     margin-bottom: 2rem;
-    color: #0a2148;
+    color: $text-on-yellow; // headings on yellow background
   }
 }
 
 /* ===============================
    Sections / Cards
    =============================== */
-
 .section {
-  background: #ffffff;
+  background: $card-bg;
   border-radius: 14px;
   padding: 1.8rem 2rem;
   margin-bottom: 2.5rem;
@@ -38,12 +38,12 @@
     font-size: 1.4rem;
     font-weight: 600;
     margin-bottom: 1.2rem;
-    color: #0a2148;
+    color: $accent-strong; // strong accent for titles
   }
 }
 
 .empty {
-  color: #64748b;
+  color: $text-secondary;
   font-size: 0.95rem;
   padding: 0.5rem 0;
 }
@@ -51,19 +51,18 @@
 /* ===============================
    Tables
    =============================== */
-
 table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  border: 1px solid #0a2148; /* core blue */
+  border: 1px solid $card-border;
   border-radius: 5px;
   overflow: hidden;
-  background: #ffffff;
+  background: $card-bg;
 }
 
 thead {
-  background: linear-gradient(90deg, #0a2148, #003366);
+  background: linear-gradient(90deg, $brand-primary, $brand-primary-hover);
 }
 
 th {
@@ -72,14 +71,14 @@ th {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   padding: 14px 12px;
-  color: #ffffff;
+  color: $common-text;
 }
 
 td {
   padding: 16px 12px;
   font-size: 0.95rem;
-  border-top: 1px solid #e5e7eb;
-  color: #374151;
+  border-top: 1px solid $card-border;
+  color: $text-primary;
 }
 
 tbody tr {
@@ -87,13 +86,12 @@ tbody tr {
 }
 
 tbody tr:hover {
-  background: #f1f6fd;
+  background: #f8e8b352;
 }
 
 /* ===============================
    Cells
    =============================== */
-
 .actions {
   display: flex;
   gap: 10px;
@@ -102,7 +100,7 @@ tbody tr:hover {
 
 .membership {
   font-weight: 600;
-  color: #2563eb;
+  color: $brand-primary;
   cursor: pointer;
 
   &:hover {
@@ -113,7 +111,6 @@ tbody tr:hover {
 /* ===============================
    Buttons
    =============================== */
-
 button {
   padding: 7px 16px;
   font-size: 0.85rem;
@@ -126,33 +123,33 @@ button {
 
 /* Approve */
 .btn-approve {
-  background: linear-gradient(135deg, #16a34a, #22c55e);
-  color: #ffffff;
+  background: linear-gradient(135deg, $brand-primary, $brand-primary-hover);
+  color: $common-text;
 
   &:hover {
-    background: linear-gradient(135deg, #15803d, #16a34a);
+    background: linear-gradient(135deg, $brand-primary-hover, $brand-primary);
     transform: translateY(-1px);
   }
 }
 
 /* Reject */
 .btn-reject {
-  background: linear-gradient(135deg, #dc2626, #ef4444);
-  color: #ffffff;
+  background: #c70202;
+  color: $common-text;
 
   &:hover {
-    background: linear-gradient(135deg, #b91c1c, #dc2626);
+    background: #f74141;
     transform: translateY(-1px);
   }
 }
 
 /* Remove */
 .btn-remove {
-  background: linear-gradient(135deg, #0a2148, #003366);
-  color: #ffffff;
+  background: #c70202;
+  color: $common-text;
 
   &:hover {
-    background: linear-gradient(135deg, #003366, #0a2148);
+    background: #f74141;
     transform: translateY(-1px);
   }
 }
@@ -160,18 +157,16 @@ button {
 /* ===============================
    Loading State
    =============================== */
-
 .admin-loading {
   text-align: center;
   font-size: 1rem;
   padding: 3rem;
-  color: #64748b;
+  color: $text-secondary;
 }
 
 /* ===============================
    Mobile Responsive
    =============================== */
-
 @media (max-width: 768px) {
   table,
   thead,
@@ -186,7 +181,7 @@ button {
   }
 
   tbody tr {
-    background: #ffffff;
+    background: $card-bg;
     border-radius: 14px;
     margin-bottom: 1.4rem;
     padding: 1.2rem;
@@ -205,7 +200,7 @@ button {
   td::before {
     content: attr(data-label);
     font-weight: 600;
-    color: #64748b;
+    color: $text-secondary;
   }
 
   .actions {
@@ -229,6 +224,10 @@ button {
     font-size: 1.25rem;
   }
 }
+
+/* ===============================
+   Toggle Switch
+   =============================== */
 .toggle-switch {
   position: relative;
   display: inline-block;
@@ -245,7 +244,7 @@ button {
     position: absolute;
     cursor: pointer;
     inset: 0;
-    background-color: #ccc;
+    background-color: $brand-primary-light;
     transition: 0.3s;
     border-radius: 22px;
 
@@ -256,14 +255,14 @@ button {
       width: 18px;
       left: 2px;
       bottom: 2px;
-      background-color: white;
+      background-color: $common-text;
       transition: 0.3s;
       border-radius: 50%;
     }
   }
 
   input:checked + .slider {
-    background-color: #28a745;
+    background-color: $brand-primary;
   }
 
   input:checked + .slider:before {
@@ -271,6 +270,9 @@ button {
   }
 }
 
+/* ===============================
+   Pagination
+   =============================== */
 .table-wrapper {
   max-height: 550px;
   overflow-y: auto;
@@ -286,12 +288,12 @@ button {
   button {
     padding: 6px 12px;
     border-radius: 6px;
-    background: #e5e7eb;
+    background: $brand-primary-light;
     font-size: 0.8rem;
 
     &.active {
-      background: #0a2148;
-      color: #fff;
+      background: $brand-primary;
+      color: $common-text;
       font-weight: 600;
     }
 

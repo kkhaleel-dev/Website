@@ -1,13 +1,15 @@
+@import '../../../variables.scss';
+
 .chennai-chapter-page {
   padding: 3rem 5%;
-  background: #f4f7fb;
+  background: $brand-primary-soft; // was #f4f7fb
   min-height: 100vh;
 }
 
 /* HERO */
 .chapter-hero {
-  background: #0a2148;
-  color: #fff;
+  background: #fce28d; // was #0a2148
+  color: $black;
   padding: 2.5rem;
   border-radius: 14px;
   margin-bottom: 2.5rem;
@@ -27,12 +29,12 @@
 .no-members {
   text-align: center;
   font-weight: 600;
-  color: #555;
+  color: $text-secondary; // was #555
 }
 
 /* LOGIN LOCK */
 .locked-box {
-  background: #fff;
+  background: $card-bg; // was #fff
   padding: 2rem;
   text-align: center;
   border-radius: 12px;
@@ -40,8 +42,8 @@
 
   button {
     margin-top: 1rem;
-    background: #105bbf;
-    color: #fff;
+    background: $brand-primary; // was #105bbf
+    color: $white;
     border: none;
     padding: 0.7rem 1.4rem;
     border-radius: 8px;
@@ -62,7 +64,7 @@
 
 /* CARD */
 .member-card {
-  background: #ffffff;
+  background: $card-bg; // was #ffffff
   border-radius: 14px;
   padding: 1.5rem;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
@@ -75,20 +77,20 @@
   text-align: center;
 
   h3 {
-    color: #0a2148;
+    color: $text-primary; // was #0a2148
     margin-bottom: 0.3rem;
     font-size: 1.05rem;
   }
 
   .profession {
     font-size: 0.9rem;
-    color: #555;
+    color: $text-secondary; // was #555
     margin-bottom: 0.6rem;
   }
 
   .member-id {
     font-weight: 600;
-    color: #105bbf;
+    color: $brand-primary; // was #105bbf
     margin-bottom: 0.8rem;
   }
 
@@ -99,7 +101,7 @@
   .contact a,
   .contact p {
     font-size: 0.85rem;
-    color: #0a2148;
+    color: $text-primary; // was #0a2148
     word-break: break-word;
   }
 }

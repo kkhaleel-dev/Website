@@ -1,16 +1,19 @@
+@import "../../variables.scss";
+
 .alumni-nearby-page {
   padding: 1.5rem 3%;
   min-height: 100vh;
-  background: #f9f9f9;
+  background: $brand-primary-soft; // was #f9f9f9
 }
 
+/* Header */
 .map-header {
   max-width: 1200px;
   margin-bottom: 1rem;
 
   h2 {
     font-size: 1.8rem;
-    color: #0a2148;
+    color: $text-primary; // was #0a2148
   }
 }
 
@@ -25,24 +28,30 @@
   padding: 6px 10px;
   border-radius: 12px;
   text-align: center;
-  color: #000;
+  color: $text-primary; // was #000
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-  border: 2px solid rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba($white, 0.9); // was rgba(255,255,255,0.9)
 }
 
 .city-name {
   font-size: 12px;
   font-weight: 600;
+  color: $black; // consistent text
 }
 
 .city-count {
   font-size: 14px;
   font-weight: bold;
+  color: $black; // highlight count with accent color
 }
 
 /* Popup */
 .popup-content {
   width: 250px;
+  background: $card-bg; // card background
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  padding: 0.8rem;
 }
 
 .popup-list {
@@ -53,16 +62,11 @@
 .popup-item {
   font-size: 13px;
   padding: 4px 0;
-  border-bottom: 1px solid #eee;
-}
+  border-bottom: 1px solid $card-border; // was #eee
+  color: $text-secondary;
 
-.popup-item {
-  font-size: 13px;
-  padding: 4px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.popup-item .batch {
-  color: #555;
-  font-size: 12px;
+  .batch {
+    color: $text-muted; // was #555
+    font-size: 12px;
+  }
 }

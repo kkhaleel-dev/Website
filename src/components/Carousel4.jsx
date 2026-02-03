@@ -102,7 +102,7 @@ const Carousel4 = () => {
 
   return (
     <div className="carousel4-wrapper">
-      <h2 className="carousel4-title">CIT Alumni Award 2025</h2>
+      <h2 className="carousel4-title">Chennai Chapter EC Members</h2>
 
       <div className="carousel4-container" ref={containerRef}>
         <div

@@ -38,7 +38,12 @@ const AdminUsers = () => {
         usersArr.filter(u => (u.approved === true || u.approved === "true") && (u.role === "user" || u.role === undefined))
       );
 
-      setAdmins(usersArr.filter(u => u.role === "admin"));
+      // setAdmins(usersArr.filter(u => u.role === "admin"));
+      setAdmins(
+        usersArr.filter(
+          u => u.role === "admin" && u.isSuperAdmin !== true
+        )
+      );
 
       const currentUid = auth.currentUser?.uid;
       setIsSuperAdmin(currentUid && usersData[currentUid]?.isSuperAdmin === true);

@@ -1,7 +1,9 @@
+@import '../../variables.scss';
+
 .mentorship-page {
   min-height: 100vh;
   padding: 2rem 5%;
-  background: #f5f7fa;
+  background: $brand-primary-soft; // soft yellow background from variables
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,14 +11,14 @@
 
   h2 {
     font-size: 2rem;
-    color: #0a2148;
+    color: $text-on-yellow; // heading text on yellow background
     margin-bottom: 0.5rem;
     text-align: center;
   }
 
   p {
     font-size: 1rem;
-    color: #333;
+    color: $text-primary; // dark text for readability
     text-align: center;
     max-width: 700px;
     margin-bottom: 2rem;
@@ -31,18 +33,18 @@
   }
 
   .mentor-card {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    background: $card-bg; // card background
+    border-radius: 14px;
+    padding: 1.8rem 1.5rem;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 
     &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.12);
     }
 
     .mentor-photo {
@@ -51,63 +53,51 @@
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 1rem;
-      border: 2px solid #105bbf;
+      border: 3px solid $brand-primary; // primary brand color border
     }
 
     h3 {
       font-size: 1.3rem;
-      color: #0a2148;
+      color: $accent-strong; // strong accent color for name
       margin-bottom: 0.5rem;
       text-align: center;
+      font-weight: 600;
     }
 
     .mentor-expertise {
       font-size: 0.95rem;
-      color: #555;
+      color: $text-secondary; // secondary text for expertise
       text-align: center;
       margin-bottom: 1rem;
     }
 
     .mentor-contact {
       font-size: 0.95rem;
-      color: #fff;
-      background: #105bbf;
+      color: $common-text; // white text
+      background: $brand-primary; // primary brand button
       padding: 0.5rem 1rem;
       border-radius: 8px;
       text-decoration: none;
       transition: 0.3s background;
 
       &:hover {
-        background: #0d4691;
+        background: $brand-primary-hover; // hover color from variables
       }
     }
   }
 }
 
-/* Responsive */
+/* ================= TABLET ================= */
 @media (max-width: 768px) {
   .mentorship-page {
     padding: 2rem 3%;
+
     .mentors-grid {
       gap: 1.5rem;
     }
-    .mentor-card {
-      padding: 1.2rem;
-    }
-  }
-}
 
-@media (max-width: 480px) {
-  .mentorship-page {
-    padding: 1.5rem 2%;
-    h2 {
-      font-size: 1.6rem;
-    }
-    p {
-      font-size: 0.95rem;
-    }
     .mentor-card {
-      padding: 1rem;
+      padding: 1.5rem 1.3rem;
 
       h3 {
         font-size: 1.2rem;
@@ -116,9 +106,36 @@
       .mentor-expertise {
         font-size: 0.9rem;
       }
+    }
+  }
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 480px) {
+  .mentorship-page {
+    padding: 1.5rem 2%;
+
+    h2 {
+      font-size: 1.6rem;
+    }
+
+    p {
+      font-size: 0.95rem;
+    }
+
+    .mentor-card {
+      padding: 1.2rem;
+
+      h3 {
+        font-size: 1.1rem;
+      }
+
+      .mentor-expertise {
+        font-size: 0.85rem;
+      }
 
       .mentor-contact {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         padding: 0.45rem 0.8rem;
       }
 

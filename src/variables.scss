@@ -1,7 +1,31 @@
-$common-bg: #0d1f1a;
+// $common-bg: #fdd13e;
+$common-bg: #ffce2c;
 $white: white;
 $black: black;
 $common-text: #ffffff;
-$options-card-bg: #1a4135;
-$option-hover: #06110e;
+$options-card-bg: #ffffff;
+$option-hover: #fcd452;
+$option-hover-1: #fdefbf;
+$option-hover-2: #ffeeb7;
 $maroon: maroon;
+$card-btn-common-bg: #fac928;
+
+
+// ===== Brand Extensions (Yellow-based, Professional) =====
+$brand-primary: $common-bg;              // main CIT yellow
+$brand-primary-soft: $option-hover-2;    // soft background yellow
+$brand-primary-hover: $option-hover;     // hover yellow
+$brand-primary-light: $option-hover-1;   // card hover surface
+
+// Text system
+$text-primary: #2b2b2b;
+$text-secondary: #555555;
+$text-muted: #777777;
+$text-on-yellow: #1f1f1f;
+
+// Card system
+$card-bg: $options-card-bg;
+$card-border: $option-hover-2;
+
+// Accent
+$accent-strong: #c89b00; // darker yellow (professional, NOT orange)

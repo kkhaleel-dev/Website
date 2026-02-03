@@ -160,26 +160,32 @@ const Accounts = () => {
       </div>
 
       {/* ✅ OFFERS SECTION (NEW) */}
-      <div className="accounts-offers">
-        <h3>Exclusive Offers for CIT Alumni</h3>
-        <p className="offers-sub">
-          Fast signup & approval unlocks these benefits for verified alumni
-        </p>
+      {/* ✅ EXCLUSIVE BENEFITS (SINGLE CONTAINER) */}
+<div className="accounts-offers">
+  <h3>Exclusive Alumni Benefits</h3>
 
-        <ul className="offers-list">
-          <li>🎁 Alumni merchandise discounts</li>
-          <li>🍽️ Partner restaurant special pricing</li>
-          <li>🎫 Priority access to events & reunions</li>
-          <li>💳 Smart Card–based rewards & benefits</li>
-        </ul>
+  <div className="offers-ticker">
+    <div className="ticker-track">
+      <span>🎁 Alumni Store — Flat 20% OFF</span>
+      <span>🍽️ Partner Restaurants — Member Deals</span>
+      <span>🎫 Events & Reunions — Priority Access</span>
+      <span>💳 Smart Card Rewards & Cashback</span>
+      <span>📢 Career Alerts — Alumni Hiring</span>
 
-        <button
-          className="offers-cta"
-          onClick={() => navigate("/signup")}
-        >
-          Signup & Get Approved
-        </button>
-      </div>
+      {/* duplicate for smooth loop */}
+      <span>🎁 Alumni Store — Flat 20% OFF</span>
+      <span>🍽️ Partner Restaurants — Member Deals</span>
+    </div>
+  </div>
+
+  <button
+    className="offers-cta"
+    onClick={() => navigate("/signup")}
+  >
+    Signup & Get Approved
+  </button>
+</div>
+
     </div>
   );
 };

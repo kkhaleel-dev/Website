@@ -1,7 +1,9 @@
+@import "../../variables.scss";
+
 .transcripts-page {
   min-height: 100vh;
   padding: 2rem 5%;
-  background: #f5f7fa;
+  background: lighten($brand-primary-soft, 35%); // light background using variables
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,14 +11,14 @@
 
   h2 {
     font-size: 2rem;
-    color: #0a2148;
+    color: $text-primary; // dark text
     margin-bottom: 0.5rem;
     text-align: center;
   }
 
   p {
     font-size: 1rem;
-    color: #333;
+    color: $text-secondary;
     text-align: center;
     max-width: 600px;
     margin-bottom: 2rem;
@@ -25,10 +27,10 @@
   .transcripts-form {
     width: 100%;
     max-width: 600px;
-    background: #fff;
+    background: $card-bg; // white card background
     padding: 2rem;
     border-radius: 12px;
-    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
@@ -36,21 +38,22 @@
     .form-group {
       display: flex;
       flex-direction: column;
+
       label {
         font-weight: 500;
         margin-bottom: 0.5rem;
-        color: #0a2148;
+        color: $text-primary;
       }
 
       input {
         padding: 0.6rem 0.8rem;
-        border: 1px solid #ccc;
+        border: 1px solid $card-border; // card border from variables
         border-radius: 8px;
         font-size: 1rem;
         transition: 0.2s border-color;
 
         &:focus {
-          border-color: #105bbf;
+          border-color: $brand-primary; // focus border
           outline: none;
         }
       }
@@ -59,8 +62,8 @@
     .submit-btn {
       margin-top: 1rem;
       padding: 0.8rem 1rem;
-      background: #105bbf;
-      color: #fff;
+      background: $brand-primary; // yellow button
+      color: $common-text; // white text
       font-size: 1rem;
       font-weight: 500;
       border: none;
@@ -69,26 +72,26 @@
       transition: 0.3s background;
 
       &:hover {
-        background: #0d4691;
+        background: $brand-primary-hover; // hover yellow
       }
     }
   }
 
   .success-message {
-    background: #e6f4ea;
+    background: lighten($brand-primary-light, 60%); // soft yellow-greenish success
     padding: 2rem;
     border-radius: 12px;
     text-align: center;
     max-width: 600px;
 
     h3 {
-      color: #105bbf;
+      color: $brand-primary; // main yellow heading
       margin-bottom: 1rem;
       font-size: 1.5rem;
     }
 
     p {
-      color: #333;
+      color: $text-secondary; // dark text
       font-size: 1rem;
     }
   }
@@ -98,6 +101,7 @@
 @media (max-width: 768px) {
   .transcripts-page {
     padding: 2rem 3%;
+
     .transcripts-form,
     .success-message {
       padding: 1.5rem;
@@ -108,9 +112,11 @@
 @media (max-width: 480px) {
   .transcripts-page {
     padding: 1.5rem 2%;
+
     h2 {
       font-size: 1.6rem;
     }
+
     p {
       font-size: 0.95rem;
     }

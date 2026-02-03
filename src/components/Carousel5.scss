@@ -20,7 +20,7 @@
       font-size: 32px;
       margin: 0;
       font-weight: 700;
-      color: $common-bg;
+      color: $black;
 
       @media (max-width: 768px) {
         font-size: 24px;
@@ -127,7 +127,7 @@
     flex: 1;
 
     .event-title {
-      color: $common-bg;
+      color: $black;
       font-size: 17px;
       font-weight: 600;
       margin: 0;
@@ -150,7 +150,7 @@
     .event-btn {
       margin-top: auto;
       padding: 9px;
-      background: $options-card-bg !important;
+      background: $card-btn-common-bg !important;
       color: $white;
       border: none;
       border-radius: 6px;
@@ -158,7 +158,7 @@
       cursor: pointer;
 
       &:hover {
-        background: $common-bg !important;
+        background: $option-hover !important;
       }
     }
   }

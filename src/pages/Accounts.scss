@@ -6,9 +6,10 @@
 }
 
 .accounts-hero {
-  background: $common-bg;
+  background: $card-btn-common-bg;
   padding: 15px;
   text-align: center;
+border-top: 1px solid rgba(255, 255, 255, 0.35);
 
   h1 {
     color: white;
@@ -86,7 +87,7 @@
   }
 
   .secondary {
-    background: $option-hover;
+    background: $common-bg;
   }
 }
 
@@ -94,70 +95,70 @@
 /* OFFERS SECTION (NEW) */
 /* ============================= */
 
-.accounts-offers {
-  max-width: 1100px;
-  margin: 20px auto 60px;
-  padding: 30px;
-  background: linear-gradient(135deg, #f4f7ff, #ffffff);
-  border-radius: 14px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  text-align: center;
+// .accounts-offers {
+//   max-width: 1100px;
+//   margin: 20px auto 60px;
+//   padding: 30px;
+//   background: linear-gradient(135deg, #f4f7ff, #ffffff);
+//   border-radius: 14px;
+//   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+//   text-align: center;
 
-  h3 {
-    font-size: 24px;
-    font-weight: 700;
-    color: $common-bg;
-    margin-bottom: 8px;
-  }
+//   h3 {
+//     font-size: 24px;
+//     font-weight: 700;
+//     color: $common-bg;
+//     margin-bottom: 8px;
+//   }
 
-  .offers-sub {
-    font-size: 15px;
-    color: #555;
-    margin-bottom: 20px;
-  }
+//   .offers-sub {
+//     font-size: 15px;
+//     color: #555;
+//     margin-bottom: 20px;
+//   }
 
-  .offers-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 25px;
+//   .offers-list {
+//     list-style: none;
+//     padding: 0;
+//     margin: 0 0 25px;
 
-    li {
-      font-size: 16px;
-      color: #0a2148;
-      margin-bottom: 10px;
-      font-weight: 500;
-    }
-  }
+//     li {
+//       font-size: 16px;
+//       color: #0a2148;
+//       margin-bottom: 10px;
+//       font-weight: 500;
+//     }
+//   }
 
-  .offers-cta {
-    background: $common-bg;
-    color: #fff;
-    border: none;
-    padding: 12px 26px;
-    font-size: 16px;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
+//   .offers-cta {
+//     background: $common-bg;
+//     color: #fff;
+//     border: none;
+//     padding: 12px 26px;
+//     font-size: 16px;
+//     font-weight: 600;
+//     border-radius: 8px;
+//     cursor: pointer;
+//     transition: background 0.3s ease, transform 0.2s ease;
 
-    &:hover {
-      background: $option-hover;
-      transform: translateY(-2px);
-    }
-  }
+//     &:hover {
+//       background: $option-hover;
+//       transform: translateY(-2px);
+//     }
+//   }
 
-  @media (max-width: 768px) {
-    padding: 20px 20px;
+//   @media (max-width: 768px) {
+//     padding: 20px 20px;
 
-    h3 {
-      font-size: 20px;
-    }
+//     h3 {
+//       font-size: 20px;
+//     }
 
-    .offers-list li {
-      font-size: 14px;
-    }
-  }
-}
+//     .offers-list li {
+//       font-size: 14px;
+//     }
+//   }
+// }
 
 .password-wrapper {
   position: relative;
@@ -180,5 +181,72 @@
 
   &:hover {
     color: #003366;
+  }
+}
+
+.accounts-offers {
+  max-width: 1100px;
+  margin: 20px auto 60px;
+  padding: 22px 24px;
+  border-radius: 14px;
+  background: #f4f7e6;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  text-align: center;
+
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 0.6rem;
+  }
+
+  .offers-ticker {
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 0.65rem 0;
+    margin-bottom: 0.9rem;
+  }
+
+  .ticker-track {
+    display: inline-flex;
+    align-items: center;
+    gap: 2.8rem;
+    white-space: nowrap;
+    animation: ticker-scroll 28s linear infinite;
+  }
+
+  .ticker-track span {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $text-secondary;
+  }
+
+  .offers-cta {
+    background: $brand-primary;
+    color: $text-on-yellow;
+    border: none;
+    padding: 0.7rem 1.8rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.2s ease;
+
+    &:hover {
+      background: $brand-primary-hover;
+      transform: translateY(-1px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 16px;
+
+    h3 {
+      font-size: 1rem;
+    }
+
+    .ticker-track span {
+      font-size: 0.85rem;
+    }
   }
 }

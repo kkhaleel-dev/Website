@@ -132,7 +132,7 @@ const SmartICardForm = () => {
     }
   };
 
-  return (
+  return (<>
     <div className="smart-i-card-container">
       <h2>Smart ID Card</h2>
 
@@ -182,16 +182,6 @@ const SmartICardForm = () => {
             <p className="website">www.citacc.com</p>
           </div>
         </div>
-      </div>
-
-      <div className="smart-offers">
-        <h3>Exclusive Offers for Approved Smart Card Users</h3>
-        <ul>
-          <li>🎁 Discount on alumni merchandise</li>
-          <li>🍽️ Special discounts at partner restaurants</li>
-          <li>🎫 Early access to workshops & events</li>
-          <li>💳 Cashback on annual membership renewal</li>
-        </ul>
       </div>
 
       {editOpen && (
@@ -353,6 +343,26 @@ const SmartICardForm = () => {
         </div>
       )}
     </div>
+       <div className="smart-offers">
+  <h3>Membership Offers</h3>
+
+  <div className="offers-container">
+    <div className="offers-ticker">
+      <div className="ticker-track">
+        <span>🎁 Alumni Store — Flat 20% OFF</span>
+        <span>🍽️ Partner Restaurants — Member Exclusive Deals</span>
+        <span>🎫 Events & Workshops — Priority Access</span>
+        <span>💳 Renewal Cashback — Earn Rewards</span>
+        <span>📢 Career Alerts — Alumni Hiring Updates</span>
+
+        {/* duplicate for smooth loop */}
+        <span>🎁 Alumni Store — Flat 20% OFF</span>
+        <span>🍽️ Partner Restaurants — Member Exclusive Deals</span>
+      </div>
+    </div>
+  </div>
+</div>
+</>
   );
 };
 

@@ -1,12 +1,13 @@
+@import "../variables.scss";
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap');
 
 .profile-page {
   min-height: 100vh;
   width: 100%;
   padding: 4rem 6vw;
-  background: linear-gradient(135deg, #667eea, #764ba2); /* professional gradient */
+  background: linear-gradient(135deg, darken($brand-primary, 5%), darken($brand-primary, 12%)); // professional gradient using $brand-primary
   font-family: 'Roboto', sans-serif;
-  color: #fff;
+  color: $white; // text color from variables
 }
 
 /* MAIN LAYOUT */
@@ -27,8 +28,8 @@
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 16px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+  border: 3px solid rgba($white, 0.3); // using $white variable
+  box-shadow: 0 15px 30px rgba(190, 188, 188, 0.25);
 }
 
 /* RIGHT CONTENT */
@@ -40,7 +41,7 @@
   font-family: 'Playfair Display', serif;
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 700;
-  color: #fff;
+  color: $white; // text color
   margin-bottom: 0.75rem;
 }
 
@@ -49,13 +50,13 @@
   flex-wrap: wrap;
   gap: 1.5rem;
   font-weight: 500;
-  color: #e0e0ff;
+  color: $brand-primary-light; // light yellow text for meta
   margin-bottom: 0.75rem;
   font-size: clamp(0.9rem, 2vw, 1.2rem);
 }
 
 .profile-location {
-  color: #d0d0ff;
+  color: $brand-primary-soft; // subtle soft yellow
   margin-bottom: 2rem;
   font-size: clamp(0.85rem, 1.8vw, 1.1rem);
 }
@@ -63,7 +64,7 @@
 .profile-bio h3 {
   font-family: 'Playfair Display', serif;
   font-size: clamp(1.4rem, 3vw, 1.8rem);
-  color: #fff;
+  color: $white;
   margin-bottom: 0.75rem;
 }
 
@@ -71,7 +72,7 @@
   font-size: clamp(1rem, 2.2vw, 1.2rem);
   line-height: 1.8;
   max-width: 800px;
-  color: #f0f0ff;
+  color: lighten($white, 8%); // subtle off-white for paragraphs
 }
 
 /* MOBILE */

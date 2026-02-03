@@ -1,7 +1,9 @@
+@import '../../variables.scss';
+
 .visit-alma-mater-page {
   min-height: 100vh;
   padding: 2rem 5%;
-  background: #f5f7fa;
+  background: $brand-primary-soft; // soft yellow background
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,14 +11,14 @@
 
   h2 {
     font-size: 2rem;
-    color: #0a2148;
+    color: $text-on-yellow; // heading text on yellow background
     margin-bottom: 0.5rem;
     text-align: center;
   }
 
   p {
     font-size: 1rem;
-    color: #333;
+    color: $text-primary; // dark text for readability
     text-align: center;
     max-width: 800px;
     margin-bottom: 2rem;
@@ -32,17 +34,17 @@
   }
 
   .visit-card {
-    background: #ffffff;
-    border-radius: 12px;
+    background: $card-bg; // card background from variables
+    border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
     display: flex;
     flex-direction: column;
 
     &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.12);
     }
 
     .visit-image img {
@@ -52,39 +54,39 @@
     }
 
     .visit-content {
-      padding: 1rem 1.2rem;
+      padding: 1.2rem 1.5rem;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
 
       h3 {
-        font-size: 1.2rem;
-        color: #0a2148;
+        font-size: 1.25rem;
+        color: $accent-strong; // accent color for card titles
       }
 
       p {
         font-size: 0.95rem;
-        color: #555;
+        color: $text-secondary; // secondary text for description
       }
     }
   }
 
   .visit-cta {
     font-size: 1rem;
-    background: #105bbf;
-    color: #fff;
+    background: $brand-primary; // primary brand color button
+    color: $common-text; // white text
     padding: 0.7rem 1.5rem;
     border-radius: 8px;
     text-decoration: none;
     transition: background 0.3s;
 
     &:hover {
-      background: #0d4691;
+      background: $brand-primary-hover; // hover state from variables
     }
   }
 }
 
-/* Responsive */
+/* ================= TABLET ================= */
 @media (max-width: 768px) {
   .visit-alma-mater-page {
     padding: 2rem 3%;
@@ -95,18 +97,21 @@
 
     .visit-card {
       .visit-content {
-        padding: 0.8rem 1rem;
+        padding: 1rem 1.2rem;
       }
     }
   }
 }
 
+/* ================= MOBILE ================= */
 @media (max-width: 480px) {
   .visit-alma-mater-page {
     padding: 1.5rem 2%;
+
     h2 {
       font-size: 1.6rem;
     }
+
     p {
       font-size: 0.95rem;
     }
@@ -114,9 +119,11 @@
     .visit-card {
       .visit-content {
         padding: 0.7rem 0.9rem;
+
         h3 {
           font-size: 1.1rem;
         }
+
         p {
           font-size: 0.9rem;
         }

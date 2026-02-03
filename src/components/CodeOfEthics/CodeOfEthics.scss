@@ -1,8 +1,9 @@
 @import '../../variables.scss';
 
 .code-of-ethics-page {
+    border-top: 1px solid #ffc4008e;
   min-height: 100vh;
-  background: #eef4fb;
+  background: $brand-primary-soft;
   padding-bottom: 4rem;
   font-family: "Inter", sans-serif;
 }
@@ -11,14 +12,22 @@
 .ethics-hero {
   text-align: center;
   padding: 2.8rem 5% 2.8rem;
-  background: linear-gradient(180deg, #225c4a 0%, #1f4d40 35%);
-  color: #fff;
+
+  /* 🔹 very soft gradient (almost flat) */
+  background: linear-gradient(
+    180deg,
+    $brand-primary 0%,
+    $brand-primary-soft 65%
+  );
+
+  color: $text-on-yellow;
 
   h2 {
     font-size: 2.6rem;
     font-weight: 700;
     margin-bottom: 0.9rem;
     letter-spacing: 0.3px;
+    color: $text-on-yellow;
   }
 
   p {
@@ -27,6 +36,7 @@
     max-width: 780px;
     margin: 0 auto;
     line-height: 1.65;
+    color: $text-on-yellow;
   }
 }
 
@@ -42,11 +52,12 @@
 
 /* ================= CARD ================= */
 .ethics-card {
-  background: #ffffff;
+  background: $card-bg;
   border-radius: 14px;
   padding: 2.2rem 2rem;
   position: relative;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+  border: 1px solid $card-border;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 
   &:hover {
@@ -58,8 +69,8 @@
     position: absolute;
     top: -16px;
     left: -16px;
-    background: $common-bg;
-    color: #fff;
+    background: $brand-primary;
+    color: $text-on-yellow;
     padding: 6px 14px;
     border-radius: 20px;
     font-weight: 600;
@@ -68,7 +79,7 @@
 
   h3 {
     font-size: 1.4rem;
-    color: $common-bg;
+    color: $accent-strong;
     margin-bottom: 0.75rem;
     font-weight: 600;
   }
@@ -76,7 +87,7 @@
   p {
     font-size: 1.02rem;
     line-height: 1.7;
-    color: #444;
+    color: $text-secondary;
   }
 }
 

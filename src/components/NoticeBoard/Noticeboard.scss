@@ -3,7 +3,11 @@
 .noticeboard-page {
   min-height: 100vh;
   width: 100%;
-  background-color: #eaf8f5;
+  background: linear-gradient(
+    180deg,
+    $brand-primary-soft 0%,
+    $white 45%
+  );
   padding: 1px 0; // prevents margin-collapse issues
 }
 
@@ -19,11 +23,15 @@
     text-align: center;
     font-size: 2rem;
     margin-bottom: 2rem;
-    color: $common-bg;
+    color: $text-primary;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
+
+    svg {
+      color: $brand-primary;
+    }
   }
 
   .noticeboard-grid {
@@ -33,16 +41,20 @@
   }
 
   .notice-card {
-    background: linear-gradient(145deg, #ffffff, #f2f7f8);
+    background: linear-gradient(
+      145deg,
+      $card-bg,
+      $brand-primary-soft
+    );
     border-radius: 12px;
     padding: 1.5rem;
+    border-left: 5px solid $brand-primary;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    border-left: 5px solid $common-bg;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 
     &:hover {
       transform: translateY(-5px);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
     }
 
     .notice-header {
@@ -53,22 +65,26 @@
 
       h3 {
         font-size: 1.3rem;
-        color: $common-bg;
         font-weight: 600;
+        color: $accent-strong;
       }
 
       .notice-date {
         font-size: 0.9rem;
-        color: $common-bg;
+        color: $text-muted;
         display: flex;
         align-items: center;
         gap: 0.3rem;
+
+        svg {
+          color: $brand-primary;
+        }
       }
     }
 
     p {
       font-size: 1rem;
-      color: #333;
+      color: $text-secondary;
       margin-bottom: 1rem;
       line-height: 1.5;
     }
@@ -76,16 +92,17 @@
     .notice-link {
       display: inline-block;
       font-size: 0.95rem;
-      color: #ffffff;
-      background-color: $options-card-bg;
+      color: $text-on-yellow;
+      background-color: $brand-primary;
       padding: 0.5rem 1rem;
       border-radius: 6px;
       text-decoration: none;
       font-weight: 500;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s ease, transform 0.2s ease;
 
       &:hover {
-        background-color: $common-bg;
+        background-color: $brand-primary-hover;
+        transform: translateY(-1px);
       }
     }
   }

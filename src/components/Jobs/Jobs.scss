@@ -2,13 +2,13 @@
 
 .jobs-page {
   padding: 2.5rem;
-  background: #f5f7fb;
+  background: $brand-primary-soft; // was #f5f7fb
   min-height: 100vh;
 
   h2 {
     font-size: 1.8rem;
     font-weight: 600;
-    color: #1f2937;
+    color: $text-primary; // was #1f2937
   }
 }
 
@@ -25,14 +25,18 @@
   font-size: 13px;
   top: 5rem;
   right: 1.3rem;
-  background: $common-bg;
-  color: #fff;
+  background: $brand-primary; // was $common-bg
+  color: $white;
   padding: 0.7rem 1.3rem;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   z-index: 1002;
   transition: all 0.25s ease;
+
+  &:hover {
+    background: $brand-primary-hover; // hover effect
+  }
 }
 
 /* 📦 Jobs Grid */
@@ -44,13 +48,11 @@
 
 /* 📄 Job Card */
 .job-card {
-  background: #ffffff;
+  background: $card-bg; // was #ffffff
   border-radius: 14px;
   padding: 1.6rem;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-
-  /* ✅ Uniform card height */
   min-height: 260px;
 
   display: flex;
@@ -65,26 +67,25 @@
   h3 {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #111827;
+    color: $text-primary; // was #111827
     margin-bottom: 0.4rem;
-    min-height: 26px; /* ✅ fixed row */
+    min-height: 26px;
   }
 
   span {
     display: block;
     font-size: 0.85rem;
-    color: #6b7280;
+    color: $text-muted; // was #6b7280
     margin-bottom: 0.25rem;
-    min-height: 18px; /* ✅ fixed row */
+    min-height: 18px;
   }
 
   p {
     margin-top: 0.7rem;
     font-size: 0.9rem;
     line-height: 1.5;
-    color: #374151;
-
-    min-height: 60px; /* ✅ uniform description space */
+    color: $text-secondary; // was #374151
+    min-height: 60px;
     overflow: hidden;
   }
 }
@@ -106,20 +107,20 @@
   }
 
   button:first-child {
-    background: $common-bg;
+    background: $brand-primary;
     color: $white;
 
     &:hover {
-      background: darken($common-bg, 8%);
+      background: $brand-primary-hover;
     }
   }
 
   button:last-child {
-    background: #b90f0f;
-    color: #fff;
+    background: $accent-strong; // replacing red/maroon
+    color: $white;
 
     &:hover {
-      background: #dc2626;
+      background: darken($accent-strong, 10%);
     }
   }
 }
@@ -138,7 +139,7 @@
 
 /* 🧾 Modal Box */
 .modal-content {
-  background: #ffffff;
+  background: $card-bg; // was #ffffff
   border-radius: 14px;
   width: 100%;
   max-width: 420px;
@@ -149,7 +150,7 @@
   h3 {
     text-align: center;
     margin-bottom: 1.4rem;
-    color: #1e293b;
+    color: $text-primary; // was #1e293b
   }
 
   input,
@@ -158,13 +159,13 @@
     padding: 0.65rem;
     margin-bottom: 0.8rem;
     border-radius: 8px;
-    border: 1px solid #d1d5db;
+    border: 1px solid $card-border; // was #d1d5db
     font-size: 0.85rem;
 
     &:focus {
       outline: none;
-      border-color: #2563eb;
-      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+      border-color: $brand-primary;
+      box-shadow: 0 0 0 2px rgba(255, 206, 44, 0.2); // $brand-primary
     }
   }
 
@@ -190,23 +191,21 @@
     transition: all 0.2s ease;
   }
 
-  /* 💾 Save */
   button:first-child {
-    background: $common-bg;
+    background: $brand-primary;
     color: $white;
 
     &:hover {
-      background: darken($common-bg, 8%);
+      background: $brand-primary-hover;
     }
   }
 
-  /* ❌ Cancel */
   button:last-child {
-    background: #b90f0f;
-    color: #fff;
+    background: $accent-strong;
+    color: $white;
 
     &:hover {
-      background: #dc2626;
+      background: darken($accent-strong, 10%);
     }
   }
 }
@@ -233,25 +232,22 @@
   }
 }
 
-/* ===============================
-   Jobs Page – Mobile Styles
-   =============================== */
+/* =============================== Mobile Styles =============================== */
 @media (max-width: 480px) {
   .jobs-page {
     padding: 1rem 2%;
   }
 
-  /* Center the header H2 */
   .jobs-header {
     flex-direction: column;
-    align-items: center; /* center content */
-    text-align: center;  /* center the H2 */
+    align-items: center;
+    text-align: center;
     gap: 1rem;
   }
 
   .jobs-header h2 {
     width: 100%;
-    font-size: 1.4rem; /* smaller on mobile */
+    font-size: 1.4rem;
     margin: 0 auto;
   }
 
@@ -266,7 +262,7 @@
   }
 
   .jobs-grid {
-    grid-template-columns: 1fr; /* single column for mobile */
+    grid-template-columns: 1fr;
     gap: 1rem;
   }
 

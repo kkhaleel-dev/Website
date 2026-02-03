@@ -1,16 +1,18 @@
+@import '../../variables.scss';
+
 .magazines-page {
   padding: 2rem 4%;
   font-family: "Inter", sans-serif;
   min-height: 100vh;
-  background: #eef4fb;
+  background: $brand-primary-soft; // was #eef4fb
   position: relative;
 
   .create-mag-btn {
     position: absolute;
     top: 35px;
     right: 20px;
-    background: #0a2148;
-    color: #fff;
+    background: $brand-primary; // was #0a2148
+    color: $white;
     padding: 0.6rem 1.2rem;
     border-radius: 8px;
     font-weight: 600;
@@ -19,7 +21,7 @@
     transition: all 0.2s ease;
 
     &:hover {
-      background: #162a55;
+      background: $brand-primary-hover; // was #162a55
     }
   }
 
@@ -27,142 +29,138 @@
     text-align: center;
     margin-bottom: 2rem;
     font-size: 2rem;
-    color: #0a2148;
+    color: $text-primary; // was #0a2148
     font-weight: 700;
   }
 
   .empty-state {
     text-align: center;
     font-size: 1.2rem;
-    color: #555;
+    color: $text-secondary; // was #555
     margin-top: 170px;
   }
 
   /* ================== MAGAZINE CARDS ================== */
-.magazines-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 cards per row */
-  gap: 1.2rem;
+  .magazines-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
 
-  @media (max-width: 1200px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media (max-width: 900px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 600px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.magazine-card {
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  height: 340px; /* increased by 40px */
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
-  }
-
-  /* Thumbnail 70% */
-  .magazine-thumbnail {
-    flex: 7;
-    overflow: hidden;
-    position: relative;
-    cursor: pointer;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      transition: transform 0.3s ease;
-      display: block;
-
-      &:hover {
-        transform: scale(1.03); /* subtle zoom */
-      }
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(3, 1fr);
     }
 
-    &::after {
-      content: "Click to Read";
-      position: absolute;
-      bottom: 8px;
-      right: 8px;
-      background: rgba(10, 33, 72, 0.8);
-      color: #fff;
-      font-size: 0.7rem; /* smaller font */
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
+    @media (max-width: 900px) {
+      grid-template-columns: repeat(2, 1fr);
     }
 
-    &:hover::after {
-      opacity: 1;
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
     }
   }
 
-  /* Title 20% */
-  .magazine-title {
-    flex: 2;
-    padding: 0.5rem 0.8rem;
-    font-weight: 600;
-    font-size: 0.95rem; /* slightly smaller */
-    color: #0a2148;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+  .magazine-card {
     display: flex;
-    align-items: center;
-  }
+    flex-direction: column;
+    background: $card-bg; // was #fff
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    height: 340px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 
-  /* Buttons 10% */
-  .magazine-actions {
-    flex: 1;
-    display: flex;
-    justify-content: space-around; /* maintain original alignment */
-    align-items: center;
-    padding: 0.3rem 0.6rem;
-    gap: 0.3rem;
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+    }
 
-    button {
-      flex: 1;
-      font-size: 0.75rem; /* smaller text */
-      font-weight: 600;
-      padding: 0.25rem 0.5rem; /* adjust padding for uniform height */
-      border-radius: 6px;
-      border: none;
+    .magazine-thumbnail {
+      flex: 7;
+      overflow: hidden;
+      position: relative;
       cursor: pointer;
-      background: #0a2148;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center; /* center text */
-      transition: all 0.2s ease;
 
-      &:hover {
-        background: #162a55;
-      }
-
-      &.delete-btn {
-        background: #e53e3e;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        transition: transform 0.3s ease;
+        display: block;
 
         &:hover {
-          background: #a01f1f;
+          transform: scale(1.03);
+        }
+      }
+
+      &::after {
+        content: "Click to Read";
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+        background: rgba(0, 0, 0, 0.55); // semi-dark overlay
+        color: $white;
+        font-size: 0.7rem;
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      &:hover::after {
+        opacity: 1;
+      }
+    }
+
+    .magazine-title {
+      flex: 2;
+      padding: 0.5rem 0.8rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: $text-primary; // was #0a2148
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    .magazine-actions {
+      flex: 1;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0.3rem 0.6rem;
+      gap: 0.3rem;
+
+      button {
+        flex: 1;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.5rem;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        background: $brand-primary; // was #0a2148
+        color: $white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: $brand-primary-hover; // was #162a55
+        }
+
+        &.delete-btn {
+          background: $maroon; // was #e53e3e
+          &:hover {
+            background: darken($maroon, 15%); // was #a01f1f
+          }
         }
       }
     }
   }
-}
 
   /* ================= POPUPS ================= */
   .popup-overlay {
@@ -175,7 +173,7 @@
     z-index: 3200;
 
     .popup {
-      background: #fff;
+      background: $card-bg; // was #fff
       border-radius: 14px;
       padding: 2rem;
       width: 90%;
@@ -192,7 +190,7 @@
       h3 {
         font-size: 1.7rem;
         margin-bottom: 1rem;
-        color: #0a2148;
+        color: $text-primary; // was #0a2148
         font-weight: 700;
         text-align: center;
       }
@@ -200,7 +198,7 @@
       iframe {
         width: 100%;
         height: 500px;
-        border: 1px solid #ccc;
+        border: 1px solid $option-hover-2; // was #ccc
         border-radius: 8px;
       }
 
@@ -218,43 +216,42 @@
           transition: all 0.2s ease;
 
           &:first-child {
-            background: #0a2148;
-            color: #fff;
+            background: $brand-primary; // was #0a2148
+            color: $white;
 
             &:hover {
-              background: #162a55;
+              background: $brand-primary-hover; // was #162a55
             }
           }
 
           &:last-child {
-            background: #e53e3e;
-            color: #fff;
+            background: $maroon; // was #e53e3e
+            color: $white;
 
             &:hover {
-              background: #a01f1f;
+              background: darken($maroon, 15%);
             }
           }
         }
       }
 
-      /* ================= CREATE FORM ================= */
       input {
         width: 100%;
         padding: 0.7rem 1rem;
         margin-bottom: 1rem;
         border-radius: 8px;
-        border: 1px solid #ccc;
+        border: 1px solid $option-hover-2; // was #ccc
         font-size: 1rem;
         outline: none;
         transition: all 0.2s ease;
 
         &:focus {
-          border-color: #0a2148;
-          box-shadow: 0 0 8px rgba(10, 33, 72, 0.3);
+          border-color: $brand-primary;
+          box-shadow: 0 0 8px rgba(34, 197, 94, 0.3); // $green accent for focus
         }
 
         &::placeholder {
-          color: #888;
+          color: $text-muted; // was #888
         }
       }
     }
@@ -278,67 +275,59 @@
     }
 
     .magazine-actions button {
-      font-size: 0.75rem;
+      font-size: 0.68rem;
       padding: 0.3rem 0.5rem;
     }
   }
-}
-//fine
 
-/* ===== SAFE CARD HEIGHT REDUCTION (RESPONSIVE) ===== */
-
-.magazine-card {
-  height: auto;
-  min-height: 280px; /* reduced overall height */
-}
-
-/* Thumbnail slightly reduced */
-.magazine-card .magazine-thumbnail {
-  flex: 6; /* was 7 */
-}
-
-/* Title stays compact */
-.magazine-card .magazine-title {
-  flex: 2;
-  font-size: 0.85rem;
-}
-
-/* Buttons remain equal height */
-.magazine-card .magazine-actions {
-  flex: 1;
-}
-
-.magazine-card .magazine-actions button {
-  font-size: 0.7rem;
-  min-height: 30px; /* equal height buttons */
-}
-
-/* Image fills space but logo looks smaller */
-.magazine-card .magazine-thumbnail img {
-  object-fit: cover;
-  transform: scale(0.88);
-}
-
-/* ===== RESPONSIVE FIXES ===== */
-
-@media (max-width: 1200px) {
+  /* ===== SAFE CARD HEIGHT REDUCTION (RESPONSIVE) ===== */
   .magazine-card {
-    min-height: 270px;
+    height: auto;
+    min-height: 280px;
   }
-}
 
-@media (max-width: 900px) {
-  .magazine-card {
-    min-height: 260px;
+  .magazine-card .magazine-thumbnail {
+    flex: 6;
   }
-}
 
-@media (max-width: 600px) {
-  .magazine-card {
-    min-height: 250px;
+  .magazine-card .magazine-title {
+    flex: 2;
+    font-size: 0.85rem;
+  }
+
+  .magazine-card .magazine-actions {
+    flex: 1;
   }
 
   .magazine-card .magazine-actions button {
-    font-size: 0.68rem;
+    font-size: 0.7rem;
+    min-height: 30px;
+  }
+
+  .magazine-card .magazine-thumbnail img {
+    object-fit: cover;
+    transform: scale(0.88);
+  }
+
+  @media (max-width: 1200px) {
+    .magazine-card {
+      min-height: 270px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .magazine-card {
+      min-height: 260px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .magazine-card {
+      min-height: 250px;
+    }
+
+    .magazine-card .magazine-actions button {
+      font-size: 0.68rem;
+    }
   }
 }

@@ -59,13 +59,13 @@
 .icon-svg {
   font-size: 70px;
   margin-bottom: 20px;
-  color: $options-card-bg; // accent icon
+  color: $card-btn-common-bg; // accent icon
   transition: transform 0.35s ease, color 0.35s ease;
 }
 
 .carousel-card:hover .icon-svg {
   transform: scale(1.15) rotate(-6deg);
-  color: lighten($options-card-bg, 25%);
+  color: lighten($card-btn-common-bg, 10%);
 }
 
 .carousel-card h3 {
@@ -82,12 +82,12 @@
   padding-right: 4px;
   color: #333; // dark gray subheader
   scrollbar-width: thin;
-  scrollbar-color: $options-card-bg transparent;
+  scrollbar-color: $card-btn-common-bg transparent;
 }
 
 .card-btn {
   padding: 10px 24px;
-  background: $options-card-bg; // button base color
+  background: $card-btn-common-bg;
   color: $white;
   border-radius: 6px;
   text-decoration: none;
@@ -103,7 +103,7 @@
   transform: translateY(-3px);
   background: $option-hover; // hover color from theme
   color: $white;
-  box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 12px 30px rgba(85, 84, 84, 0.25);
 }
 
 .card-btn::after {
