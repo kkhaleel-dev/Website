@@ -98,47 +98,138 @@ const SmartICardForm = () => {
     setEditData((prev) => ({ ...prev, profileImage: compressed }));
   };
 
-  const saveProfile = async () => {
-    try {
-      if (newPassword || confirmPassword) {
-        if (!oldPassword) {
-          alert("Enter old password");
-          return;
-        }
-        if (newPassword !== confirmPassword) {
-          alert("Passwords do not match");
-          return;
-        }
+  // const saveProfile = async () => {
+  //   try {
+  //     if (newPassword || confirmPassword) {
+  //       if (!oldPassword) {
+  //         alert("Enter old password");
+  //         return;
+  //       }
+  //       if (newPassword !== confirmPassword) {
+  //         alert("Passwords do not match");
+  //         return;
+  //       }
 
-        const user = auth.currentUser;
-        const credential = EmailAuthProvider.credential(
-          user.email,
-          oldPassword
-        );
-        await reauthenticateWithCredential(user, credential);
-        await updatePassword(user, newPassword);
+  //       const user = auth.currentUser;
+  //       const credential = EmailAuthProvider.credential(
+  //         user.email,
+  //         oldPassword
+  //       );
+  //       await reauthenticateWithCredential(user, credential);
+  //       await updatePassword(user, newPassword);
+  //     }
+
+  //     const userRef = ref(db, `users/${auth.currentUser.uid}`);
+  //     const { password, ...safeData } = editData; // never store password
+
+  //     // Convert field to array if comma separated (optional)
+  //     if (safeData.field && typeof safeData.field === "string") {
+  //       safeData.field = safeData.field
+  //         .split(",")
+  //         .map((f) => f.trim())
+  //         .filter((f) => f !== "");
+  //     }
+
+  //     await update(userRef, safeData);
+  //     setUserData(safeData);
+  //     alert("Profile updated successfully!");
+  //     closeEdit();
+  //   } catch (err) {
+  //     console.error(err);
+  //     alert("Failed to update profile");
+  //   }
+  // };
+const saveProfile = async () => {
+  try {
+    if (newPassword || confirmPassword) {
+      if (!oldPassword) {
+        alert("Enter old password");
+        return;
+      }
+      if (newPassword !== confirmPassword) {
+        alert("Passwords do not match");
+        return;
       }
 
-      const userRef = ref(db, `users/${auth.currentUser.uid}`);
-      const { password, ...safeData } = editData; // never store password
-
-      // Convert field to array if comma separated (optional)
-      if (safeData.field && typeof safeData.field === "string") {
-        safeData.field = safeData.field
-          .split(",")
-          .map((f) => f.trim())
-          .filter((f) => f !== "");
-      }
-
-      await update(userRef, safeData);
-      setUserData(safeData);
-      alert("Profile updated successfully!");
-      closeEdit();
-    } catch (err) {
-      console.error(err);
-      alert("Failed to update profile");
+      const user = auth.currentUser;
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        oldPassword
+      );
+      await reauthenticateWithCredential(user, credential);
+      await updatePassword(user, newPassword);
     }
-  };
+
+    const uid = auth.currentUser.uid;
+    const userRef = ref(db, `users/${uid}`);
+
+    const { password, ...safeData } = editData;
+
+    // Convert field string to array
+    if (safeData.field && typeof safeData.field === "string") {
+      safeData.field = safeData.field
+        .split(",")
+        .map((f) => f.trim())
+        .filter((f) => f !== "");
+    }
+
+    // ✅ UPDATE users table (existing behaviour)
+    await update(userRef, safeData);
+
+    // ⭐ FETCH membershipId from updated user
+    const snap = await get(userRef);
+    if (!snap.exists()) return;
+
+    const updatedUser = snap.val();
+    const membershipId = updatedUser.membershipId;
+
+    // ⭐ SYNC publicProfiles WITHOUT REMOVING ANY EXISTING FIELD
+    if (membershipId) {
+      const publicProfileRef = ref(
+        db,
+        `publicProfiles/${membershipId}`
+      );
+
+      // Only push fields that belong to public profile
+      const publicSyncData = {
+        fullname: safeData.fullname,
+        age: safeData.age,
+        batch: safeData.batch,
+        branch: safeData.branch,
+        mobile: safeData.mobile,
+        email: safeData.email,
+        city: safeData.city,
+        state: safeData.state,
+        country: safeData.country,
+        profession: safeData.profession,
+        website: safeData.website,
+        industry: safeData.industry,
+        company: safeData.company,
+        companySize: safeData.companySize,
+        field: safeData.field,
+        profileImage: safeData.profileImage
+      };
+
+      // Remove undefined fields to avoid overwriting with null
+      Object.keys(publicSyncData).forEach(key => {
+        if (publicSyncData[key] === undefined) {
+          delete publicSyncData[key];
+        }
+      });
+
+      // ⭐ MERGE update (adds missing fields + updates existing)
+      await update(publicProfileRef, publicSyncData);
+    }
+
+    setUserData(prev => ({ ...prev, ...safeData }));
+    alert("Profile updated successfully!");
+    closeEdit();
+
+  } catch (err) {
+    console.error(err);
+    alert("Failed to update profile");
+  }
+};
 
   return (
     <>
