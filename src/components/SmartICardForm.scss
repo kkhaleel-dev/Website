@@ -435,3 +435,137 @@
   border-color: $brand-primary;
   box-shadow: 0 0 0 2px rgba(250, 201, 40, 0.25);
 }
+/* ===== Unpaid Right Card Styles ===== */
+.right-card.unpaid {
+  background: linear-gradient(135deg, #fff7f0, #ffe6d5);
+  border: 2px dashed #ff9f43;
+  text-align: center;
+  animation: pulseBorder 2s infinite;
+}
+
+/* title */
+.right-card.unpaid .membership-required {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ff6b00;
+  margin-bottom: 6px;
+}
+
+/* description text */
+.right-card.unpaid .membership-message {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 6px;
+  line-height: 1.45;
+}
+
+/* ===== Highlight Box ===== */
+.right-card.unpaid .membership-highlight {
+  background: #ffed87;
+  border-radius: 10px;
+  padding: 12px 10px;
+  margin: 10px 0;
+  font-size: 13px;
+  color: #222;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===== Subscribe Button ===== */
+/* ===== Subscribe Toast ===== */
+.subscribe-toast {
+  position: fixed;
+  bottom: 90px; /* sits just above chat widget */
+  right: 20px;
+  background: #222;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  z-index: 9999;
+  animation: toastSlideIn 0.4s ease;
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.subscribe-btn {
+  background: linear-gradient(135deg, #ff6b00, #ff9f43);
+  border: none;
+  border-radius: 24px;
+  padding: 10px 16px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  margin: 8px 0;
+  line-height: 1.2;
+
+  box-shadow: 0 8px 20px rgba(255, 107, 0, 0.32);
+  transition: all 0.25s ease;
+  animation: subscribePulse 2s infinite;
+}
+
+.subscribe-btn span {
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+/* secure text */
+.secure-text {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #666;
+}
+
+/* CTA below highlight */
+.right-card.unpaid .membership-cta {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  margin-top: 4px;
+}
+
+/* ===== Animations ===== */
+@keyframes subscribePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(255, 107, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 0, 0);
+  }
+}
+
+@keyframes pulseBorder {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 159, 67, 0.35);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 159, 67, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 159, 67, 0);
+  }
+}
+

@@ -17,6 +17,9 @@ const SmartICardForm = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const isApproved = userData?.approved === true;
+  const isPaidMember = userData?.isPaidMember === true;
+  const [showToast, setShowToast] = useState(false);
 
   const [editOpen, setEditOpen] = useState(false);
   const [editData, setEditData] = useState({});
@@ -265,6 +268,7 @@ const saveProfile = async () => {
             </div>
           </div>
 
+          {isApproved && isPaidMember ? (
           <div className="card right-card">
             <div className="card-content">
               <p>
@@ -282,7 +286,53 @@ const saveProfile = async () => {
               <p className="website">www.citacc.com</p>
             </div>
           </div>
+          ):(
+            <>
+              <div className="card right-card unpaid">
+                <div className="card-content">
+                  <p className="membership-required">
+                    Membership Required
+                  </p>
+
+                  <p className="membership-message">
+                    You are an approved user, but you have not taken the paid
+                    membership yet.
+                  </p>
+
+                  <p className="membership-message">
+                    Please contact admin to activate your Smart ID Card and
+                    unlock all lifetime benefits.
+                  </p>
+
+                  <div className="membership-highlight">
+                    One-time payment · Lifetime access <br />
+                   <button
+                      className="subscribe-btn"
+                      onClick={() => {
+                        setShowToast(true);
+                        setTimeout(() => setShowToast(false), 3500);
+                      }}
+                    >
+                      $50 <span>Subscribe Now</span>
+                    </button>
+
+                    <p className="secure-text">🔒 One-time payment · Lifetime access</p>
+                  </div>
+
+                  <p className="membership-cta">
+                    Smart ID Card + all collaborated offers
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
         </div>
+        {showToast && (
+          <div className="subscribe-toast">
+            💬 Please contact <strong>CIT Super Admin</strong> via chat
+          </div>
+        )}
+
 
         {editOpen && (
           <div className="edit-popup">

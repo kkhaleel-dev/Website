@@ -50,6 +50,7 @@ import Entrepreneurs from "./components/Entrepreneurs/Entrepreneurs.jsx";
 import ScanMembership from "./components/ScanMembership.jsx";
 import ChennaiChapter from "./components/Chapters/ChennaiChapter/ChennaiChapter.jsx";
 import Messaging from "./components/messaging/Messaging.jsx";
+import AdminPostApproval from "./pages/AdminPostApproval.jsx";
 
 const AppContent = () => {
   const location = useLocation();
@@ -124,6 +125,15 @@ const AppContent = () => {
           <Route
             path="/scan/:membershipId"
             element={<ScanMembership />}
+          />
+
+          <Route
+            path="/posts-management"
+            element={
+              <ProtectedRoute>
+                <AdminPostApproval />
+              </ProtectedRoute>
+            }
           />
 
 
