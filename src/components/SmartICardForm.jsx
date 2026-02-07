@@ -279,7 +279,7 @@ const saveProfile = async () => {
               </p>
 
               <QRCodeSVG
-                value={`https://website-delta-six-36.vercel.app/scan/${userData.membershipId}`}
+                value={`https://citacc.com/scan/${userData.membershipId}`}
                 size={160}
                 includeMargin
               />

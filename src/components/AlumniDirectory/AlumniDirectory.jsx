@@ -9,6 +9,7 @@ const AlumniDirectory = () => {
   const [alumni, setAlumni] = useState([]);
   const [canViewAll, setCanViewAll] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState(""); // New search state
 
   /* 🔐 Auth & approval check */
   useEffect(() => {
@@ -73,19 +74,35 @@ const AlumniDirectory = () => {
     fetchAlumni();
   }, [canViewAll]);
 
-  /* 💬 Messaging Event (Same as Entrepreneurs) */
+  /* 💬 Messaging Event */
   const sendMessage = (uid) => {
     window.dispatchEvent(new CustomEvent("openChat", { detail: uid }));
   };
+
+  // Filter alumni based on search query
+  const filteredAlumni = alumni.filter((member) =>
+    member.fullname.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (loading) return <p className="alumni-loading">Loading alumni...</p>;
 
   return (
     <div className="alumni-directory-page">
-      <h2>CIT Alumni Directory</h2>
+      {/* Header with title and search bar */}
+      <div className="alumni-directory-header">
+        <h2>CIT Alumni Directory</h2>
+        <input
+          type="text"
+          placeholder="Search by name..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="alumni-search"
+        />
+      </div>
 
+      {/* Alumni grid */}
       <div className={`alumni-grid ${!canViewAll ? "blurred" : ""}`}>
-        {alumni.map((member) => (
+        {filteredAlumni.map((member) => (
           <div className="alumni-card" key={member.id}>
             <div className="alumni-photo">
               <img src={member.profileImage} alt={member.fullname} />
@@ -93,7 +110,6 @@ const AlumniDirectory = () => {
 
             <div className="alumni-info">
               <h3>{member.fullname}</h3>
-
               <p>
                 <strong>Branch:</strong> {member.branch}
               </p>
@@ -124,6 +140,7 @@ const AlumniDirectory = () => {
         ))}
       </div>
 
+      {/* Locked overlay */}
       {!canViewAll && (
         <div className="alumni-overlay">
           <h3>Want to view full alumni details?</h3>

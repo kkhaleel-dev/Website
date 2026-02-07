@@ -147,7 +147,7 @@
 }
 
 .carousel4-dots .dot.active {
-  background: $options-card-bg;
+  background: $card-btn-common-bg; /* changed from $options-card-bg */
   width: 12px;
   height: 12px;
 }

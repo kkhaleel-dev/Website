@@ -112,7 +112,7 @@ const Chapters = () => {
       </div>
 
       {chapters.length === 0 ? (
-        <p className="no-chapters">No chapters available</p>
+        <p className="no-chapters">Approved Users can view Chapters</p>
       ) : (
         <div className="chapters-grid">
           {chapters.map((chapter) => (

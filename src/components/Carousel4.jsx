@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import "./Carousel4.scss";
 import { FaArrowRight } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
-import Ashokraj from "../assets/Ashokraj.jpg";
-import img1 from "../assets/person-logo.png";
+import { db } from "../firebase";
+import { ref, get } from "firebase/database";
+import NoProfile from "../assets/person-logo.png";
 
 const Carousel4 = () => {
   const containerRef = useRef(null);
@@ -13,58 +14,36 @@ const Carousel4 = () => {
   const [popupData, setPopupData] = useState(null);
   const [visibleCards, setVisibleCards] = useState(4);
   const [slideSize, setSlideSize] = useState(310);
+  const [profiles, setProfiles] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const profiles = [
-    {
-      img: Ashokraj,
-      name: "Ashok Raj V, Class of 1993",
-      role: "CEO of Intelizest & Expanz, India",
-      desc: "Innovative CEO inspiring teams, fostering growth, and achieving remarkable success. Strategic leader driving innovation, growth, and excellence company-wide every day.",
-    },
-    {
-      img: img1,
-      name: "Thiagarajan P , Class of 1977",
-      role: "India",
-      desc: "CIT chennai Alumni Award",
-    },
-    {
-      img: img1,
-      name: "Balaji Mayilan M P , Class of 2019",
-      role: "India",
-      desc: "CIT chennai Alumni Award",
-    },
-    {
-      img: img1,
-      name: "Ramesh M , Class of 1983",
-      role: "India",
-      desc: "CIT chennai Alumni Award",
-    },
-    {
-      img: img1,
-      name: "Subramanian R  , Class of 1978",
-      role: "India",
-      desc: "CIT chennai Alumni Award",
-    },
-    {
-      img: img1,
-      name: "Vasantha Kumar, Class of 1996",
-      role: "India",
-      desc: "CIT chennai Alumni Award",
-    },
-    {
-      img: img1,
-      name: "Elangovan P P , Class of 1984",
-      role: "India",
-      desc: "CIT chennai Alumni Award",
-    },
-    {
-      img: img1,
-      name: "Naveen Prabhu D , Class of 2005",
-      role: "India",
-      desc: "CIT chennai Alumni Award",
-    },
-  ];
+  // Fetch approved paid users from Firebase
+  const fetchProfiles = async () => {
+    setLoading(true);
+    try {
+      const usersSnap = await get(ref(db, "users"));
+      const usersData = usersSnap.val() || {};
+      const usersArr = Object.entries(usersData).map(([uid, user]) => ({ uid, ...user }));
 
+      // Filter: approved & paid members only
+      const filtered = usersArr.filter(u => u.approved === true && u.isPaidMember === true);
+
+      // Sort filtered users by fullname ascending
+      filtered.sort((a, b) => a.fullname.localeCompare(b.fullname));
+
+      setProfiles(filtered);
+    } catch (err) {
+      console.error("Failed to fetch profiles:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfiles();
+  }, []);
+
+  // Responsive cards
   useEffect(() => {
     const updateResponsive = () => {
       const w = window.innerWidth;
@@ -86,19 +65,21 @@ const Carousel4 = () => {
     return () => window.removeEventListener("resize", updateResponsive);
   }, []);
 
+  // Show nav only if more cards than visible
   useEffect(() => {
     setShowNav(profiles.length > visibleCards);
-  }, [visibleCards]);
+  }, [visibleCards, profiles]);
 
   const nextSlide = () => {
-    if (active < profiles.length - visibleCards) {
-      setActive(active + 1);
-    }
+    if (active < profiles.length - visibleCards) setActive(active + 1);
   };
 
   const prevSlide = () => {
     if (active > 0) setActive(active - 1);
   };
+
+  if (loading) return <p className="carousel4-title">Loading...</p>;
+  if (!loading && profiles.length === 0) return <p className="carousel4-title">No data available</p>;
 
   return (
     <div className="carousel4-wrapper">
@@ -111,13 +92,10 @@ const Carousel4 = () => {
         >
           {profiles.map((p, i) => (
             <div className="carousel4-card" key={i}>
-              <img src={p.img} alt="" className="carousel4-img" />
-
-              <h3 className="carousel4-name">{p.name}</h3>
-              <p className="carousel4-role">{p.role}</p>
-
-              <p className="carousel4-desc">{p.desc}</p>
-
+              <img src={p.profileImage || NoProfile} alt="" className="carousel4-img" />
+              <h3 className="carousel4-name">{p.fullname}</h3>
+              <p className="carousel4-role">{p.profession || p.role || ""}</p>
+              <p className="carousel4-desc">{p.bio || p.desc || "No description available"}</p>
               <span
                 className="carousel4-readmore"
                 onClick={() => setPopupData(p)}
@@ -149,11 +127,10 @@ const Carousel4 = () => {
             <button className="popup-close" onClick={() => setPopupData(null)}>
               <IoClose size={23} />
             </button>
-
-            <img src={popupData.img} className="popup-img" />
-            <h2>{popupData.name}</h2>
-            <h4>{popupData.role}</h4>
-            <p>{popupData.desc}</p>
+            <img src={popupData.profileImage || NoProfile} className="popup-img" alt={popupData.fullname} />
+            <h2>{popupData.fullname}</h2>
+            <h4>{popupData.profession || popupData.role}</h4>
+            <p>{popupData.bio || popupData.desc || "No description available"}</p>
           </div>
         </div>
       )}

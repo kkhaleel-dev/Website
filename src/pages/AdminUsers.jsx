@@ -8,6 +8,7 @@ const PAGE_SIZE = 8;
 const AdminUsers = () => {
   const [pendingUsers, setPendingUsers] = useState([]);
   const [approvedUsers, setApprovedUsers] = useState([]);
+  const [approvedSearch, setApprovedSearch] = useState("");
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
@@ -15,6 +16,7 @@ const AdminUsers = () => {
   const [pendingPage, setPendingPage] = useState(1);
   const [approvedPage, setApprovedPage] = useState(1);
   const [adminPage, setAdminPage] = useState(1);
+  const [showPaidOnly, setShowPaidOnly] = useState(false);
 
   const paginate = (data, page) => {
     const start = (page - 1) * PAGE_SIZE;
@@ -38,7 +40,6 @@ const AdminUsers = () => {
         usersArr.filter(u => (u.approved === true || u.approved === "true") && (u.role === "user" || u.role === undefined))
       );
 
-      // setAdmins(usersArr.filter(u => u.role === "admin"));
       setAdmins(
         usersArr.filter(
           u => u.role === "admin" && u.isSuperAdmin !== true
@@ -157,38 +158,32 @@ const AdminUsers = () => {
   };
 
   const removeUser = async (uid) => {
-  if (!window.confirm("Remove this user?")) return;
+    if (!window.confirm("Remove this user?")) return;
 
-  try {
-    // 1️⃣ Get user data
-    const userSnap = await get(ref(db, `users/${uid}`));
-    if (!userSnap.exists()) return;
+    try {
+      const userSnap = await get(ref(db, `users/${uid}`));
+      if (!userSnap.exists()) return;
 
-    const user = userSnap.val();
-    const membershipId = user.membershipId;
+      const user = userSnap.val();
+      const membershipId = user.membershipId;
 
-    // 2️⃣ Remove from users table
-    await remove(ref(db, `users/${uid}`));
+      await remove(ref(db, `users/${uid}`));
 
-    // 3️⃣ Remove from publicProfiles
-    if (membershipId) {
-      await remove(ref(db, `publicProfiles/${membershipId}`));
+      if (membershipId) {
+        await remove(ref(db, `publicProfiles/${membershipId}`));
+      }
+
+      const counterRef = ref(db, "meta/membershipCounter");
+      await runTransaction(counterRef, (c) => (c || 0) - 1);
+
+      await remove(ref(db, `chats/${uid}`));
+
+      fetchAll();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to remove user");
     }
-
-    // 4️⃣ Decrement membershipCounter
-    const counterRef = ref(db, "meta/membershipCounter");
-    await runTransaction(counterRef, (c) => (c || 0) - 1);
-
-    // 5️⃣ Remove the user's own chat data only
-    await remove(ref(db, `chats/${uid}`));
-
-    fetchAll();
-  } catch (err) {
-    console.error(err);
-    alert("Failed to remove user");
-  }
-};
-
+  };
 
   const removeAdmin = async (uid) => {
     if (!window.confirm("Remove this admin?")) return;
@@ -210,6 +205,11 @@ const AdminUsers = () => {
       </div>
     );
   };
+
+  // ✅ Filter approved users based on search AND paid-only toggle
+  const filteredApprovedUsers = approvedUsers
+    .filter(u => u.fullname.toLowerCase().includes(approvedSearch.toLowerCase()))
+    .filter(u => (showPaidOnly ? u.isPaidMember === true : true));
 
   return (
     <div className="admin-users">
@@ -251,6 +251,45 @@ const AdminUsers = () => {
       {/* Approved Users */}
       <div className="section">
         <h3>Approved Users</h3>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop:"-6px", marginBottom: "10px", marginLeft: "5px" }}>
+          <span style={{ fontSize: "0.9rem", color: "#555", fontWeight: 600 }}>
+            Total Users: {filteredApprovedUsers.length}
+          </span>
+
+          <div style={{ display: "flex", gap: "8px" }}>
+            {/* Paid Members Button */}
+            <button
+              onClick={() => { setShowPaidOnly(prev => !prev); setApprovedPage(1); }}
+              style={{
+                padding: "4px 8px",
+                fontSize: "0.85rem",
+                borderRadius: "6px",
+                border: showPaidOnly ? "1px solid #007BFF" : "1px solid #ccc",
+                background: showPaidOnly ? "#007BFF" : "#fff",
+                color: showPaidOnly ? "#fff" : "#000",
+                cursor: "pointer",
+              }}
+            >
+              {showPaidOnly ? "Showing Paid Members" : "Filter Paid Members"}
+            </button>
+
+            {/* Search Input */}
+            <input
+              type="text"
+              placeholder="Search person..."
+              value={approvedSearch}
+              onChange={(e) => { setApprovedSearch(e.target.value); setApprovedPage(1); }}
+              style={{
+                padding: "4px 8px",
+                fontSize: "0.85rem",
+                borderRadius: "6px",
+                border: "1px solid #ccc",
+                width: "150px",
+              }}
+            />
+          </div>
+        </div>
+
         {approvedUsers.length === 0 ? <p className="empty">No approved users</p> :
           <>
             <div className="table-wrapper">
@@ -265,7 +304,7 @@ const AdminUsers = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {paginate(approvedUsers, approvedPage).map(u => (
+                  {paginate(filteredApprovedUsers, approvedPage).map(u => (
                     <tr key={u.uid}>
                       <td>{u.fullname}</td>
                       <td>{u.email}</td>
@@ -285,7 +324,8 @@ const AdminUsers = () => {
                 </tbody>
               </table>
             </div>
-            <Pagination page={approvedPage} total={Math.ceil(approvedUsers.length / PAGE_SIZE)} onChange={setApprovedPage} />
+            {/* ✅ Use filteredApprovedUsers for pagination total */}
+            <Pagination page={approvedPage} total={Math.ceil(filteredApprovedUsers.length / PAGE_SIZE)} onChange={setApprovedPage} />
           </>
         }
       </div>

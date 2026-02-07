@@ -13,6 +13,49 @@
   }
 }
 
+/* HEADER WITH SEARCH */
+.alumni-directory-header {
+  display: flex;
+  justify-content: center; /* center title */
+  align-items: center;
+  position: relative;
+  margin-bottom: 2rem;
+
+  h2 {
+    margin: 0 auto; /* center title */
+  }
+
+  .alumni-search {
+    position: absolute;
+    right: 0;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+    width: 220px;
+    max-width: 40%;
+  }
+
+  @media (max-width: 768px) {
+    .alumni-search {
+      width: 150px;
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+
+    .alumni-search {
+      position: static;
+      margin-top: 0.8rem;
+      width: 100%;
+    }
+  }
+}
+
+/* REST OF EXISTING STYLES REMAIN UNCHANGED */
+
 /* GRID */
 .alumni-grid {
   display: grid;
@@ -78,7 +121,7 @@
   }
 }
 
-/* ⭐ SEND MESSAGE BUTTON */
+/* SEND MESSAGE BUTTON */
 .send-message-btn {
   margin-top: 12px;
   padding: 8px 18px;
@@ -133,21 +176,19 @@
   }
 }
 
-/* TABLET */
+/* RESPONSIVE GRIDS */
 @media (max-width: 1024px) {
   .alumni-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-/* MOBILE */
 @media (max-width: 768px) {
   .alumni-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* SMALL MOBILE */
 @media (max-width: 480px) {
   .alumni-grid {
     grid-template-columns: 1fr;
