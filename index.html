@@ -2,6 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
+    <!-- ADD THIS SCRIPT (GitHub Pages SPA Fix) -->
+    <script>
+      (function(l) {
+        if (l.search[1] === "/") {
+          var decoded = l.search.slice(1).split("&").map(function(s) {
+            return s.replace(/~and~/g, "&");
+          }).join("?");
+          window.history.replaceState(null, null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location))
+    </script>
+    <!-- END SCRIPT -->
+
     <link rel="icon" type="image/svg+xml" href="src/assets/Favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Official Community of Coimbatore Institute Of Technology</title>
@@ -11,3 +27,18 @@
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="src/assets/Favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Official Community of Coimbatore Institute Of Technology</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html> -->
