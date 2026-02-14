@@ -12,6 +12,8 @@ const AdminUsers = () => {
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const [showMembersPopup, setShowMembersPopup] = useState(false);
+  const [memberSearch, setMemberSearch] = useState("");
 
   const [pendingPage, setPendingPage] = useState(1);
   const [approvedPage, setApprovedPage] = useState(1);
@@ -214,6 +216,15 @@ const AdminUsers = () => {
   return (
     <div className="admin-users">
       <h2>Admin User Management</h2>
+      {isSuperAdmin && (
+        <button
+          className="members-fab"
+          onClick={() => setShowMembersPopup(true)}
+          title="View All Members"
+        >
+          👥
+        </button>
+      )}
 
       {/* Pending Users */}
       <div className="section">
@@ -366,6 +377,65 @@ const AdminUsers = () => {
           </>
         }
       </div>
+      {isSuperAdmin && showMembersPopup && (
+      <div className="members-modal-overlay" onClick={() => setShowMembersPopup(false)}>
+        <div className="members-modal" onClick={(e) => e.stopPropagation()}>
+         <div className="modal-header">
+  <h3>All Members</h3>
+
+  <input
+    type="text"
+    className="member-search"
+    placeholder="Search name / membership ID..."
+    value={memberSearch}
+    onChange={(e) => setMemberSearch(e.target.value)}
+  />
+
+  <button
+    className="close-btn"
+    onClick={() => {
+      setShowMembersPopup(false);
+      setMemberSearch("");
+    }}
+  >
+    ✕
+  </button>
+</div>
+
+
+          <div className="modal-body">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>UID</th>
+                  <th>Membership ID</th>
+                  <th>Password</th>
+                </tr>
+              </thead>
+              <tbody>
+              {approvedUsers
+  .filter(u =>
+    u.fullname?.toLowerCase().includes(memberSearch.toLowerCase()) ||
+    u.membershipId?.toLowerCase().includes(memberSearch.toLowerCase())
+  )
+  .map(u => (
+
+                  <tr key={u.uid}>
+                    <td>{u.fullname}</td>
+                    <td>{u.email}</td>
+                    <td style={{ fontSize: "0.75rem" }}>{u.uid}</td>
+                    <td>{u.membershipId}</td>
+                    <td>{u.password}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    )}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import Award2 from "../../assets/Award2.png";
 import Award3 from "../../assets/Award3.png";
 import Award4 from "../../assets/Award4.png";
 import Award5 from "../../assets/Award5.png";
+import Placeholderpage from "../Placeholderpage";
 
 const Awards = () => {
   const [awards, setAwards] = useState([]);
@@ -76,26 +77,7 @@ const Awards = () => {
         </p>
       </div>
 
-      <div className="awards-grid">
-        {awards.map((award) => (
-          <div className="award-card" key={award.id}>
-            <div className="award-image">
-              <img src={award.image} alt={award.title} />
-            </div>
-
-            <div className="award-content">
-              <h3>{award.title}</h3>
-              <span className="award-recipient">{award.recipient}</span>
-              <span className="award-year">{award.year}</span>
-              <p>{award.description}</p>
-
-              <a href={award.link} className="award-link">
-                Learn More →
-              </a>
-            </div>
-          </div>
-        ))}
-      </div>
+     <Placeholderpage />
     </div>
   );
 };

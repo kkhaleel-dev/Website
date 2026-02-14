@@ -51,6 +51,7 @@ import ScanMembership from "./components/ScanMembership.jsx";
 import ChennaiChapter from "./components/Chapters/ChennaiChapter/ChennaiChapter.jsx";
 import Messaging from "./components/messaging/Messaging.jsx";
 import AdminPostApproval from "./pages/AdminPostApproval.jsx";
+import AlumniDay from "./pages/AlumniDay.jsx";
 
 const AppContent = () => {
   const location = useLocation();
@@ -126,6 +127,8 @@ const AppContent = () => {
             path="/scan/:membershipId"
             element={<ScanMembership />}
           />
+
+          <Route path="/alumniDay" element={<AlumniDay/>} />
 
           <Route
             path="/posts-management"

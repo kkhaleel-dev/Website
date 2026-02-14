@@ -65,7 +65,7 @@ const Header = () => {
           <nav className="nav">
             <ul className="nav-list">
               <li className="nav-item active">
-                <Link to="/">Alumni Day</Link>
+                <Link to="/alumniDay">Alumni Day</Link>
               </li>
 
               <li

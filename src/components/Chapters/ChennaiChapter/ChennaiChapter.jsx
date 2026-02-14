@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import "./ChennaiChapter.scss";
 import { db, auth } from "../../../firebase";
 import { ref, get } from "firebase/database";
@@ -9,26 +9,30 @@ const ChennaiChapter = () => {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [canView, setCanView] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  /* 🔐 Check login (paid members page) */
+  const PRIORITY_MEMBERS = [
+    { name: "Saravana Raja", batch: "1988" },
+    { name: "Ashok Raj Vadivelu", batch: "1993" },
+    { name: "Ramesh M", batch: "1983" },
+    { name: "Karnan Ramamurthy", batch: "1996" },
+    { name: "Satheesh S", batch: "1985" },
+    { name: "Anitha S", batch: "1989" },
+  ];
+
+  /* 🔐 Login Check */
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setCanView(true);
-      } else {
-        setCanView(false);
-      }
+      setCanView(!!user);
     });
-
     return () => unsub();
   }, []);
 
-  /* 📦 Fetch Chennai Chapter members */
+  /* 📦 Fetch Users */
   useEffect(() => {
     const fetchMembers = async () => {
       try {
         const snapshot = await get(ref(db, "users"));
-
         if (!snapshot.exists()) {
           setMembers([]);
           return;
@@ -36,30 +40,37 @@ const ChennaiChapter = () => {
 
         const data = snapshot.val();
 
-        const filteredMembers = Object.keys(data)
-          .map((uid) => ({
-            uid,
-            ...data[uid],
-          }))
-          .filter(
-            (user) =>
-              user.isPaidMember === true &&
-              user.approved === true &&
-              user.membershipId &&
-              user.membershipId.trim() !== "" &&
-              user.state === "Tamil Nadu"
-          )
-          .map((user) => ({
-            uid: user.uid,
-            fullname: user.fullname || "Unnamed",
-            profession: user.profession || "",
-            membershipId: user.membershipId,
-            email: user.email || "",
-            mobile: user.mobile || "",
-            profileImage: user.profileImage || personLogo,
-          }));
+        let allMembers = Object.keys(data).map((uid) => ({
+          uid,
+          fullname: data[uid].fullname || "Unnamed",
+          designation: data[uid].designation || "",
+          branch: data[uid].branch || "",
+          batch: data[uid].batch || "",
+          profession: data[uid].profession || "",
+          profileImage: data[uid].profileImage || personLogo,
+        }));
 
-        setMembers(filteredMembers);
+        /* ✅ Priority Sorting */
+        const priorityList = [];
+        const remainingList = [];
+
+        allMembers.forEach((member) => {
+          const matchIndex = PRIORITY_MEMBERS.findIndex(
+            (p) =>
+              p.name === member.fullname &&
+              p.batch === member.batch
+          );
+
+          if (matchIndex !== -1) {
+            priorityList[matchIndex] = member;
+          } else {
+            remainingList.push(member);
+          }
+        });
+
+        const orderedPriority = priorityList.filter(Boolean);
+
+        setMembers([...orderedPriority, ...remainingList]);
       } catch (err) {
         console.error("Chennai chapter fetch error:", err);
       } finally {
@@ -70,36 +81,59 @@ const ChennaiChapter = () => {
     fetchMembers();
   }, []);
 
+  /* 🔎 Search Filter */
+  const filteredMembers = useMemo(() => {
+    return members.filter((member) =>
+      member.fullname
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+    );
+  }, [members, searchTerm]);
+
+  /* 💬 Send Message */
+  const sendMessage = (uid) => {
+    window.dispatchEvent(
+      new CustomEvent("openChat", { detail: uid })
+    );
+  };
+
   if (loading) {
-    return <p className="chapter-loading">Loading chapter members...</p>;
+    return <p className="chapter-loading">Loading members...</p>;
   }
 
   return (
     <div className="chennai-chapter-page">
-      {/* Hero */}
       <div className="chapter-hero">
-        <h1>Chennai Alumni Chapter</h1>
-        <p>
-          Verified paid members of CIT Alumni Chennai Chapter
-        </p>
+        <div>
+          <h1>Chennai Alumni Chapter</h1>
+          <p>CIT Alumni Chennai Chapter</p>
+        </div>
+
+        {canView && (
+          <div className="chapter-search">
+            <input
+              type="text"
+              placeholder="Search member by name..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        )}
       </div>
 
-      {/* Members Section */}
       {!canView ? (
         <div className="locked-box">
           <h3>🔒 Login Required</h3>
-          <p>Please login to view Chennai chapter members</p>
+          <p>Please login to view members</p>
           <button onClick={() => (window.location.href = "/accounts")}>
             Login / Signup
           </button>
         </div>
-      ) : members.length === 0 ? (
-        <p className="no-members">
-          No approved paid members found for Chennai Chapter
-        </p>
+      ) : filteredMembers.length === 0 ? (
+        <p className="no-members">No members found</p>
       ) : (
         <div className="members-grid">
-          {members.map((member) => (
+          {filteredMembers.map((member) => (
             <div className="member-card" key={member.uid}>
               <div className="member-photo">
                 <img
@@ -109,20 +143,34 @@ const ChennaiChapter = () => {
               </div>
 
               <h3>{member.fullname}</h3>
-              <p>{member.profession}</p>
 
-              <span className="member-id">
-                ID: {member.membershipId}
-              </span>
+              {member.designation && (
+                <p className="designation">
+                  {member.designation}
+                </p>
+              )}
 
-              <div className="member-contact">
-                {member.email && (
-                  <a href={`mailto:${member.email}`}>
-                    {member.email}
-                  </a>
-                )}
-                {/* {member.mobile && <p>{member.mobile}</p>} */}
-              </div>
+              {(member.branch || member.batch) && (
+                <p className="branch-batch">
+                  {member.branch}
+                  {member.branch && member.batch && " | "}
+                  {member.batch}
+                </p>
+              )}
+
+              {member.profession && (
+                <p className="profession">
+                  {member.profession}
+                </p>
+              )}
+
+              {/* ✅ Send Message Button */}
+              <button
+                className="send-message-btn"
+                onClick={() => sendMessage(member.uid)}
+              >
+                Send Message
+              </button>
             </div>
           ))}
         </div>

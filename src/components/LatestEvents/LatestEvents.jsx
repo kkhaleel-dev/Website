@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./LatestEvents.scss";
 
+// Import same images used in Carousel5
+import movieNightImg from "../../assets/event1.jpg";
+import familyEventImg from "../../assets/event2.jpg";
+import alumniDayImg from "../../assets/Event3.png";
+
 const LatestEvents = () => {
   const [events, setEvents] = useState([]);
 
@@ -8,43 +13,27 @@ const LatestEvents = () => {
     const data = [
       {
         id: 1,
-        title: "CIT Global Alumni Meet 2025",
-        date: "15 Dec 2025",
-        location: "CIT Chennai Campus",
-        description:
-          "The flagship alumni gathering bringing together CITians from across the globe for networking, knowledge sharing, and celebrating institutional pride.",
-        image: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d",
-        link: "/events/global-alumni-meet",
+        title: "Movie Night",
+        date: "March 22nd, 2026",
+        location: "Prasad Studios",
+        description: "Movie will be announced soon",
+        image: movieNightImg,
       },
       {
         id: 2,
-        title: "Distinguished Alumni Lecture Series",
-        date: "20 Nov 2025",
-        location: "Main Auditorium, CIT",
-        description:
-          "An inspiring talk by eminent CIT alumni leaders sharing industry insights, career guidance, and future technology trends with students and alumni.",
-        image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df",
-        link: "/events/alumni-lecture",
+        title: "Annual CITAACC Family Event",
+        date: "Date to be announced soon",
+        location: "Official Event",
+        description: "",
+        image: familyEventImg,
       },
       {
         id: 3,
-        title: "CIT Alumni Startup & Innovation Summit",
-        date: "10 Oct 2025",
-        location: "Hybrid (Online & Campus)",
-        description:
-          "A platform for alumni entrepreneurs to pitch startups, connect with investors, and mentor young innovators from the CIT community.",
-        image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7",
-        link: "/events/startup-summit",
-      },
-      {
-        id: 4,
-        title: "Regional Alumni Networking Meet – Chennai",
-        date: "05 Sep 2025",
-        location: "Chennai",
-        description:
-          "An exclusive regional networking event to strengthen alumni bonds, foster collaborations, and expand professional connections.",
-        image: "https://images.unsplash.com/photo-1528605248644-14dd04022da1",
-        link: "/events/chennai-meet",
+        title: "Alumni Day",
+        date: "March 14th, 2026",
+        location: "Alumni Event",
+        description: "",
+        image: alumniDayImg,
       },
     ];
 
@@ -72,11 +61,7 @@ const LatestEvents = () => {
             <div className="event-content">
               <h3>{event.title}</h3>
               <span className="event-location">{event.location}</span>
-              <p>{event.description}</p>
-
-              <a href={event.link} className="event-link">
-                View Details →
-              </a>
+              {event.description && <p>{event.description}</p>}
             </div>
           </div>
         ))}

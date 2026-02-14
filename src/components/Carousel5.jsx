@@ -1,42 +1,38 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Carousel5.scss";
-import event1 from "../assets/Event1.png";
-import event2 from "../assets/Event2.png";
-import event3 from "../assets/Event3.png";
-import event4 from "../assets/Event4.png";
+
+// Updated images for events (download and place in src/assets)
+import movieNightImg from "../assets/event1.jpg";
+import familyEventImg from "../assets/event2.jpg";
+import alumniDayImg from "../assets/Event3.png";
 
 const CARD_GAP = 16;
 
 const events = [
   {
-    title: "CIT Alumni Association – Upcoming Reunion Announcement",
-    type: "Alumni Event",
-    start: "Jan 15, 2026",
-    end: "Jan 16, 2026",
-    img: event1,
+    title: "Movie Night",
+    type: "Prasad Studios",
+    start: "March 22nd, 2026",
+    end: "",
+    img: movieNightImg,
+    description: "Movie will be announced soon",
   },
   {
-    title: "CIT Alumni Association – Distinguished Alumni Recognition",
-    type: "Alumni Highlight",
-    start: "Feb 10, 2026 - 10:00 AM",
-    end: "02:00 PM",
-    img: event2,
-  },
-  {
-    title:
-      "CIT Alumni Regional Chapter Meet (Chennai / Bangalore / Salem / Neyveli / Trichy)",
-    type: "Networking Event",
-    start: "Mar 05, 2026",
-    end: "Mar 06, 2026",
-    img: event3,
-  },
-  {
-    title: "CIT Alumni Engagement Event (Login Required)",
+    title: "Annual CITAACC Family Event",
     type: "Official Event",
-    start: "Apr 20, 2026",
-    end: "Apr 21, 2026",
-    img: event4,
+    start: "Date to be announced soon",
+    end: "",
+    img: familyEventImg,
+    description: "",
+  },
+  {
+    title: "Alumni Day",
+    type: "Alumni Event",
+    start: "March 14th, 2026",
+    end: "",
+    img: alumniDayImg,
+    description: "",
   },
 ];
 
@@ -113,7 +109,10 @@ const Carousel5 = () => {
                     {e.start}
                     {e.end && ` - ${e.end}`}
                   </p>
-                  <button className="event-btn">View Event</button>
+                  {e.description && (
+                    <p className="event-desc">{e.description}</p>
+                  )}
+                  {/* <button className="event-btn">View Event</button> */}
                 </div>
               </div>
             ))}

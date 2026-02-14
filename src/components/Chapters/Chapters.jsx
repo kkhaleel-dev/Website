@@ -22,7 +22,7 @@ const Chapters = () => {
           chennaiCount = Object.keys(users).filter((uid) => {
             const u = users[uid];
             return (
-              u.isPaidMember === true &&
+              // u.isPaidMember === true &&
               u.approved === true &&
               u.membershipId &&
               u.membershipId.trim() !== ""

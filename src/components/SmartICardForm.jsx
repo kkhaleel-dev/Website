@@ -264,7 +264,10 @@ const saveProfile = async () => {
               />
               <p className="name">Name: {userData.fullname}</p>
               <p className="branch">Branch: {userData.branch}</p>
-              <p className="membership">ID: {userData.membershipId}</p>
+              {isApproved && isPaidMember && (
+                <p className="membership">Membership ID: {userData.membershipId}</p>
+              )}
+
             </div>
           </div>
 
@@ -313,7 +316,7 @@ const saveProfile = async () => {
                         setTimeout(() => setShowToast(false), 3500);
                       }}
                     >
-                      $50 <span>Subscribe Now</span>
+                    $35 <span>Subscribe Now</span>
                     </button>
 
                     <p className="secure-text">🔒 One-time payment · Lifetime access</p>

@@ -74,6 +74,8 @@ const Footer = () => {
           <strong>Intelizest Consulting Pvt Ltd</strong>
         </a>
       </p>
+
+      <p className="version">Version 1.0.0</p>
     </footer>
   );
 };

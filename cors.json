@@ -2,8 +2,8 @@
   {
     "origin": [
       "http://localhost:5173",
-      "https://website-delta-six-36.vercel.app",
-      "https://citacc.com"
+      "https://citacc.com",
+      "https://website-delta-six-36.vercel.app"
     ],
     "method": ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"],
     "responseHeader": [

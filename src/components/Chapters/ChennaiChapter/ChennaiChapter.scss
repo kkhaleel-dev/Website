@@ -1,145 +1,128 @@
 @import '../../../variables.scss';
 
+html, body {
+  height: 100%;
+  scroll-behavior: smooth;
+  overflow-y: auto; /* ✅ Full page scrollbar visible */
+}
+
 .chennai-chapter-page {
   padding: 3rem 5%;
-  background: $brand-primary-soft; // was #f4f7fb
+  background: $brand-primary-soft;
   min-height: 100vh;
 }
 
 /* HERO */
 .chapter-hero {
-  background: #fce28d; // was #0a2148
+  background: #fce28d;
   color: $black;
-  padding: 2.5rem;
+  padding: 2rem;
   border-radius: 14px;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 
   h1 {
-    font-size: 2.4rem;
-    margin-bottom: 0.6rem;
+    font-size: 2.2rem;
+    margin-bottom: 0.3rem;
   }
 
   p {
+    margin: 0;
     opacity: 0.9;
   }
-}
 
-/* STATES */
-.chapter-loading,
-.no-members {
-  text-align: center;
-  font-weight: 600;
-  color: $text-secondary; // was #555
-}
-
-/* LOGIN LOCK */
-.locked-box {
-  background: $card-bg; // was #fff
-  padding: 2rem;
-  text-align: center;
-  border-radius: 12px;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
-
-  button {
-    margin-top: 1rem;
-    background: $brand-primary; // was #105bbf
-    color: $white;
-    border: none;
-    padding: 0.7rem 1.4rem;
+  .chapter-search input {
+    padding: 0.55rem 0.9rem;
     border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    font-size: 0.9rem;
+    min-width: 220px;
   }
 }
 
-/* ===========================
-   MEMBERS GRID (IMPORTANT)
-   =========================== */
-
+/* GRID */
 .members-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* ✅ 4 cards per row */
-  gap: 1.6rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
 }
 
 /* CARD */
 .member-card {
-  background: $card-bg; // was #ffffff
-  border-radius: 14px;
-  padding: 1.5rem;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  background: $card-bg;
+  border-radius: 12px;
+  padding: 1.3rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  min-height: 300px;
 
-  /* ✅ FIXED HEIGHT BEHAVIOR */
-  min-height: 320px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 
   h3 {
-    color: $text-primary; // was #0a2148
-    margin-bottom: 0.3rem;
     font-size: 1.05rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .designation,
+  .branch-batch,
+  .profession {
+    font-size: 0.82rem;
+    margin-bottom: 0.25rem;
+    color: $text-secondary;
   }
 
   .profession {
-    font-size: 0.9rem;
-    color: $text-secondary; // was #555
-    margin-bottom: 0.6rem;
+    color: $text-muted;
   }
 
-  .member-id {
-    font-weight: 600;
-    color: $brand-primary; // was #105bbf
-    margin-bottom: 0.8rem;
-  }
-
-  .contact {
-    margin-top: auto; /* ✅ pushes contact to bottom */
-  }
-
-  .contact a,
-  .contact p {
+  /* Push button to bottom */
+  .send-message-btn {
+    margin-top: auto;
+    background: $brand-primary;
+    color: $white;
+    border: none;
+    padding: 0.55rem 1.2rem;
+    border-radius: 8px;
     font-size: 0.85rem;
-    color: $text-primary; // was #0a2148
-    word-break: break-word;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+
+    &:hover {
+      opacity: 0.9;
+    }
   }
 }
 
-/* PHOTO */
 .member-photo img {
-  width: 130px;
-  height: 130px;
-  border-radius: 5%;
+  width: 115px;
+  height: 115px;
+  border-radius: 8%;
   object-fit: cover;
   margin-bottom: 0.8rem;
 }
 
-/* ===========================
-   RESPONSIVE
-   =========================== */
-
-/* Tablet */
-@media (max-width: 1024px) {
+/* Responsive */
+@media (max-width: 1200px) {
   .members-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-/* Small Tablet */
 @media (max-width: 768px) {
   .members-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Mobile */
 @media (max-width: 480px) {
   .members-grid {
     grid-template-columns: 1fr;
-  }
-
-  .member-card {
-    min-height: 300px;
   }
 }

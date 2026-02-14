@@ -58,9 +58,9 @@ const VisitAlmaMater = () => {
           </div>
         ))}
       </div>
-      <a href="/services/visitAlmaMaster" className="visit-cta">
+      {/* <a href="/services/visitAlmaMaster" className="visit-cta">
         Plan Your Visit
-      </a>
+      </a> */}
     </div>
   );
 };
