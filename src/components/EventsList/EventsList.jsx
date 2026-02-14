@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./EventsList.scss";
+
 import Event1 from "../assets/Event1.jpg";
 import Event2 from "../assets/Event2.jpg";
 import Event3 from "../assets/Event3.png";
