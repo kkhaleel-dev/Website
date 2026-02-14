@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import "./Carousel5.scss";
 
 // Updated images for events (download and place in src/assets)
-import movieNightImg from "../assets/event1.jpg";
-import familyEventImg from "../assets/event2.jpg";
-import alumniDayImg from "../assets/Event3.png";
+import Event1 from "../assets/Event1.jpg";
+import Event2 from "../assets/Event2.jpg";
+import Event3 from "../assets/Event3.png";
 
 const CARD_GAP = 16;
 
@@ -15,7 +15,7 @@ const events = [
     type: "Prasad Studios",
     start: "March 22nd, 2026",
     end: "",
-    img: movieNightImg,
+    img: Event1,
     description: "Movie will be announced soon",
   },
   {
@@ -23,7 +23,7 @@ const events = [
     type: "Official Event",
     start: "Date to be announced soon",
     end: "",
-    img: familyEventImg,
+    img: Event2,
     description: "",
   },
   {
@@ -31,7 +31,7 @@ const events = [
     type: "Alumni Event",
     start: "March 14th, 2026",
     end: "",
-    img: alumniDayImg,
+    img: Event3,
     description: "",
   },
 ];

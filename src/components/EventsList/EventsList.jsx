@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./EventsList.scss";
-import event1 from "../../assets/event1.jpg";
-import event2 from "../../assets/event2.jpg";
-import event3 from "../../assets/Event3.png";
+import Event1 from "../assets/Event1.jpg";
+import Event2 from "../assets/Event2.jpg";
+import Event3 from "../assets/Event3.png";
 
 const CARD_GAP = 16;
 
@@ -13,7 +13,7 @@ const events = [
     type: "Prasad Studios",
     start: "March 22nd, 2026",
     end: "",
-    img: event1,
+    img: Event1,
     description: "Movie will be announced soon",
   },
   {
@@ -21,7 +21,7 @@ const events = [
     type: "Official Event",
     start: "Date to be announced soon",
     end: "",
-    img: event2,
+    img: Event2,
     description: "",
   },
   {
@@ -29,7 +29,7 @@ const events = [
     type: "Alumni Event",
     start: "March 14th, 2026",
     end: "",
-    img: event3,
+    img: Event3,
     description: "",
   },
 ];

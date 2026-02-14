@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./LatestEvents.scss";
 
-// Import same images used in Carousel5
-import movieNightImg from "../../assets/event1.jpg";
-import familyEventImg from "../../assets/event2.jpg";
-import alumniDayImg from "../../assets/Event3.png";
+import Event1 from "../../assets/Event1.jpg";
+import Event2 from "../../assets/Event2.jpg";
+import Event3 from "../../assets/Event3.png";
 
 const LatestEvents = () => {
   const [events, setEvents] = useState([]);
@@ -17,7 +16,7 @@ const LatestEvents = () => {
         date: "March 22nd, 2026",
         location: "Prasad Studios",
         description: "Movie will be announced soon",
-        image: movieNightImg,
+        image: Event1,
       },
       {
         id: 2,
@@ -25,7 +24,7 @@ const LatestEvents = () => {
         date: "Date to be announced soon",
         location: "Official Event",
         description: "",
-        image: familyEventImg,
+        image: Event2,
       },
       {
         id: 3,
@@ -33,7 +32,7 @@ const LatestEvents = () => {
         date: "March 14th, 2026",
         location: "Alumni Event",
         description: "",
-        image: alumniDayImg,
+        image: Event3,
       },
     ];
 
