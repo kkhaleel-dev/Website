@@ -75,7 +75,7 @@ const Footer = () => {
         </a>
       </p>
 
-      <p className="version">Version 1.0.5.1</p>
+      <p className="version">Version 1.0.6</p>
     </footer>
   );
 };
