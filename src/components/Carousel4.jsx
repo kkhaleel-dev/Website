@@ -28,7 +28,7 @@ const Carousel4 = () => {
   const [loading, setLoading] = useState(true);
 
   /* ✅ Fetch EC Members with priority logic */
-  const fetchProfiles = async () => {
+const fetchProfiles = async () => {
   setLoading(true);
   try {
     // 1️⃣ Get EC Member table (contains UID + designation)
@@ -41,26 +41,14 @@ const Carousel4 = () => {
       return;
     }
 
-    // 2️⃣ Get all users
-    const usersSnap = await get(ref(db, "users"));
-    const usersData = usersSnap.val() || {};
-
-    // 3️⃣ Map EC members (designation from ecMembers table)
-    let ecProfiles = Object.keys(ecData)
-      .map((uid) => {
-        const user = usersData[uid];
-        if (!user) return null;
-
-        return {
-          uid,
-          fullname: user.fullname || "",
-          branch: user.branch || "",
-          batch: user.batch || "",
-          profileImage: user.profileImage || "",
-          designation: ecData[uid]?.designation || "", // ✅ FROM ecMembers
-        };
-      })
-      .filter(Boolean);
+    let ecProfiles = Object.keys(ecData).map((uid) => ({
+      uid,
+      fullname: ecData[uid]?.fullname || "",
+      branch: ecData[uid]?.branch || "",
+      batch: ecData[uid]?.batch || "",
+      profileImage: ecData[uid]?.profileImage || "",
+      designation: ecData[uid]?.designation || "",
+    }));
 
     /* ✅ PRIORITY SORTING */
     const priorityProfiles = [];
