@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Carousel4.scss";
-import { FaArrowRight } from "react-icons/fa";
-import { IoClose } from "react-icons/io5";
 import { db } from "../firebase";
 import { ref, get } from "firebase/database";
 import NoProfile from "../assets/person-logo.png";
 
-/* ✅ PRIORITY MEMBERS (Will always appear first in this exact order) */
+/* ✅ PRIORITY MEMBERS */
 const PRIORITY_MEMBERS = [
   { name: "Saravana Raja", batch: "1988" },
   { name: "Ashok Raj Vadivelu", batch: "1993" },
@@ -18,80 +16,77 @@ const PRIORITY_MEMBERS = [
 
 const Carousel4 = () => {
   const containerRef = useRef(null);
+  const innerRef = useRef(null);
+  const animationRef = useRef(null);
+  const positionRef = useRef(0);
+  const isPausedRef = useRef(false);
 
   const [active, setActive] = useState(0);
   const [showNav, setShowNav] = useState(false);
-  const [popupData, setPopupData] = useState(null);
   const [visibleCards, setVisibleCards] = useState(4);
   const [slideSize, setSlideSize] = useState(330);
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  /* ✅ Fetch EC Members with priority logic */
-const fetchProfiles = async () => {
-  setLoading(true);
-  try {
-    // 1️⃣ Get EC Member table (contains UID + designation)
-    const ecSnap = await get(ref(db, "ecMembers"));
-    const ecData = ecSnap.val();
+  /* ✅ Fetch EC Members */
+  const fetchProfiles = async () => {
+    setLoading(true);
+    try {
+      const ecSnap = await get(ref(db, "ecMembers"));
+      const ecData = ecSnap.val();
 
-    if (!ecData) {
-      setProfiles([]);
-      setLoading(false);
-      return;
-    }
-
-    let ecProfiles = Object.keys(ecData).map((uid) => ({
-      uid,
-      fullname: ecData[uid]?.fullname || "",
-      branch: ecData[uid]?.branch || "",
-      batch: ecData[uid]?.batch || "",
-      profileImage: ecData[uid]?.profileImage || "",
-      designation: ecData[uid]?.designation || "",
-    }));
-
-    /* ✅ PRIORITY SORTING */
-    const priorityProfiles = [];
-    const remainingProfiles = [];
-
-    ecProfiles.forEach((profile) => {
-      const isPriority = PRIORITY_MEMBERS.some(
-        (p) =>
-          p.name.trim().toLowerCase() ===
-            profile.fullname.trim().toLowerCase() &&
-          String(p.batch) === String(profile.batch)
-      );
-
-      if (isPriority) {
-        priorityProfiles.push(profile);
-      } else {
-        remainingProfiles.push(profile);
+      if (!ecData) {
+        setProfiles([]);
+        setLoading(false);
+        return;
       }
-    });
 
-    const orderedPriorityProfiles = PRIORITY_MEMBERS.map((p) =>
-      priorityProfiles.find(
-        (profile) =>
-          profile.fullname.trim().toLowerCase() ===
-            p.name.trim().toLowerCase() &&
-          String(profile.batch) === String(p.batch)
-      )
-    ).filter(Boolean);
+      let ecProfiles = Object.keys(ecData).map((uid) => ({
+        uid,
+        fullname: ecData[uid]?.fullname || "",
+        branch: ecData[uid]?.branch || "",
+        batch: ecData[uid]?.batch || "",
+        profileImage: ecData[uid]?.profileImage || "",
+        designation: ecData[uid]?.designation || "",
+      }));
 
-    setProfiles([...orderedPriorityProfiles, ...remainingProfiles]);
-  } catch (err) {
-    console.error("Failed to fetch EC profiles:", err);
-  } finally {
-    setLoading(false);
-  }
-};
+      const priorityProfiles = [];
+      const remainingProfiles = [];
 
+      ecProfiles.forEach((profile) => {
+        const isPriority = PRIORITY_MEMBERS.some(
+          (p) =>
+            p.name.trim().toLowerCase() ===
+              profile.fullname.trim().toLowerCase() &&
+            String(p.batch) === String(profile.batch)
+        );
+
+        if (isPriority) priorityProfiles.push(profile);
+        else remainingProfiles.push(profile);
+      });
+
+      const orderedPriorityProfiles = PRIORITY_MEMBERS.map((p) =>
+        priorityProfiles.find(
+          (profile) =>
+            profile.fullname.trim().toLowerCase() ===
+              p.name.trim().toLowerCase() &&
+            String(profile.batch) === String(p.batch)
+        )
+      ).filter(Boolean);
+
+      setProfiles([...orderedPriorityProfiles, ...remainingProfiles]);
+    } catch (err) {
+      console.error("Failed to fetch EC profiles:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchProfiles();
   }, []);
 
-  /* Responsive Cards (UNCHANGED) */
+  /* Responsive */
   useEffect(() => {
     const updateResponsive = () => {
       const w = window.innerWidth;
@@ -117,6 +112,39 @@ const fetchProfiles = async () => {
     setShowNav(profiles.length > visibleCards);
   }, [visibleCards, profiles]);
 
+  /* ✅ AUTO LOOP SCROLL (UNCHANGED) */
+  useEffect(() => {
+    if (!innerRef.current || !containerRef.current) return;
+
+    const speed = 0.4;
+    const inner = innerRef.current;
+    const container = containerRef.current;
+
+    const animate = () => {
+      if (!isPausedRef.current) {
+        const maxScroll = inner.scrollWidth - container.clientWidth;
+
+        positionRef.current += speed;
+
+        if (positionRef.current >= maxScroll) {
+          positionRef.current = 0;
+          inner.style.transform = `translateX(0px)`;
+        } else {
+          inner.style.transform = `translateX(-${positionRef.current}px)`;
+        }
+
+        const newActive = Math.floor(positionRef.current / slideSize);
+        setActive(newActive);
+      }
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(animationRef.current);
+  }, [profiles, slideSize]);
+
   if (loading) return <p className="carousel4-title">Loading...</p>;
   if (!loading && profiles.length === 0)
     return <p className="carousel4-title">No EC Members available</p>;
@@ -128,7 +156,9 @@ const fetchProfiles = async () => {
       <div className="carousel4-container" ref={containerRef}>
         <div
           className="carousel4-inner"
-          style={{ transform: `translateX(-${active * slideSize}px)` }}
+          ref={innerRef}
+          onMouseEnter={() => (isPausedRef.current = true)}
+          onMouseLeave={() => (isPausedRef.current = false)}
         >
           {profiles.map((p) => (
             <div className="carousel4-card" key={p.uid}>
@@ -146,16 +176,7 @@ const fetchProfiles = async () => {
                 {p.batch}
               </p>
 
-              <p className="carousel4-desc">
-                {p.designation || ""}
-              </p>
-
-              <span
-                className="carousel4-readmore"
-                onClick={() => setPopupData(p)}
-              >
-                Read More <FaArrowRight size={12} />
-              </span>
+              <p className="carousel4-desc">{p.designation || ""}</p>
             </div>
           ))}
         </div>
@@ -168,42 +189,18 @@ const fetchProfiles = async () => {
               <div
                 key={i}
                 className={`dot ${i === active ? "active" : ""}`}
-                onClick={() => setActive(i)}
+                onClick={() => {
+                  const newPosition = i * slideSize;
+                  positionRef.current = newPosition;
+                  if (innerRef.current) {
+                    innerRef.current.style.transform =
+                      `translateX(-${newPosition}px)`;
+                  }
+                  setActive(i);
+                }}
               ></div>
             )
           )}
-        </div>
-      )}
-
-      {popupData && (
-        <div className="popup-overlay" onClick={() => setPopupData(null)}>
-          <div
-            className="popup-card"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="popup-close"
-              onClick={() => setPopupData(null)}
-            >
-              <IoClose size={23} />
-            </button>
-
-            <img
-              src={popupData.profileImage || NoProfile}
-              className="popup-img"
-              alt={popupData.fullname}
-            />
-
-            <h2>{popupData.fullname}</h2>
-
-            <h4>
-              {popupData.branch}
-              {popupData.branch && popupData.batch && " | "}
-              {popupData.batch}
-            </h4>
-
-            <p>{popupData.designation}</p>
-          </div>
         </div>
       )}
     </div>

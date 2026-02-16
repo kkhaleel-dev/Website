@@ -14,8 +14,15 @@
 }
 
 .carousel4-inner {
-  display: flex;
-  transition: transform 0.45s ease;
+   display: flex;
+  transition: transform 0.1s linear;
+  will-change: transform;
+  cursor: grab;
+
+&:active {
+  cursor: grabbing;
+}
+
 }
 
 /* CARD */
@@ -108,22 +115,22 @@
   overflow: hidden;
 }
 
-/* READ MORE */
-.carousel4-readmore {
-  margin-top: 14px;
-  color: $options-card-bg;
-  font-weight: 700;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: color 0.25s ease, transform 0.25s ease;
+// /* READ MORE */
+// .carousel4-readmore {
+//   margin-top: 14px;
+//   color: $options-card-bg;
+//   font-weight: 700;
+//   cursor: pointer;
+//   display: inline-flex;
+//   align-items: center;
+//   gap: 6px;
+//   transition: color 0.25s ease, transform 0.25s ease;
 
-  &:hover {
-    color: $common-bg;
-    transform: translateX(4px);
-  }
-}
+//   &:hover {
+//     color: $common-bg;
+//     transform: translateX(4px);
+//   }
+// }
 
 /* DOTS */
 .carousel4-dots {
