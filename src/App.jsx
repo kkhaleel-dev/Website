@@ -53,7 +53,7 @@ import Messaging from "./components/messaging/Messaging.jsx";
 import AdminPostApproval from "./pages/AdminPostApproval.jsx";
 import AlumniDay from "./pages/AlumniDay.jsx";
 import AlumniInMyCity from "./components/AlumniInMyCity/AlumniInMyCity.jsx";
-import MyBatchmates from "./components/MyBatchMates/MyBatchMates.jsx";
+import MyBatchmates from "./components/MyBatchmates/MyBatchMates.jsx";
 
 const AppContent = () => {
   const location = useLocation();
