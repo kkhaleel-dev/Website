@@ -5,6 +5,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import personLogo from "../../assets/person-logo.png";
 import "./MyBatchMates.scss";
 
+
 const MyBatchmates = () => {
   const [users, setUsers] = useState([]);
   const [myBatch, setMyBatch] = useState("");
