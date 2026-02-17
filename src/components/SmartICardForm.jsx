@@ -12,6 +12,9 @@ import Signup from "../../src/pages/Signup";
 import logo from "../assets/Favicon.png";
 import personImg from "../assets/person-logo.png";
 import { QRCodeSVG } from "qrcode.react";
+import Select from "react-select";
+import AsyncSelect from "react-select/async";
+import { industryData } from "../data/industryData";
 
 const SmartICardForm = () => {
   const [userData, setUserData] = useState(null);
@@ -29,6 +32,39 @@ const SmartICardForm = () => {
 
   const [imagePreview, setImagePreview] = useState("");
   const fileInputRef = useRef(null);
+  // ===== BATCH YEARS =====
+const currentYear = new Date().getFullYear();
+const batchYears = Array.from(
+  { length: currentYear - 1949 },
+  (_, i) => 1950 + i
+);
+
+// ===== BRANCH LIST =====
+const branches = [
+  "CSE","IT","ECE","EEE","MECH","CIVIL","AERO","BIOTECH",
+  "CHEMICAL","PETRO","INDUSTRIAL","TEXTILE","FASHION",
+  "AUTOMOBILE","MINING","METALLURGY","ARCHITECTURE",
+  "PHARMACY","NURSING","AGRICULTURE","LAW","MANAGEMENT",
+  "HOSPITALITY","FOOD TECHNOLOGY","ENVIRONMENTAL",
+  "DEFENSE","SPACE SCIENCE","DATA SCIENCE","AI/ML",
+  "ROBOTICS","CYBERSECURITY","SOFTWARE ENGINEERING",
+  "GAME DESIGN","CLOUD COMPUTING","BLOCKCHAIN"
+];
+
+// ===== INDUSTRY OPTIONS =====
+const industryOptions = Object.keys(industryData).map(ind => ({
+  value: ind,
+  label: ind
+}));
+
+const fieldOptions =
+  editData.industry && industryData[editData.industry]
+    ? industryData[editData.industry].map(f => ({
+        value: f,
+        label: f
+      }))
+    : [];
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -100,6 +136,57 @@ const SmartICardForm = () => {
     setImagePreview(compressed);
     setEditData((prev) => ({ ...prev, profileImage: compressed }));
   };
+  // ===== LOCATION LOADERS =====
+
+const loadCountryOptions = async (inputValue) => {
+  if (!inputValue) return [];
+  const res = await fetch(
+    `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&q=${encodeURIComponent(inputValue)}`
+  );
+  const data = await res.json();
+  return data.map(item => ({
+    label: item.display_name.split(",")[0],
+    value: item.display_name.split(",")[0],
+  }));
+};
+
+const loadStateOptions = async (inputValue) => {
+  if (!inputValue || !editData.country) return [];
+  const res = await fetch(
+    `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&country=${encodeURIComponent(editData.country)}&limit=7&q=${encodeURIComponent(inputValue)}`
+  );
+  const data = await res.json();
+  return data
+    .filter(item => item.address?.state)
+    .map(item => ({
+      label: item.address.state,
+      value: item.address.state,
+    }));
+};
+
+const loadCityOptions = async (inputValue) => {
+  if (!inputValue) return [];
+  const query = `${inputValue}${editData.state ? ", " + editData.state : ""}${editData.country ? ", " + editData.country : ""}`;
+  const res = await fetch(
+    `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=10&q=${encodeURIComponent(query)}`
+  );
+  const data = await res.json();
+  return data
+    .filter(item => item.address?.city || item.address?.town)
+    .map(item => {
+      const city = item.address.city || item.address.town;
+      return {
+        label: city,
+        value: city,
+        city,
+        state: item.address.state,
+        country: item.address.country,
+        lat: item.lat,
+        lng: item.lng
+      };
+    });
+};
+
 
   // const saveProfile = async () => {
   //   try {
@@ -144,31 +231,39 @@ const SmartICardForm = () => {
   // };
 const saveProfile = async () => {
   try {
+    const user = auth.currentUser;
+    if (!user) {
+      alert("User not authenticated");
+      return;
+    }
+
+    // 🔐 PASSWORD UPDATE
     if (newPassword || confirmPassword) {
       if (!oldPassword) {
         alert("Enter old password");
         return;
       }
+
       if (newPassword !== confirmPassword) {
         alert("Passwords do not match");
         return;
       }
 
-      const user = auth.currentUser;
       const credential = EmailAuthProvider.credential(
         user.email,
         oldPassword
       );
+
       await reauthenticateWithCredential(user, credential);
       await updatePassword(user, newPassword);
     }
 
-    const uid = auth.currentUser.uid;
+    const uid = user.uid;
     const userRef = ref(db, `users/${uid}`);
 
     const { password, ...safeData } = editData;
 
-    // Convert field string to array
+    // convert field to array
     if (safeData.field && typeof safeData.field === "string") {
       safeData.field = safeData.field
         .split(",")
@@ -176,21 +271,20 @@ const saveProfile = async () => {
         .filter((f) => f !== "");
     }
 
-    // ✅ UPDATE users table (existing behaviour)
+    // ✅ UPDATE USER TABLE
     await update(userRef, safeData);
 
-    // ⭐ FETCH membershipId from updated user
-    const snap = await get(userRef);
-    if (!snap.exists()) return;
+    // ✅ UPDATE LOCAL STATE IMMEDIATELY
+    setUserData((prev) => ({
+      ...prev,
+      ...safeData,
+    }));
 
-    const updatedUser = snap.val();
-    const membershipId = updatedUser.membershipId;
-
-    // ⭐ SYNC publicProfiles WITHOUT REMOVING ANY EXISTING FIELD
-    if (membershipId) {
+    // ⭐ SYNC publicProfiles safely
+    if (userData?.membershipId) {
       const publicProfileRef = ref(
         db,
-        `publicProfiles/${membershipId}`
+        `publicProfiles/${userData.membershipId}`
       );
 
       // Only push fields that belong to public profile
@@ -204,6 +298,8 @@ const saveProfile = async () => {
         city: safeData.city,
         state: safeData.state,
         country: safeData.country,
+        lat: safeData.lat,
+        lng: safeData.lng,
         profession: safeData.profession,
         website: safeData.website,
         industry: safeData.industry,
@@ -220,19 +316,18 @@ const saveProfile = async () => {
         }
       });
 
-      // ⭐ MERGE update (adds missing fields + updates existing)
       await update(publicProfileRef, publicSyncData);
     }
 
-    setUserData(prev => ({ ...prev, ...safeData }));
     alert("Profile updated successfully!");
     closeEdit();
 
   } catch (err) {
-    console.error(err);
-    alert("Failed to update profile");
+    console.error("PROFILE UPDATE ERROR:", err);
+    alert(err.message || "Failed to update profile");
   }
 };
+
 
   return (
     <>
@@ -390,115 +485,193 @@ const saveProfile = async () => {
 
                 <label>
                   Branch:
-                  <input
-                    type="text"
-                    name="branch"
-                    value={editData.branch || ""}
-                    onChange={handleChange}
+                  <Select
+                    options={branches.map(b => ({ value: b, label: b }))}
+                    value={editData.branch ? { value: editData.branch, label: editData.branch } : null}
+                    onChange={(selected) =>
+                      setEditData(prev => ({
+                        ...prev,
+                        branch: selected?.value || ""
+                      }))
+                    }
+                    isClearable
                   />
+
                 </label>
 
                 <label>
                   Batch:
-                  <input
-                    type="text"
+                  <select
                     name="batch"
                     value={editData.batch || ""}
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="">Select Batch</option>
+                    {batchYears.map(year => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+
                 </label>
 
                 <label>
                   City:
-                  <input
-                    type="text"
-                    name="city"
-                    value={editData.city || ""}
-                    onChange={handleChange}
-                  />
+                 <AsyncSelect
+  cacheOptions
+  defaultOptions
+  loadOptions={loadCityOptions}
+  value={editData.city ? { label: editData.city, value: editData.city } : null}
+  onChange={(selected) =>
+    setEditData(prev => ({
+      ...prev,
+      city: selected?.value || "",
+      state: selected?.state || prev.state,
+      country: selected?.country || prev.country,
+      lat: selected?.lat? parseFloat(selected.lat) : prev.lat,
+      lng: selected?.lng? parseFloat(selected.lng) : prev.lng,
+    }))
+  }
+  isClearable
+/>
+
                 </label>
 
                 <label>
                   State:
-                  <input
-                    type="text"
-                    name="state"
-                    value={editData.state || ""}
-                    onChange={handleChange}
-                  />
+                 <AsyncSelect
+  cacheOptions
+  defaultOptions
+  loadOptions={loadStateOptions}
+  value={editData.state ? { label: editData.state, value: editData.state } : null}
+  onChange={(selected) =>
+    setEditData(prev => ({
+      ...prev,
+      state: selected?.value || ""
+    }))
+  }
+  isClearable
+/>
+
                 </label>
 
                 <label>
                   Country:
-                  <input
-                    type="text"
-                    name="country"
-                    value={editData.country || ""}
-                    onChange={handleChange}
-                  />
+               <AsyncSelect
+  cacheOptions
+  defaultOptions
+  loadOptions={loadCountryOptions}
+  value={editData.country ? { label: editData.country, value: editData.country } : null}
+  onChange={(selected) =>
+    setEditData(prev => ({
+      ...prev,
+      country: selected?.value || ""
+    }))
+  }
+  isClearable
+/>
+
                 </label>
 
                 <label>
                   Profession:
-                  <select
-                    name="profession"
-                    value={editData.profession || ""}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Profession</option>
-                    <option value="Employed">Employed</option>
-                    <option value="Entrepreneur">Entrepreneur</option>
-                  </select>
+                 <select
+  name="profession"
+  value={editData.profession || ""}
+  onChange={(e) =>
+    setEditData((prev) => ({
+      ...prev,
+      profession: e.target.value,
+      industry: "",
+      field: "",
+      companySize: "",
+    }))
+  }
+>
+  <option value="">Select Profession</option>
+  <option value="Employed">Employed</option>
+  <option value="Entrepreneur">Entrepreneur</option>
+</select>
+
                 </label>
 
                 {/* ===== Entrepreneur Fields ===== */}
-                {editData.profession === "Entrepreneur" && (
-                  <>
-                    <label>
-                      Company Name:
-                      <input
-                        type="text"
-                        name="company" // fixed: match DB key
-                        value={editData.company || ""}
-                        onChange={handleChange}
-                      />
-                    </label>
+              {/* ===== INDUSTRY (For Both Employed & Entrepreneur) ===== */}
+{editData.profession && (
+  <label>
+    Industry:
+    <Select
+      options={industryOptions}
+      value={
+        editData.industry
+          ? { value: editData.industry, label: editData.industry }
+          : null
+      }
+      onChange={(selected) =>
+        setEditData((prev) => ({
+          ...prev,
+          industry: selected?.value || "",
+          field: "",
+        }))
+      }
+      isClearable
+    />
+  </label>
+)}
 
-                    <label>
-                      Industry:
-                      <input
-                        type="text"
-                        name="industry"
-                        value={editData.industry || ""}
-                        onChange={handleChange}
-                      />
-                    </label>
+{/* ===== FIELD (For Both Employed & Entrepreneur) ===== */}
+{editData.profession && editData.industry && (
+  <label>
+    Field / Specialization:
+    <Select
+      options={fieldOptions}
+      value={
+        editData.field
+          ? { value: editData.field, label: editData.field }
+          : null
+      }
+      onChange={(selected) =>
+        setEditData((prev) => ({
+          ...prev,
+          field: selected?.value || "",
+        }))
+      }
+      isClearable
+    />
+  </label>
+)}
 
-                    <label>
-                      Field / Specialization (comma separated):
-                      <input
-                        type="text"
-                        name="field"
-                        value={
-                          Array.isArray(editData.field)
-                            ? editData.field.join(", ")
-                            : editData.field || ""
-                        }
-                        onChange={handleChange}
-                      />
-                    </label>
+{/* ===== COMPANY NAME (Both can have it if needed) ===== */}
+{editData.profession && (
+  <label>
+    Company Name:
+    <input
+      type="text"
+      name="company"
+      value={editData.company || ""}
+      onChange={handleChange}
+    />
+  </label>
+)}
 
-                    <label>
-                      Company Size:
-                      <input
-                        type="text"
-                        name="companySize"
-                        value={editData.companySize || ""}
-                        onChange={handleChange}
-                      />
-                    </label>
-                  </>
-                )}
+{/* ===== COMPANY SIZE (Only Entrepreneur) ===== */}
+{editData.profession === "Entrepreneur" && (
+  <label>
+    Company Size:
+    <select
+      name="companySize"
+      value={editData.companySize || ""}
+      onChange={handleChange}
+    >
+      <option value="">Company Size</option>
+      <option value="1-10">1-10</option>
+      <option value="11-50">11-50</option>
+      <option value="51-200">51-200</option>
+      <option value="200+">200-1000</option>
+      <option value="1000+">1000+</option>
+    </select>
+  </label>
+)}
+
 
                 <label>
                   Website:

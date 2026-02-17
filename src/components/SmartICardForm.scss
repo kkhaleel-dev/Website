@@ -145,7 +145,7 @@
     padding: 2rem;
     border-radius: 12px;
     width: 90%;
-    max-width: 500px;
+    max-width: 750px;
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
@@ -157,9 +157,11 @@
     }
 
     .edit-form {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
+      display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 20px;
+  margin-top: 10px;
+  
 
       label {
         display: flex;
@@ -177,32 +179,22 @@
         }
       }
 
-      .edit-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-        margin-top: 1rem;
+     .edit-actions {
+  grid-column: 1 / -1;   // 👈 FULL ROW
+  display: flex;
+  justify-content: center;  // 👈 CENTERED
+  gap: 16px;
+  margin-top: 25px;
+}
 
-        button {
-          padding: 0.6rem 1.2rem;
-          border-radius: 6px;
-          border: none;
-          cursor: pointer;
-          font-weight: 600;
-          font-size: 0.9rem;
-          transition: all 0.2s ease;
-        }
-
-        .cancel-btn {
-          background: #f0f0f0;
-          color: $text-secondary;
-        }
-
-        button:first-child {
-          background: $brand-primary;
-          color: $text-on-yellow;
-        }
-      }
+.edit-actions button {
+  min-width: 160px;
+  height: 44px;
+  border-radius: 8px;
+  font-weight: 600;
+  background-color: $brand-primary;
+  color: $text-on-yellow;
+}
     }
   }
 }
@@ -239,6 +231,29 @@
     }
   }
 }
+.edit-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #444;
+  gap: 6px;
+}
+
+  .edit-form .profile-image-upload {
+  grid-column: 1 / -1;   // 👈 FULL WIDTH
+  justify-content: center;
+  margin: 10px 0;   // spacing below image
+}
+
+.edit-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+  font-weight: 600;
+  gap: 6px;
+}
+
 
 .edit-form label input[type="password"] {
   letter-spacing: 0.05em;
@@ -267,7 +282,11 @@
 .edit-content::-webkit-scrollbar-track {
   background: $option-hover-2;
 }
-
+@media (max-width: 768px) {
+  .edit-form {
+    grid-template-columns: 1fr;
+  }
+}
 @media (max-width: 480px) {
   .edit-content {
     padding: 1.5rem;

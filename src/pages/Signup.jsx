@@ -7,12 +7,16 @@ import { auth, db } from "../firebase";
 import { ref, set } from "firebase/database";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Select from "react-select";
+import { industryData } from "../data/industryData";
+import AsyncSelect from "react-select/async";
 
 const Signup = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
   const [profileImage, setProfileImage] = useState("");
+  const [cityOptions, setCityOptions] = useState([]);
 
   const currentYear = new Date().getFullYear();
 
@@ -35,15 +39,6 @@ const Signup = () => {
     field: "",
   });
 
-  /* INDUSTRY → FIELD MAPPING */
-  const industryFields = {
-    IT: ["AI", "Developer", "Cyber Security", "Cloud", "Data Science"],
-    Finance: ["Banking", "Investment", "Accounting", "FinTech"],
-    Healthcare: ["Doctor", "Pharma", "Medical Tech"],
-    Manufacturing: ["Production", "Operations", "Quality Control"],
-    Education: ["Professor", "Trainer", "Researcher"],
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -54,7 +49,6 @@ const Signup = () => {
       return;
     }
 
-    /* RESET WHEN PROFESSION CHANGES */
     if (name === "profession") {
       setForm({
         ...form,
@@ -63,16 +57,6 @@ const Signup = () => {
         field: "",
         company: "",
         companySize: "",
-      });
-      return;
-    }
-
-    /* RESET FIELD WHEN INDUSTRY CHANGES */
-    if (name === "industry") {
-      setForm({
-        ...form,
-        industry: value,
-        field: "",
       });
       return;
     }
@@ -128,11 +112,257 @@ const Signup = () => {
     }
   };
 
-  const branches = ["CSE", "EEE", "MECH", "CIVIL", "ECE", "IT"];
-  const batchYears = Array.from(
-    { length: currentYear - 1949 },
-    (_, i) => 1950 + i
-  );
+const branches = [
+  "CSE",
+  "IT",
+  "ECE",
+  "EEE",
+  "MECH",
+  "CIVIL",
+  "AERO",
+  "BIOTECH",
+  "CHEMICAL",
+  "PETRO",
+  "INDUSTRIAL",
+  "TEXTILE",
+  "FASHION",
+  "AUTOMOBILE",
+  "MINING",
+  "METALLURGY",
+  "ARCHITECTURE",
+  "PHARMACY",
+  "NURSING",
+  "AGRICULTURE",
+  "LAW",
+  "MANAGEMENT",
+  "HOSPITALITY",
+  "FOOD TECHNOLOGY",
+  "ENVIRONMENTAL",
+  "DEFENSE",
+  "SPACE SCIENCE",
+  "DATA SCIENCE",
+  "AI/ML",
+  "ROBOTICS",
+  "CYBERSECURITY",
+  "SOFTWARE ENGINEERING",
+  "GAME DESIGN",
+  "CLOUD COMPUTING",
+  "BLOCKCHAIN"
+];
+
+const batchYears = Array.from({ length: currentYear - 1949 }, (_, i) => 1950 + i);
+
+  const industryOptions = Object.keys(industryData).map((ind) => ({ value: ind, label: ind }));
+  const fieldOptions =
+    form.industry && industryData[form.industry]
+      ? industryData[form.industry].map((f) => ({ value: f, label: f }))
+      : [];
+
+  // Custom styles for react-select to fix width
+  const selectStyles = {
+    container: (provided) => ({ ...provided, maxWidth: "400px", width: "100%" }),
+    control: (provided) => ({
+      ...provided,
+      fontSize: "14px",
+      fontFamily: "inherit",
+      minHeight: "40px",
+    }),
+    menu: (provided) => ({ ...provided, width: "250px" }),
+    singleValue: (provided) => ({ ...provided, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "180px" }),
+  };
+// const loadCountryOptions = async (inputValue) => {
+//   if (!inputValue || inputValue.length < 2) return [];
+
+//   try {
+//     const res = await fetch(
+//       `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&featuretype=country&limit=5&q=${encodeURIComponent(inputValue)}`
+//     );
+
+//     const data = await res.json();
+
+//     return data
+//       .filter(item => item.address?.country)
+//       .map((item) => ({
+//         label: item.address.country,
+//         value: item.address.country,
+//       }));
+//   } catch {
+//     return [];
+//   }
+// };
+// const loadStateOptions = async (inputValue) => {
+//   if (!inputValue || !form.country || inputValue.length < 2) return [];
+
+//   try {
+//     const res = await fetch(
+//       `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&country=${encodeURIComponent(form.country)}&featuretype=state&limit=10&q=${encodeURIComponent(inputValue)}`
+//     );
+
+//     const data = await res.json();
+
+//     return data
+//       .filter(item => item.address?.state)
+//       .map((item) => ({
+//         label: item.address.state,
+//         value: item.address.state,
+//       }));
+//   } catch {
+//     return [];
+//   }
+// };
+// const loadCityOptions = async (inputValue) => {
+//   if (!inputValue || inputValue.length < 2) return [];
+
+//   try {
+//     const query = form.state && form.country
+//       ? `${inputValue}, ${form.state}, ${form.country}`
+//       : inputValue;
+
+//     const res = await fetch(
+//       `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=10&q=${encodeURIComponent(query)}`
+//     );
+
+//     const data = await res.json();
+
+//     return data
+//       .filter(item =>
+//         item.address?.city ||
+//         item.address?.town ||
+//         item.address?.village
+//       )
+//       .map((item) => {
+//         const cityName =
+//           item.address.city ||
+//           item.address.town ||
+//           item.address.village;
+
+//         return {
+//           label: cityName,
+//           value: cityName,
+//           city: cityName,
+//           state: item.address.state || "",
+//           country: item.address.country || "",
+//           lat: item.lat,
+//           lon: item.lon,
+//         };
+//       });
+//   } catch {
+//     return [];
+//   }
+// };
+// //workig all
+
+// ================= COUNTRY =================
+const loadCountryOptions = async (inputValue) => {
+  if (!inputValue) return [];
+
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&q=${encodeURIComponent(inputValue)}`,
+      {
+        headers: {
+          "Accept-Language": "en"
+        }
+      }
+    );
+
+    const data = await res.json();
+
+    return data
+      .filter(
+        (item) =>
+          item.type === "administrative" ||
+          item.type === "country"
+      )
+      .map((item) => ({
+        label: item.display_name.split(",")[0],
+        value: item.display_name.split(",")[0],
+      }));
+  } catch (err) {
+    console.error("Country error:", err);
+    return [];
+  }
+};
+
+
+// ================= STATE =================
+const loadStateOptions = async (inputValue) => {
+  if (!inputValue || !form.country) return [];
+
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&country=${encodeURIComponent(form.country)}&limit=7&q=${encodeURIComponent(inputValue)}`,
+      {
+        headers: {
+          "Accept-Language": "en"
+        }
+      }
+    );
+
+    const data = await res.json();
+
+    return data
+      .filter((item) => item.address?.state)
+      .map((item) => ({
+        label: item.address.state,
+        value: item.address.state,
+      }));
+  } catch (err) {
+    console.error("State error:", err);
+    return [];
+  }
+};
+
+
+// ================= CITY =================
+const loadCityOptions = async (inputValue) => {
+  if (!inputValue) return [];
+
+  try {
+    const query = `${inputValue}${
+      form.state ? ", " + form.state : ""
+    }${form.country ? ", " + form.country : ""}`;
+
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=10&q=${encodeURIComponent(query)}`,
+      {
+        headers: {
+          "Accept-Language": "en"
+        }
+      }
+    );
+
+    const data = await res.json();
+
+    return data
+      .filter(
+        (item) =>
+          item.address?.city ||
+          item.address?.town ||
+          item.address?.village
+      )
+      .map((item) => {
+        const city =
+          item.address.city ||
+          item.address.town ||
+          item.address.village;
+
+        return {
+          label: city,
+          value: city,
+          city: city,
+          state: item.address.state,
+          country: item.address.country,
+          lat: item.lat,
+          lon: item.lon,
+        };
+      });
+  } catch (err) {
+    console.error("City error:", err);
+    return [];
+  }
+};
+
 
   return (
     <div className="signup-page">
@@ -145,15 +375,12 @@ const Signup = () => {
         <div className="signup-card-left">
           <img src={Favicon} alt="logo" height={60} />
           <h2>CIT Alumni Association</h2>
-
           <div className="profile-upload">
             <img
               src={profileImage || DummyLogo}
               alt="profile"
               className="profile-preview"
-              onClick={() =>
-                document.getElementById("profileInput").click()
-              }
+              onClick={() => document.getElementById("profileInput").click()}
             />
             <input
               type="file"
@@ -174,9 +401,7 @@ const Signup = () => {
                     canvas.width = size;
                     canvas.height = size;
                     ctx.drawImage(img, 0, 0, size, size);
-                    setProfileImage(
-                      canvas.toDataURL("image/jpeg", 0.5)
-                    );
+                    setProfileImage(canvas.toDataURL("image/jpeg", 0.5));
                   };
                 };
                 reader.readAsDataURL(file);
@@ -190,16 +415,21 @@ const Signup = () => {
         <div className="signup-card-right">
           <input name="fullname" placeholder="FULLNAME*" value={form.fullname} onChange={handleChange} />
           <input name="age" placeholder="AGE" value={form.age} onChange={handleChange} />
-          
+
           <select name="batch" value={form.batch} onChange={handleChange}>
             <option value="">BATCH</option>
             {batchYears.map((y) => <option key={y}>{y}</option>)}
           </select>
 
-          <select name="branch" value={form.branch} onChange={handleChange}>
-            <option value="">BRANCH</option>
-            {branches.map((b) => <option key={b}>{b}</option>)}
-          </select>
+          <Select
+            options={branches.map((b) => ({ value: b, label: b }))}
+            value={form.branch ? { value: form.branch, label: form.branch } : null}
+            onChange={(selected) => setForm({ ...form, branch: selected?.value || "" })}
+            placeholder="BRANCH/STREAM"
+            isSearchable
+            styles={selectStyles}
+          />
+
 
           <input type="tel" name="mobile" placeholder="MOBILE*" value={form.mobile} onChange={handleChange} />
           <input type="email" name="email" placeholder="EMAIL*" value={form.email} onChange={handleChange} />
@@ -217,59 +447,113 @@ const Signup = () => {
             </span>
           </div>
 
-          <input name="city" placeholder="CITY*" value={form.city} onChange={handleChange} />
-          <input name="state" placeholder="STATE*" value={form.state} onChange={handleChange} />
-          <input name="country" placeholder="COUNTRY*" value={form.country} onChange={handleChange} />
+{/* CITY */}
+<AsyncSelect
+  cacheOptions
+  defaultOptions
+  loadOptions={loadCityOptions}
+  placeholder="CITY*"
+  value={form.city ? { label: form.city, value: form.city } : null}
+  onChange={(selected) => {
+    if (!selected) return;
 
-          {/* PROFESSION */}
+    setForm({
+      ...form,
+      city: selected.city,
+      state: selected.state,
+      country: selected.country,
+      lat: selected.lat,
+      lng: selected.lon
+    });
+  }}
+  styles={selectStyles}
+  isClearable
+/>
+
+{/* STATE */}
+<AsyncSelect
+  cacheOptions
+  defaultOptions
+  loadOptions={loadStateOptions}
+  placeholder="STATE*"
+  value={form.state ? { label: form.state, value: form.state } : null}
+  onChange={(selected) => {
+    setForm({
+      ...form,
+      state: selected?.value || "",
+      city: ""
+    });
+  }}
+  styles={selectStyles}
+  isClearable
+/>
+
+      {/* COUNTRY */}
+<AsyncSelect
+  cacheOptions
+  defaultOptions
+  loadOptions={loadCountryOptions}
+  placeholder="COUNTRY*"
+  value={form.country ? { label: form.country, value: form.country } : null}
+  onChange={(selected) => {
+    setForm({
+      ...form,
+      country: selected?.value || "",
+      state: "",
+      city: ""
+    });
+  }}
+  styles={selectStyles}
+  isClearable
+/>
+
+
           <select name="profession" value={form.profession} onChange={handleChange}>
             <option value="">PROFESSION*</option>
             <option value="Employed">Employed</option>
             <option value="Entrepreneur">Entrepreneur</option>
           </select>
 
-          {/* INDUSTRY */}
+          {/* INDUSTRY SELECT */}
           {form.profession && (
-            <select name="industry" value={form.industry} onChange={handleChange}>
-              <option value="">INDUSTRY*</option>
-              {Object.keys(industryFields).map((key) => (
-                <option key={key}>{key}</option>
-              ))}
-              <option value="Others">Others</option>
-            </select>
+            <Select
+              options={[...industryOptions, { value: "Others", label: "Others" }]}
+              value={form.industry ? { value: form.industry, label: form.industry } : null}
+              onChange={(selected) => {
+                const ind = selected?.value || "";
+                setForm({ ...form, industry: ind, field: "" });
+              }}
+              placeholder="INDUSTRY*"
+              isSearchable
+              styles={selectStyles}
+            />
           )}
 
-          {/* FIELD */}
-          {form.industry === "Others" && (
+          {/* FIELD SELECT / INPUT */}
+          {form.industry && form.industry !== "Others" && (
+            <Select
+              options={[...fieldOptions, { value: "Others", label: "Others" }]}
+              value={form.field ? { value: form.field, label: form.field } : null}
+              onChange={(selected) => {
+                const fld = selected?.value || "";
+                setForm({ ...form, field: fld });
+              }}
+              placeholder="FIELD OF WORK*"
+              isSearchable
+              styles={selectStyles}
+            />
+          )}
+
+          {form.industry === "Others" || form.field === "Others" ? (
             <input
               name="field"
               placeholder="ENTER YOUR FIELD OF WORK*"
               value={form.field}
               onChange={handleChange}
+              style={{ maxWidth: "400px", marginTop: "8px" }}
             />
-          )}
+          ) : null}
 
-          {form.industry && form.industry !== "Others" && (
-            <>
-              <select name="field" value={form.field} onChange={handleChange}>
-                <option value="">FIELD OF WORK*</option>
-                {industryFields[form.industry]?.map((f) => (
-                  <option key={f}>{f}</option>
-                ))}
-                <option value="Others">Others</option>
-              </select>
-
-              {form.field === "Others" && (
-                <input
-                  name="field"
-                  placeholder="ENTER YOUR FIELD OF WORK*"
-                  onChange={handleChange}
-                />
-              )}
-            </>
-          )}
-
-          {/* COMPANY */}
           {form.profession && (
             <input
               name="company"
@@ -279,13 +563,8 @@ const Signup = () => {
             />
           )}
 
-          {/* COMPANY SIZE (Entrepreneur Only) */}
           {form.profession === "Entrepreneur" && (
-            <select
-              name="companySize"
-              value={form.companySize}
-              onChange={handleChange}
-            >
+            <select name="companySize" value={form.companySize} onChange={handleChange}>
               <option value="">COMPANY SIZE*</option>
               <option value="1-10">1-10</option>
               <option value="11-50">11-50</option>
@@ -295,12 +574,7 @@ const Signup = () => {
             </select>
           )}
 
-          <input
-            name="website"
-            placeholder="Website"
-            value={form.website}
-            onChange={handleChange}
-          />
+          <input name="website" placeholder="Website" value={form.website} onChange={handleChange} />
 
           <button className="go" onClick={handleSignup}>
             Create Account

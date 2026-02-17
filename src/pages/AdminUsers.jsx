@@ -19,6 +19,56 @@ const AdminUsers = () => {
   const [approvedPage, setApprovedPage] = useState(1);
   const [adminPage, setAdminPage] = useState(1);
   const [showPaidOnly, setShowPaidOnly] = useState(false);
+  
+  //edit users profiles 
+  const [editMember, setEditMember] = useState(null);
+  const [editFormData, setEditFormData] = useState({});
+
+  const openEditMember = (user) => {
+  setEditMember(user);
+  setEditFormData({ ...user });
+};
+
+const handleEditChange = (e) => {
+  const { name, value } = e.target;
+  setEditFormData(prev => ({
+    ...prev,
+    [name]: value
+  }));
+};
+
+const updateMember = async () => {
+  try {
+    const uid = editMember.uid;
+    const membershipId = editMember.membershipId;
+
+    // 1️⃣ Update users table
+    await update(ref(db, `users/${uid}`), editFormData);
+
+    // 2️⃣ Update publicProfiles if exists
+    if (membershipId) {
+      await update(
+        ref(db, `publicProfiles/${membershipId}`),
+        editFormData
+      );
+    }
+
+    // 3️⃣ Update UI instantly
+    setApprovedUsers(prev =>
+      prev.map(u =>
+        u.uid === uid ? { ...u, ...editFormData } : u
+      )
+    );
+
+    alert("Member updated successfully");
+    setEditMember(null);
+
+  } catch (err) {
+    console.error(err);
+    alert("Update failed");
+  }
+};
+
 
   const paginate = (data, page) => {
     const start = (page - 1) * PAGE_SIZE;
@@ -81,10 +131,74 @@ const AdminUsers = () => {
     fetchAll();
   };
 
+  //working membership toggle - updates both users/{uid} and publicProfiles/{membershipId}
+  // const togglePaidMember = async (uid, current) => {
+  //   await update(ref(db, `users/${uid}`), { isPaidMember: !current });
+  //   setApprovedUsers(prev => prev.map(u => u.uid === uid ? { ...u, isPaidMember: !current } : u));
+  // };
   const togglePaidMember = async (uid, current) => {
-    await update(ref(db, `users/${uid}`), { isPaidMember: !current });
-    setApprovedUsers(prev => prev.map(u => u.uid === uid ? { ...u, isPaidMember: !current } : u));
-  };
+  try {
+    const userRef = ref(db, `users/${uid}`);
+    const userSnap = await get(userRef);
+
+    if (!userSnap.exists()) return;
+
+    const user = userSnap.val();
+    const membershipId = user.membershipId;
+
+    const newPaidStatus = !current;
+
+    // 1️⃣ Update users table only
+    await update(userRef, { isPaidMember: newPaidStatus });
+
+    // 2️⃣ If turning OFF paid membership → remove from publicProfiles
+    if (!newPaidStatus && membershipId) {
+      await remove(ref(db, `publicProfiles/${membershipId}`));
+    }
+
+    // 3️⃣ If turning ON paid membership → recreate public profile
+    if (newPaidStatus && membershipId) {
+      const publicProfileData = {
+        fullname: user.fullname || "",
+        age: user.age || "",
+        batch: user.batch || "",
+        branch: user.branch || "",
+        mobile: user.mobile || "",
+        email: user.email || "",
+        city: user.city || "",
+        state: user.state || "",
+        country: user.country || "",
+        profession: user.profession || "",
+        website: user.website || "",
+        industry: user.industry || "",
+        company: user.company || "",
+        companySize: user.companySize || "",
+        field: user.field || "",
+        lat: user.lat || 0,
+        lng: user.lng || 0,
+        createdAt: user.createdAt || Date.now(),
+        approved: true,
+        profileImage: user.profileImage || "",
+        isPaidMember: true,
+        membershipId,
+      };
+
+      await set(ref(db, `publicProfiles/${membershipId}`), publicProfileData);
+    }
+
+    // 4️⃣ Update UI instantly
+    setApprovedUsers(prev =>
+      prev.map(u =>
+        u.uid === uid ? { ...u, isPaidMember: newPaidStatus } : u
+      )
+    );
+
+  } catch (err) {
+    console.error(err);
+    alert("Failed to update membership status");
+  }
+};
+
 
   /* =========================
      APPROVE USER WITH PUBLIC PROFILE CREATION
@@ -412,6 +526,7 @@ const AdminUsers = () => {
                   <th>UID</th>
                   <th>Membership ID</th>
                   <th>Password</th>
+                  <th>Edit</th>
                 </tr>
               </thead>
               <tbody>
@@ -428,6 +543,20 @@ const AdminUsers = () => {
                     <td style={{ fontSize: "0.75rem" }}>{u.uid}</td>
                     <td>{u.membershipId}</td>
                     <td>{u.password}</td>
+                    <td>
+                      <button
+                        style={{
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          fontSize: "16px"
+                        }}
+                        onClick={() => openEditMember(u)}
+                      >
+                        ✏️
+                      </button>
+                    </td>
+
                   </tr>
                 ))}
               </tbody>
@@ -436,6 +565,241 @@ const AdminUsers = () => {
         </div>
       </div>
     )}
+    {editMember && (
+ <div className="edit-member-overlay">
+  <div className="edit-member-modal">
+    
+    <div className="edit-member-header">
+      <h3>Edit Member</h3>
+      <button className="edit-member-close">✕</button>
+    </div>
+
+    <div className="edit-member-body">
+      <form className="edit-member-form">
+  <label>
+    Full Name
+    <input
+      name="fullname"
+      value={editFormData.fullname || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    Email
+    <input
+      name="email"
+      value={editFormData.email || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    Mobile
+    <input
+      name="mobile"
+      value={editFormData.mobile || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    Age
+    <input
+      name="age"
+      value={editFormData.age || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    Batch
+    <input
+      name="batch"
+      value={editFormData.batch || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    Branch
+    <input
+      name="branch"
+      value={editFormData.branch || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    City
+    <input
+      name="city"
+      value={editFormData.city || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    State
+    <input
+      name="state"
+      value={editFormData.state || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    Country
+    <input
+      name="country"
+      value={editFormData.country || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    Profession
+    <input
+      name="profession"
+      value={editFormData.profession || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    Industry
+    <input
+      name="industry"
+      value={editFormData.industry || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    Field
+    <input
+      name="field"
+      value={editFormData.field || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    Company
+    <input
+      name="company"
+      value={editFormData.company || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    Company Size
+    <input
+      name="companySize"
+      value={editFormData.companySize || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    Website
+    <input
+      name="website"
+      value={editFormData.website || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    Membership ID
+    <input
+      name="membershipId"
+      value={editFormData.membershipId || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    Extra Info
+    <textarea
+      name="extraInfo"
+      value={editFormData.extraInfo || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    Latitude
+    <input
+      name="lat"
+      value={editFormData.lat || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    Longitude
+    <input
+      name="lng"
+      value={editFormData.lng || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+
+  <label>
+    Approved
+    <select
+      name="approved"
+      value={editFormData.approved ? "true" : "false"}
+      onChange={(e) =>
+        setEditFormData({
+          ...editFormData,
+          approved: e.target.value === "true"
+        })
+      }
+    >
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select>
+  </label>
+
+  <label>
+    Paid Member
+    <select
+      name="isPaidMember"
+      value={editFormData.isPaidMember ? "true" : "false"}
+      onChange={(e) =>
+        setEditFormData({
+          ...editFormData,
+          isPaidMember: e.target.value === "true"
+        })
+      }
+    >
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select>
+  </label>
+
+  <label>
+    Role
+    <input
+      name="role"
+      value={editFormData.role || ""}
+      onChange={handleEditChange}
+    />
+  </label>
+ </form>
+    </div>
+
+    <div className="edit-member-footer">
+      <button className="edit-btn-cancel" onClick={() => setEditMember(null)}>Cancel</button>
+      <button className="edit-btn-save" onClick={updateMember}>Save Changes</button>
+    </div>
+
+  </div>
+</div>
+)}
     </div>
   );
 };

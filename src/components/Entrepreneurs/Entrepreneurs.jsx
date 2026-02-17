@@ -4,6 +4,8 @@ import { db, auth } from "../../firebase";
 import { ref, get } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth";
 import profileImg from "../../assets/person-logo.png";
+import { industryData } from "../../data/industryData"; // ✅ SAME AS SIGNUP
+import Select from "react-select";
 
 const Entrepreneurs = () => {
   const [entrepreneurs, setEntrepreneurs] = useState([]);
@@ -18,17 +20,17 @@ const Entrepreneurs = () => {
   const [canViewAll, setCanViewAll] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  /* 🔥 STATIC INDUSTRIES */
-  const staticIndustryFields = {
-    IT: ["AI", "Developer", "Cyber Security", "Cloud", "Data Science"],
-    Finance: ["Banking", "Investment", "Accounting", "FinTech"],
-    Healthcare: ["Doctor", "Pharma", "Medical Tech"],
-    Manufacturing: ["Production", "Operations", "Quality Control"],
-    Education: ["Professor", "Trainer", "Researcher"],
-    Others: []
-  };
+  /* ✅ STATIC INDUSTRIES (FROM SIGNUP industryData) */
+  const industries = Object.keys(industryData);
 
-  const staticIndustries = Object.keys(staticIndustryFields);
+  /* ✅ STATIC COMPANY SIZE (EXACT SAME AS SIGNUP) */
+  const companySizes = [
+    "1-10",
+    "11-50",
+    "51-200",
+    "200-1000",
+    "1000+",
+  ];
 
   /* 🔐 AUTH CHECK */
   useEffect(() => {
@@ -110,9 +112,7 @@ const Entrepreneurs = () => {
 
     if (fieldFilter)
       result = result.filter((e) =>
-        e.field.some((f) =>
-          f.toLowerCase().includes(fieldFilter.toLowerCase())
-        )
+        e.field.includes(fieldFilter)
       );
 
     if (companyFilter)
@@ -120,36 +120,9 @@ const Entrepreneurs = () => {
         e.company?.toLowerCase().includes(companyFilter.toLowerCase())
       );
 
-    /* ✅ FIXED COMPANY SIZE RANGE FILTER */
-    /* ✅ FIXED COMPANY SIZE FILTER (Inclusive upward logic) */
-if (sizeFilter) {
-  const getNumericSize = (value) => {
-    if (!value) return 0;
-
-    if (typeof value === "number") return value;
-
-    if (value.includes("+")) {
-      return parseInt(value.replace("+", ""));
+    if (sizeFilter) {
+      result = result.filter((e) => e.companySize === sizeFilter);
     }
-
-    return parseInt(value);
-  };
-
-  const getMinFromRange = (range) => {
-    if (range.includes("+")) {
-      return parseInt(range.replace("+", ""));
-    }
-    return parseInt(range.split("-")[0]);
-  };
-
-  const selectedMin = getMinFromRange(sizeFilter);
-
-  result = result.filter((e) => {
-    const size = getNumericSize(e.companySize);
-    return size >= selectedMin;
-  });
-}
-
 
     if (websiteFilter)
       result = result.filter((e) =>
@@ -170,119 +143,149 @@ if (sizeFilter) {
     window.dispatchEvent(new CustomEvent("openChat", { detail: uid }));
   };
 
-  /* 🔥 INDUSTRIES MERGED */
-  const dbIndustries = [
-    ...new Set(
-      entrepreneurs
-        .map((e) => e.industry)
-        .filter(Boolean)
-    ),
-  ];
-
-  const industries = [
-    ...new Set([
-      ...staticIndustries,
-      ...dbIndustries,
-      "Others"
-    ]),
-  ];
-
-  /* 🔥 FIELD LIST */
-  let fields = [];
-
-  if (industryFilter) {
-    const staticFields = staticIndustryFields[industryFilter] || [];
-
-    const dbFields = [
-      ...new Set(
-        entrepreneurs
-          .filter((e) => e.industry === industryFilter)
-          .flatMap((e) => e.field || [])
-      ),
-    ];
-
-    fields = [...new Set([...staticFields, ...dbFields])];
-  }
-
-  const companySizes = [
-    "1-10",
-    "11-50",
-    "51-200",
-    "200-1000",
-    "1000+",
-  ];
+  /* ✅ STATIC FIELD LIST (BASED ON SELECTED INDUSTRY) */
+  const fields = industryFilter
+    ? industryData[industryFilter] || []
+    : [];
 
   if (loading) return <p>Loading...</p>;
+ 
+  const selectStyles = {
+  container: (provided) => ({
+    ...provided,
+    width: "220px",
+  }),
+
+  control: (provided) => ({
+    ...provided,
+    height: "35px",
+    minHeight: "35px",
+    borderRadius: "6px",
+  }),
+
+  valueContainer: (provided) => ({
+    ...provided,
+    height: "35px",
+    padding: "0 12px",
+  }),
+
+  indicatorsContainer: (provided) => ({
+    ...provided,
+    height: "35px",
+  }),
+
+  input: (provided) => ({
+    ...provided,
+    margin: "0px",
+    padding: "0px",
+  }),
+
+  menuPortal: (base) => ({
+    ...base,
+    zIndex: 9999,
+  }),
+};
+
+
 
   return (
     <div className="entrepreneurs-page">
       <div className="entrepreneurs-header">
         <h2>CIT Alumni Entrepreneurs</h2>
 
-        <div className="entrepreneurs-filter-bar">
+      <div className="entrepreneurs-filter-bar">
 
-          <div className="filter-group">
-            <label>Industry</label>
-            <select
-              value={industryFilter}
-              onChange={(e) => {
-                setIndustryFilter(e.target.value);
-                setFieldFilter("");
-              }}
-            >
-              <option value="">All</option>
-              {industries.map((i) => (
-                <option key={i}>{i}</option>
-              ))}
-            </select>
-          </div>
+  {/* INDUSTRY */}
+  <div className="filter-group">
+    <label>Industry</label>
+    <Select
+    menuPortalTarget={document.body}
+menuPosition="fixed"
+      styles={selectStyles}
+      options={[
+        { value: "", label: "All" },
+        ...industries.map((i) => ({ value: i, label: i }))
+      ]}
+      value={
+        industryFilter
+          ? { value: industryFilter, label: industryFilter }
+          : { value: "", label: "All" }
+      }
+      onChange={(selected) => {
+        setIndustryFilter(selected.value);
+        setFieldFilter("");
+      }}
+      isSearchable
+    />
+  </div>
 
-          <div className="filter-group">
-            <label>Field</label>
-            <select
-              value={fieldFilter}
-              onChange={(e) => setFieldFilter(e.target.value)}
-              disabled={!industryFilter}
-            >
-              <option value="">All</option>
-              {fields.map((f) => (
-                <option key={f}>{f}</option>
-              ))}
-            </select>
-          </div>
+  {/* FIELD */}
+  <div className="filter-group">
+    <label>Field</label>
+    <Select
+    menuPortalTarget={document.body}
+menuPosition="fixed"
+      styles={selectStyles}
+      isDisabled={!industryFilter}
+      options={[
+        { value: "", label: "All" },
+        ...fields.map((f) => ({ value: f, label: f }))
+      ]}
+      value={
+        fieldFilter
+          ? { value: fieldFilter, label: fieldFilter }
+          : { value: "", label: "All" }
+      }
+      onChange={(selected) => setFieldFilter(selected.value)}
+      isSearchable
+    />
+  </div>
 
-          <div className="filter-group">
-            <label>Company</label>
-            <input
-              value={companyFilter}
-              placeholder="Search..."
-              onChange={(e) => setCompanyFilter(e.target.value)}
-            />
-          </div>
+  {/* COMPANY */}
+  <div className="filter-group">
+    <label>Company</label>
+    <input
+      value={companyFilter}
+      placeholder="Search..."
+      onChange={(e) => setCompanyFilter(e.target.value)}
+      style={{ width: "220px", height: "42px" }}
+    />
+  </div>
 
-          <div className="filter-group">
-            <label>Company Size</label>
-            <select
-              value={sizeFilter}
-              onChange={(e) => setSizeFilter(e.target.value)}
-            >
-              <option value="">All</option>
-              {companySizes.map((s) => (
-                <option key={s}>{s}</option>
-              ))}
-            </select>
-          </div>
+  {/* COMPANY SIZE */}
+  <div className="filter-group">
+    <label>Company Size</label>
+    <Select
+    menuPortalTarget={document.body}
+menuPosition="fixed"
+      styles={selectStyles}
+      options={[
+        { value: "", label: "All" },
+        ...companySizes.map((s) => ({ value: s, label: s }))
+      ]}
+      value={
+        sizeFilter
+          ? { value: sizeFilter, label: sizeFilter }
+          : { value: "", label: "All" }
+      }
+      onChange={(selected) => setSizeFilter(selected.value)}
+      isSearchable={false}
+    />
+  </div>
 
-          <div className="filter-group">
-            <label>Website</label>
-            <input
-              value={websiteFilter}
-              placeholder="Search..."
-              onChange={(e) => setWebsiteFilter(e.target.value)}
-            />
-          </div>
+  {/* WEBSITE */}
+  <div className="filter-group">
+    <label>Website</label>
+    <input
+      value={websiteFilter}
+      placeholder="Search..."
+      onChange={(e) => setWebsiteFilter(e.target.value)}
+      style={{ width: "220px", height: "42px" }}
+    />
+  </div>
 
-        </div>
+</div>
+
       </div>
 
       <div className={`entrepreneurs-grid ${!canViewAll ? "blurred" : ""}`}>

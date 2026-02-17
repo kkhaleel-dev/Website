@@ -52,6 +52,8 @@ import ChennaiChapter from "./components/Chapters/ChennaiChapter/ChennaiChapter.
 import Messaging from "./components/messaging/Messaging.jsx";
 import AdminPostApproval from "./pages/AdminPostApproval.jsx";
 import AlumniDay from "./pages/AlumniDay.jsx";
+import AlumniInMyCity from "./components/AlumniInMyCity/AlumniInMyCity.jsx";
+import MyBatchmates from "./components/MyBatchMates/MyBatchMates.jsx";
 
 const AppContent = () => {
   const location = useLocation();
@@ -194,6 +196,25 @@ const AppContent = () => {
             path="/services/alumniDirectory"
             element={<AlumniDirectory />}
           />
+
+          <Route
+            path="/services/alumniInMyCity"
+            element={
+              <ProtectedRoute>
+                <AlumniInMyCity />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/services/myBatchmates"
+            element={
+              <ProtectedRoute>
+                <MyBatchmates />
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="/services/alumniNearby" element={<AlumniNearby />} />
           <Route path="/services/getTranscript" element={<GetTranscripts />} />
           <Route path="/services/mentorship" element={<Mentorship />} />

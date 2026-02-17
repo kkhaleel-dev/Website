@@ -1,0 +1,25 @@
+@import "../../variables.scss";
+
+/* EMPTY / LOADING STATE */
+.city-empty-state {
+  background-color: $brand-primary-soft;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 0.8rem;
+  }
+
+  p {
+    font-size: 1rem;
+    font-weight: 500;
+    color: $text-secondary;
+  }
+}

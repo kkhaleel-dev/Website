@@ -12,15 +12,14 @@ const Carousel3 = () => {
       header: "Alumni in your city",
       subheader: "Find alumni living in your city & connect with them",
       buttonText: "Alumni In My City",
-      route: "/services/alumniNearby",
+      route: "/services/alumniInMyCity",
     },
     {
       icon: <PiStudent className="icon-svg" />,
       header: "Your Batchmates",
-      subheader:
-        "View our exclusive batchmates directory to know about whereabouts of your batchmates",
+      subheader: "View our exclusive batchmates directory to know about whereabouts of your batchmates",
       buttonText: "My Batchmates",
-      route: "/about/team",
+      route: "/services/myBatchmates",
     },
     {
       icon: <FaUserGraduate className="icon-svg" />,
