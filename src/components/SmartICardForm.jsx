@@ -23,6 +23,7 @@ const SmartICardForm = () => {
   const isApproved = userData?.approved === true;
   const isPaidMember = userData?.isPaidMember === true;
   const [showToast, setShowToast] = useState(false);
+  const [paying, setPaying] = useState(false);
 
   const [editOpen, setEditOpen] = useState(false);
   const [editData, setEditData] = useState({});
@@ -65,7 +66,84 @@ const fieldOptions =
       }))
     : [];
 
+const handlePayment = async () => {
+  const user = auth.currentUser;
+  if (!user) return alert("Login required");
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  setPaying(true);
+
+  try {
+    const res = await fetch(`${API_URL}/create-order`, {
+      method: "POST",
+    });
+
+    const order = await res.json();
+
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY,
+      amount: order.amount,
+      currency: "INR",
+      name: "CIT Alumni",
+      description: "Membership Payment",
+      order_id: order.id,
+
+      handler: async function (response) {
+        try {
+          const verifyRes = await fetch(`${API_URL}/verify-payment`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ...response,
+              uid: user.uid,
+            }),
+          });
+
+          const data = await verifyRes.json();
+
+          if (data.success) {
+            alert("Payment Successful 🎉");
+            window.location.reload();
+          } else {
+            alert("Payment verification failed");
+            setPaying(false);
+          }
+        } catch (err) {
+          console.error(err);
+          setPaying(false);
+        }
+      },
+
+      prefill: {
+        name: userData.fullname,
+        email: user.email,
+        contact: userData.mobile,
+      },
+
+      theme: {
+        color: "#3399cc",
+      },
+    };
+
+    const razor = new window.Razorpay(options);
+
+    razor.on("payment.failed", function (response) {
+      console.error(`For Membership Payment, Please Contact "CIT Super Admin"`);
+      alert(`For Membership Payment, Please Contact "CIT Super Admin"`);
+      setPaying(false);
+    });
+
+    razor.open();
+
+  } catch (err) {
+    console.error(err);
+    alert("Payment failed to start");
+    setPaying(false);
+  }
+};
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -186,49 +264,6 @@ const loadCityOptions = async (inputValue) => {
       };
     });
 };
-
-
-  // const saveProfile = async () => {
-  //   try {
-  //     if (newPassword || confirmPassword) {
-  //       if (!oldPassword) {
-  //         alert("Enter old password");
-  //         return;
-  //       }
-  //       if (newPassword !== confirmPassword) {
-  //         alert("Passwords do not match");
-  //         return;
-  //       }
-
-  //       const user = auth.currentUser;
-  //       const credential = EmailAuthProvider.credential(
-  //         user.email,
-  //         oldPassword
-  //       );
-  //       await reauthenticateWithCredential(user, credential);
-  //       await updatePassword(user, newPassword);
-  //     }
-
-  //     const userRef = ref(db, `users/${auth.currentUser.uid}`);
-  //     const { password, ...safeData } = editData; // never store password
-
-  //     // Convert field to array if comma separated (optional)
-  //     if (safeData.field && typeof safeData.field === "string") {
-  //       safeData.field = safeData.field
-  //         .split(",")
-  //         .map((f) => f.trim())
-  //         .filter((f) => f !== "");
-  //     }
-
-  //     await update(userRef, safeData);
-  //     setUserData(safeData);
-  //     alert("Profile updated successfully!");
-  //     closeEdit();
-  //   } catch (err) {
-  //     console.error(err);
-  //     alert("Failed to update profile");
-  //   }
-  // };
 const saveProfile = async () => {
   try {
     const user = auth.currentUser;
@@ -404,15 +439,13 @@ const saveProfile = async () => {
 
                   <div className="membership-highlight">
                     One-time payment · Lifetime access <br />
-                   <button
-                      className="subscribe-btn"
-                      onClick={() => {
-                        setShowToast(true);
-                        setTimeout(() => setShowToast(false), 3500);
-                      }}
-                    >
-                    $35 <span>Subscribe Now</span>
-                    </button>
+   <button
+  className="subscribe-btn"
+  onClick={handlePayment}
+  disabled={paying}
+>
+  {paying ? "Processing..." : "$35 Subscribe Now"}
+</button>
 
                     <p className="secure-text">🔒 One-time payment · Lifetime access</p>
                   </div>
